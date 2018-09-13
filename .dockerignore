@@ -1,0 +1,6 @@
+Dockerfile
+docker/
+!docker/nginx/conf/
+Makefile
+node_modules/
+README.md

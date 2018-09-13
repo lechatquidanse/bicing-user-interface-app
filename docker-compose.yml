@@ -1,0 +1,20 @@
+version: '2.3'
+
+services:
+
+  node:
+    build:
+      context: .
+      target: 'bicing_app_node'
+    networks: ['app']
+    ports: ['3000:3000']
+    volumes: ['.:/usr/src/app', '/usr/src/app/node_modules']
+
+  api-mock:
+    image: 'clue/json-server'
+    networks: ['app']
+    ports: ['80:80']
+    volumes: ['./docker/stages/development/mock/data-api.json:/data/db.json']
+
+networks:
+  app:

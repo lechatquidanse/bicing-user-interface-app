@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+    nginx:
+        image: ${PRODUCTION_IMAGE}
+        ports: ['8080:80']
+        restart: 'always'

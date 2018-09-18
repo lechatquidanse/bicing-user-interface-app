@@ -1,5 +1,5 @@
 {
-  "posts": [
+  "stations": [
     { "id": 1, "body": "foo" },
     { "id": 2, "body": "bar" }
   ],

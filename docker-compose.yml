@@ -8,12 +8,12 @@ services:
       target: 'bicing_app_node'
     networks: ['app']
     ports: ['3000:3000']
-    volumes: ['.:/usr/src/app', '/usr/src/app/node_modules']
+    volumes: ['.:/usr/src/app', './node_modules:/usr/src/app/node_modules']
 
-  api-mock:
+  apimock:
     image: 'clue/json-server'
     networks: ['app']
-    ports: ['80:80']
+    ports: ['8080:80']
     volumes: ['./docker/stages/development/mock/data-api.json:/data/db.json']
 
 networks:

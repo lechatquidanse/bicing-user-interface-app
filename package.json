@@ -1,16 +1,25 @@
 {
-  "name": "app",
+  "name": "bicing-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
-    "react-scripts": "1.1.5"
+    "react-redux": "^5.0.7",
+    "react-scripts": "1.1.5",
+    "redux": "^4.0.0",
+    "redux-saga": "^0.16.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "CI=true react-scripts test --env=jsdom",
+    "test-feature": "./node_modules/.bin/cucumber-js",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "cucumber": "^5.0.0",
+    "testcafe": "^0.22.0"
   }
 }

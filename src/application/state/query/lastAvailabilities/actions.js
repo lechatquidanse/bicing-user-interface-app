@@ -1,4 +1,4 @@
-import * as Types from './types';
+import * as Types from 'application/state/query/lastAvailabilities/types';
 
 export const fetchListStart = () => ({
     type: Types.FETCH_LIST.START,

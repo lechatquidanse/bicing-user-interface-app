@@ -1,8 +1,7 @@
-import React from "react";
+import React from 'react';
 
-// @todo change import without ../../
-import Home from "./HomePage/Home";
-import Header from './../components/Header';
+import Home from 'userInterface/react/containers/HomePage/Home';
+import Header from 'userInterface/react/components/Header';
 
 export default function App() {
   return (

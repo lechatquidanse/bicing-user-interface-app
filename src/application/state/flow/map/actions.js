@@ -1,4 +1,4 @@
-import * as Types from './types';
+import * as Types from 'application/state/flow/map/types';
 
 export const fetchMapStart = () => ({
     type: Types.FETCH_MAP.START,
@@ -7,11 +7,17 @@ export const fetchMapStart = () => ({
     }
 });
 
-export const fetchMapSuccess = (stations, lastAvailabilities) => ({
+export const fetchMapSuccess = () => ({
     type: Types.FETCH_MAP.SUCCESS,
     payload: {
-        stations,
-        lastAvailabilities,
         isFetching: false
+    },
+});
+
+export const fetchMapFailure = (error) => ({
+    type: Types.FETCH_MAP.Failure,
+    payload: {
+        isFetching: false,
+        error
     },
 });

@@ -13,6 +13,7 @@ const Map = withScriptjs(withGoogleMap(props => {
                 defaultIcon={icon}
                 key={station.id}
                 position={{ lat: station.latitude, lng: station.longitude }}
+            // options={{ optimized: false }} use for e2e test to see marker in DOM
             >
             </Marker>
         )
@@ -22,9 +23,10 @@ const Map = withScriptjs(withGoogleMap(props => {
         <GoogleMap
             defaultZoom={14}
             defaultCenter={{ lat: 41.390205, lng: 2.154007 }}
+        // options={{ optimized: false }} use for e2e test to see marker in DOM
         >
             {markers}
-        </GoogleMap>
+        </GoogleMap >
     )
 }));
 

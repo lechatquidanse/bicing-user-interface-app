@@ -1,8 +1,8 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { fetchListSuccess } from './actions';
-import * as Types from './types';
-import HttpAvailabilityQuery from './../../../../infrastructure/bicingApi/HttpAvailabilityQuery';
+import { fetchListSuccess } from 'application/state/query/lastAvailabilities/actions';
+import * as Types from 'application/state/query/lastAvailabilities/types';
+import HttpAvailabilityQuery from 'infrastructure/bicingApi/HttpAvailabilityQuery';
 
 export function* list(action) {
   try {

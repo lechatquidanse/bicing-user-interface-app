@@ -1,17 +1,17 @@
-import { all, put, takeLatest, select } from 'redux-saga/effects';
+import { all, put, takeLatest, race, select } from 'redux-saga/effects';
 
-import { fetchMapSuccess } from './actions';
-import * as Types from './types';
+import { fetchMapSuccess } from 'application/state/flow/map/actions';
+import * as Types from 'application/state/flow/map/types';
 
-import { fetchListStart as stationFetchListStart } from '../../query/stations/actions';
-import { stations as stationsSelector } from '../../query/stations/selectors';
-import * as StationsTypes from '../../query/stations/types';
+import { fetchListStart as stationFetchListStart } from 'application/state/query/stations/actions';
+import { stationsData as stationsSelector } from 'application/state/query/stations/selectors';
+import * as StationsTypes from 'application/state/query/stations/types';
 
-import { fetchListStart as lastAvailabilitiesFetchListStart } from '../../query/lastAvailabilities/actions';
-import { lastAvailabilities as lastAvailabilitiesSelector } from '../../query/lastAvailabilities/selectors';
-import * as LastAvailabilitiesTypes from '../../query/lastAvailabilities/types';
+import { fetchListStart as lastAvailabilitiesFetchListStart } from 'application/state/query/lastAvailabilities/actions';
+import { lastAvailabilitiesData as lastAvailabilitiesSelector } from 'application/state/query/lastAvailabilities/selectors';
+import * as LastAvailabilitiesTypes from 'application/state/query/lastAvailabilities/types';
 
-function* initFetch() {
+export function* initFetch(action) {
   try {
     yield all([
       put(stationFetchListStart()),
@@ -22,14 +22,18 @@ function* initFetch() {
   }
 }
 
-function* dataFetched() {
-  try {
-    const [stations, lastAvailabilities] = yield all([
-      select(stationsSelector),
-      select(lastAvailabilitiesSelector),
-    ]);
+// export function* stationDataFailure(action) {
+//   console.log(action);
+//   // yield put(fetchMapFailure())
+// }
 
-    yield put(fetchMapSuccess(stations, lastAvailabilities));
+export function* dataFetched(action) {
+  try {
+    yield all([
+      select(stationsSelector),
+      select(lastAvailabilitiesSelector)
+    ]);
+    yield put(fetchMapSuccess());
   } catch (e) {
     console.log('DATA FETCHED LALAL ERROR operations.js', e);
   }
@@ -37,6 +41,9 @@ function* dataFetched() {
 
 export default function* operation() {
   yield takeLatest(Types.FETCH_MAP.START, initFetch);
-  yield takeLatest(StationsTypes.FETCH_LIST.SUCCESS, dataFetched);
-  yield takeLatest(LastAvailabilitiesTypes.FETCH_LIST.SUCCESS, dataFetched);
+  // yield takeLatest(StationsTypes.FETCH_LIST.FAILURE, stationDataFailure);
+  yield race({
+    stationsSuccess: takeLatest(StationsTypes.FETCH_LIST.SUCCESS, dataFetched),
+    lastAvailabilities: takeLatest(LastAvailabilitiesTypes.FETCH_LIST.SUCCESS, dataFetched),
+  });
 }

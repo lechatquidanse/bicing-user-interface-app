@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import './../../components/App.css';
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import { fetchMapStart } from "./../../../../application/state/flow/map/actions";
-import Map from '../../components/Map';
+import 'userInterface/react/components/App.css';
+import Map from 'userInterface/react/components/Map';
+
+import { fetchMapStart } from 'application/state/flow/map/actions';
+import { stationsWithLastAvailabilty } from 'application/state/flow/map/selectors';
 
 class Home extends Component {
   componentDidMount() {
@@ -19,7 +21,7 @@ class Home extends Component {
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `400px` }} />}
           mapElement={<div style={{ height: `100%` }} />}
-          stations={this.props.stationsWithLastAvailabilities}
+          stations={this.props.stations}
         />
       </div>
     );
@@ -27,7 +29,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  ...state.flow.map,
+  stations: stationsWithLastAvailabilty(state),
 });
 
 const mapDispatchToProps = dispatch =>

@@ -1,17 +1,18 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { fetchListSuccess } from './actions';
-import * as Types from './types';
-import HttpStationQuery from './../../../../infrastructure/bicingApi/HttpStationQuery';
+import { fetchListPending, fetchListSuccess, fetchListFailure } from 'application/state/query/stations/actions';
+import * as Types from 'application/state/query/stations/types';
+import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
 
 export function* list(action) {
-  try {
-    const response = yield call(HttpStationQuery.findAll);
-    yield put(fetchListSuccess(response.data));
+  yield put(fetchListPending());
 
-    // return response.data;
+  try {
+    const stations = yield call(HttpStationQuery.findAll);
+
+    yield put(fetchListSuccess(stations));
   } catch (e) {
-    console.log('LALAL ERROR operations.js', e);
+    yield put(fetchListFailure(e));
   }
 }
 

@@ -1,9 +1,9 @@
-import { createReducer, Types as ReduxSauceTypes } from 'reduxsauce'
-import Immutable from 'seamless-immutable';
+import { createReducer } from 'reduxsauce'
+import produce from 'immer';
 
-import * as Types from "./types";
+import * as Types from 'application/state/query/lastAvailabilities/types';
 
-export const INITIAL_STATE = Immutable({ error: false, isFetching: false, lastAvailabilities: [] });
+export const INITIAL_STATE = { error: false, isFetching: false, lastAvailabilities: [] };
 
 export const fetchListStart = (state = INITIAL_STATE, action) => {
   const { isFetching } = action.payload;
@@ -22,7 +22,6 @@ export const defaultHandler = (state, action) => {
 export const HANDLERS = {
   [Types.FETCH_LIST.START]: fetchListStart,
   [Types.FETCH_LIST.SUCCESS]: fetchListSuccess,
-  [ReduxSauceTypes.DEFAULT]: defaultHandler,
 }
 
 export default createReducer(INITIAL_STATE, HANDLERS);

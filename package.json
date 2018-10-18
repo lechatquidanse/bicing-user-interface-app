@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "http-status": "^1.2.0",
+    "immer": "^1.7.2",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-google-maps": "^9.4.5",
@@ -13,7 +15,7 @@
     "redux-define": "^1.1.1",
     "redux-saga": "^0.16.0",
     "reduxsauce": "^1.0.0",
-    "seamless-immutable": "^7.1.4"
+    "reselect": "^3.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -24,6 +26,8 @@
   },
   "devDependencies": {
     "cucumber": "^5.0.0",
-    "testcafe": "^0.22.0"
+    "puppeteer": "^1.9.0",
+    "redux-saga-test-plan": "^3.7.0",
+    "request-promise-native": "^1.0.5"
   }
 }

@@ -5562,7 +5562,7 @@
       }
     ]
   },
-  "availabilities": {
+  "last-availabilities-by-station": {
     "@context": "\/api\/contexts\/lastAvailabilitiesByStationView",
     "@id": "\/api\/last-availabilities-by-station",
     "@type": "hydra:Collection",

@@ -16,4 +16,4 @@ down:
 
 qa:
 	docker-compose run --rm node yarn test
-	# docker-compose run --rm node yarn test-feature
+	# docker-compose up -d test-feature && docker-compose run --rm node yarn test-feature

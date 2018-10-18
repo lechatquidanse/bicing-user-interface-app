@@ -11,9 +11,9 @@ Feature: User views actual informations about the station fleet on a map
     As a User
     I need to be able to view the actual informations of the station fleet
 
-Scenario: I can distinguish stations on map according to their status
-    Given the fleet has "2" stations "OPEN"
-    And the fleet has "5" stations "CLOSED"
-    When I go to the "home" page
-    Then I should see "2" stations with "red" marker on the map
-    And I should see "5" stations with "grey" marker on the map
+    Scenario: I can distinguish stations on map according to their status
+        Given the fleet has "2" stations with status "OPEN"
+        And the fleet has "5" stations with status "CLOSED"
+        When I go to the "home" page
+        Then I should see "2" stations with "red" marker on the map
+        And I should see "5" stations with "grey" marker on the map

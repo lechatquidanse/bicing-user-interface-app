@@ -1,7 +1,6 @@
 version: '2.3'
 
 services:
-
   node:
     build:
       context: .
@@ -10,11 +9,24 @@ services:
     ports: ['3000:3000']
     volumes: ['.:/usr/src/app', './node_modules:/usr/src/app/node_modules']
 
+  test-feature:
+    build: './docker/chrome'
+    cap_add: [SYS_ADMIN]
+    networks: ['app']
+    ports: ['9222:9222']
+    shm_size: '1gb'
+
   apimock:
     image: 'clue/json-server'
     networks: ['app']
     ports: ['8080:80']
-    volumes: ['./docker/stages/development/mock/data-api.json:/data/db.json']
+    volumes: ['./docker/stages/development/mock/:/data/']
+    entrypoint: [
+      'json-server',
+      'db.json',
+      '-p', '80',
+      '--routes', 'routes.json',
+      ]
 
 networks:
   app:

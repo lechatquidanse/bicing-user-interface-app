@@ -1,17 +1,20 @@
 import { createReducer } from 'reduxsauce'
+import produce from 'immer';
 
 import * as Types from 'application/state/flow/map/types';
 
 export const INITIAL_STATE = { error: false, stationsWithLastAvailabilities: [] };
 
 export const fetchMapStart = (state = INITIAL_STATE, action) => {
-  const { isFetching } = action.payload;
-  return { ...state, isFetching };
+  return produce(state, draft => {
+    draft.payload = action.payload
+  })
 };
 
 export const fetchMapSuccess = (state = INITIAL_STATE, action) => {
-  const { isFetching } = action.payload;
-  return { ...state, isFetching };
+  return produce(state, draft => {
+    draft.payload = action.payload
+  })
 }
 
 export const HANDLERS = {

@@ -1,17 +1,18 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { fetchListSuccess } from 'application/state/query/lastAvailabilities/actions';
+import { fetchListPending, fetchListSuccess, fetchListFailure } from 'application/state/query/lastAvailabilities/actions';
 import * as Types from 'application/state/query/lastAvailabilities/types';
 import HttpAvailabilityQuery from 'infrastructure/bicingApi/HttpAvailabilityQuery';
 
 export function* list(action) {
-  try {
-    const response = yield call(HttpAvailabilityQuery.findAll);
-    yield put(fetchListSuccess(response.data));
+  yield put(fetchListPending());
 
-    // return response.data;
+  try {
+    const lastAvailabilities = yield call(HttpAvailabilityQuery.findAll);
+
+    yield put(fetchListSuccess(lastAvailabilities));
   } catch (e) {
-    console.log('LALAL ERROR operations.js', e);
+    yield put(fetchListFailure(e));
   }
 }
 

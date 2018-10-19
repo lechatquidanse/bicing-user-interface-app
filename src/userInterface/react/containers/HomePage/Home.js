@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import 'userInterface/react/components/App.css';
 import Map from 'userInterface/react/components/Map';
-
 import { fetchMapStart } from 'application/state/flow/map/actions';
 import { stationsWithLastAvailabilty } from 'application/state/flow/map/selectors';
 
-class Home extends Component {
+class Home extends PureComponent {
   componentDidMount() {
     this.props.fetchMapStart();
   }
@@ -27,6 +27,10 @@ class Home extends Component {
     );
   }
 }
+
+Home.propTypes = {
+  stations: PropTypes.array
+};
 
 const mapStateToProps = state => ({
   stations: stationsWithLastAvailabilty(state),

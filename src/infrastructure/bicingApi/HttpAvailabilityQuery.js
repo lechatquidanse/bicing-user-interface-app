@@ -15,7 +15,7 @@ class HttpAvailabilityQuery {
               error: HttpAvailabilityQueryError.withUnexpectedResponseStatus(response.status)
             });
           }
-          resolve(response);
+          resolve(response.data);
         }).catch(error => {
           reject({
             error: HttpAvailabilityQueryError.withRequestError(error)

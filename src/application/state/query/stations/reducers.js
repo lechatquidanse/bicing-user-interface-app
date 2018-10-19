@@ -12,14 +12,15 @@ export const fetchListStart = (state = INITIAL_STATE, action) => {
 };
 
 export const fetchListSuccess = (state = INITIAL_STATE, action) => {
-  const { isFetching, data } = action.payload;
-
-  return { ...state, isFetching, stations: data['hydra:member'] };
+  return produce(state, draft => {
+    draft.stations = action.payload.data
+  });
 }
 
 export const fetchListFailure = (state = INITIAL_STATE, action) => {
-  const { isFetching, error } = action.payload;
-  return { ...state, isFetching, error };
+  return produce(state, draft => {
+    draft.error = action.payload.error
+  });
 }
 
 export const defaultHandler = (state, action) => {

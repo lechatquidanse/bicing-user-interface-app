@@ -9,12 +9,12 @@ services:
     ports: ['3000:3000']
     volumes: ['.:/usr/src/app', './node_modules:/usr/src/app/node_modules']
 
-  test-feature:
-    build: './docker/chrome'
-    cap_add: [SYS_ADMIN]
-    networks: ['app']
-    ports: ['9222:9222']
-    shm_size: '1gb'
+  # test-feature:
+  #   build: './docker/chrome'
+  #   cap_add: [SYS_ADMIN]
+  #   networks: ['app']
+  #   ports: ['9222:9222']
+  #   shm_size: '1gb'
 
   apimock:
     image: 'clue/json-server'

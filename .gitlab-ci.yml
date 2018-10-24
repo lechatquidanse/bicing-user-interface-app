@@ -54,7 +54,7 @@ build:
   - docker-compose run --rm node yarn test
   - docker-compose down -v --remove-orphans
 
-  - rm .env && envsubst < ./docker/stages/production/.env.dist > ./docker/stages/production/.env
+  - rm .env && envsubst < ./docker/stages/production/.env.dist > ./.env
   - docker build --target bicing_app_nginx -t $PRODUCTION_IMAGE .
   - docker push $PRODUCTION_IMAGE
 

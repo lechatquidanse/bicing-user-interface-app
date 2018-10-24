@@ -1,8 +1,8 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import * as queryReducers from 'application/state/query/index';
-import * as flowReducers from 'application/state/flow/index';
+import * as queryReducers from 'application/state/query';
+import * as flowReducers from 'application/state/flow';
 import stationsOperation from 'application/state/query/stations/operations';
 import lastAvailabilitiesOperation from 'application/state/query/lastAvailabilities/operations';
 import map from 'application/state/flow/map/operations';

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # Prepare environment file and docker-compose
-envsubst < ./docker/stages/production/.env.dist > ./docker/stages/production/.env
 envsubst < ./docker/stages/production/docker-compose.yml.dist > ./docker/stages/production/docker-compose.yml
 
 # Prepare ssh connection with production server

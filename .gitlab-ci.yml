@@ -32,6 +32,7 @@ test:
   - cp .env.dist .env
 
   - docker-compose up -d
+  - docker-compose run --rm node yarn install
   - docker-compose run --rm node yarn test
   - docker-compose down -v --remove-orphans
 
@@ -49,6 +50,7 @@ build:
   - cp .env.dist .env
 
   - docker-compose up -d
+  - docker-compose run --rm node yarn install
   - docker-compose run --rm node yarn test
 
   - docker build --target bicing_app_nginx -t $PRODUCTION_IMAGE .

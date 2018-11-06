@@ -1,30 +1,39 @@
 import React from 'react';
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
+import { GoogleMap } from 'react-google-maps';
+import { arrayOf, string, func } from 'prop-types';
 
-const Map = withScriptjs(withGoogleMap(prop => {
-    const markers = prop.stations.map(station => {
-        let icon = ('BIKE' === station.type) ?
-            'https://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png' :
-            'https://mt.google.com/vt/icon?color=ff004C13&name=icons/spotlight/spotlight-waypoint-blue.png';
+import stationType from 'domain/types/stationType';
+import Marker from 'userInterface/react/components/Marker';
 
-        return (
+const Map = ({ stations, markerActive, onMapClick, onMarkerClick, onInfoWindowCloseClick }) => {
+    return <GoogleMap
+        defaultZoom={14}
+        defaultCenter={{ lat: 41.390205, lng: 2.154007 }}
+        onClick={() => onMapClick()}
+    >
+        {stations.map(station =>
             <Marker
-                defaultIcon={icon}
                 key={station.id}
-                position={{ lat: station.latitude, lng: station.longitude }}
-            >
-            </Marker>
-        )
-    });
+                markerId={station.id}
+                station={station}
+                markerActive={markerActive}
+                onMarkerClick={onMarkerClick}
+                onInfoWindowCloseClick={onInfoWindowCloseClick}
+            />
+        )}
+    </GoogleMap >
+};
 
-    return (
-        <GoogleMap
-            defaultZoom={14}
-            defaultCenter={{ lat: 41.390205, lng: 2.154007 }}
-        >
-            {markers}
-        </GoogleMap >
-    )
-}));
+Map.defaultProps = {
+    markerActive: null,
+};
+
+Map.prototype = {
+    stations: arrayOf(stationType),
+    markerActive: string,
+    onMapClick: func.isRequired,
+    onMarkerClick: func.isRequired,
+    onInfoWindowCloseClick: func.isRequired,
+};
 
 export default Map;

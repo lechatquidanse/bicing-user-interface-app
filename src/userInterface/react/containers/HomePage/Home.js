@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { arrayOf } from 'prop-types';
 
-import 'userInterface/react/components/App.css';
-import Map from 'userInterface/react/components/Map';
 import { fetchMapStart } from 'application/state/flow/map/actions';
 import { stationsWithLastAvailabilty } from 'application/state/flow/map/selectors';
+import stationType from 'domain/types/stationType';
+import MapEnhanced from 'userInterface/react/containers/Map';
+import 'userInterface/react/components/App.css';
 
 class Home extends PureComponent {
   componentDidMount() {
@@ -16,20 +17,14 @@ class Home extends PureComponent {
   render() {
     return (
       <div className="App">
-        <Map
-          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-          loadingElement={<div style={{ height: `100%` }} />}
-          containerElement={<div style={{ height: `400px` }} />}
-          mapElement={<div style={{ height: `100%` }} />}
-          stations={this.props.stations}
-        />
+        <MapEnhanced stations={this.props.stations} />
       </div>
     );
   }
 }
 
 Home.propTypes = {
-  stations: PropTypes.array
+  stations: arrayOf(stationType)
 };
 
 const mapStateToProps = state => ({

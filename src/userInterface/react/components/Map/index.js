@@ -5,7 +5,7 @@ import { arrayOf, string, func } from 'prop-types';
 import stationType from 'domain/types/stationType';
 import Marker from 'userInterface/react/components/Marker';
 
-const Map = ({ stations, markerActive, onMapClick, onMarkerClick, onInfoWindowCloseClick }) => {
+const Map = ({ stations, markerActive, onMapClick, onMarkerClick, onInfoWindowCloseClick, onInfoWindowViewMoreClick }) => {
     return <GoogleMap
         defaultZoom={14}
         defaultCenter={{ lat: 41.390205, lng: 2.154007 }}
@@ -19,6 +19,7 @@ const Map = ({ stations, markerActive, onMapClick, onMarkerClick, onInfoWindowCl
                 markerActive={markerActive}
                 onMarkerClick={onMarkerClick}
                 onInfoWindowCloseClick={onInfoWindowCloseClick}
+                onInfoWindowViewMoreClick={onInfoWindowViewMoreClick}
             />
         )}
     </GoogleMap >
@@ -34,6 +35,7 @@ Map.prototype = {
     onMapClick: func.isRequired,
     onMarkerClick: func.isRequired,
     onInfoWindowCloseClick: func.isRequired,
+    onInfoWindowViewMoreClick: func.isRequired,
 };
 
 export default Map;

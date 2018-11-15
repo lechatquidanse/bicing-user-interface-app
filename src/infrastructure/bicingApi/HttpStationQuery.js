@@ -25,6 +25,26 @@ class HttpStationQuery {
         })
     });
   }
+  static find(stationId) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${process.env.REACT_APP_BICING_API_URL}/stations/${stationId}`)
+        .then(response => {
+          if (OK !== response.status) {
+            reject({
+              error: HttpStationQueryError.withUnexpectedResponseStatus(response.status)
+            });
+          }
+
+          // if () @todo add test to check if response.data
+          resolve(response.data);
+        }).catch(error => {
+          reject({
+            error: HttpStationQueryError.withRequestError(error)
+          });
+        })
+    });
+  }
 }
 
 export default HttpStationQuery;

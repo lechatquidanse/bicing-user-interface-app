@@ -4,8 +4,13 @@ import * as Types from 'application/state/query/stationAvailabilities/types';
 describe('application/state/query/stationAvailabilities/actions', () => {
     it('should create an action to start fetching availabilities for a station with function fetchStart()', () => {
         const stationId = 'cc90eb4e-4988-4443-aedf-6464f79eeb12';
+        const periodStart = '2016-08-11 14:15:00';
+        const periodEnd = '2016-08-13 16:15:00';
+        const interval = '5 minute';
 
-        expect(actions.fetchStart(stationId)).toEqual({ type: Types.FETCH.START, payload: { stationId } });
+        expect(actions.fetchStart(stationId, periodStart, periodEnd, interval)).toEqual({
+            type: Types.FETCH.START, payload: { stationId, periodStart, periodEnd, interval }
+        });
     });
     it('should create an action pending while fetching availabilities for a station with function fetchPending()', () => {
         expect(actions.fetchPending()).toEqual({ type: Types.FETCH.PENDING, payload: {} });

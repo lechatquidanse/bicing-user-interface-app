@@ -24,6 +24,10 @@ describe('application/state/query/stationAvailabilities/operations', () => {
 
     it('should fetch expected availabilities for a station with fetch()', () => {
         const stationId = 'cc90eb4e-4988-4443-aedf-6464f79eeb12';
+        const periodStart = '2016-08-11 14:15:00';
+        const periodEnd = '2016-08-13 16:15:00';
+        const interval = '5 minute';
+
         const fakeStationAvailabilities = [
             {
                 "interval": "2018-11-05 14:45:00",
@@ -45,12 +49,15 @@ describe('application/state/query/stationAvailabilities/operations', () => {
             },
         ];
 
-        const action = { type: Types.FETCH.START, payload: { stationId } };
+        const action = { type: Types.FETCH.START, payload: { stationId, periodStart, periodEnd, interval } };
 
         // @todo use real stub/mock with https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#srcsetuptestsjs-1
         return expectSaga(fetch, action)
             .provide([
-                [matchers.call.fn(HttpStationAvailabilityQuery.find, stationId), fakeStationAvailabilities],
+                [matchers.call.fn(
+                    HttpStationAvailabilityQuery.find, stationId, periodStart, periodEnd, interval),
+                    fakeStationAvailabilities
+                ],
             ])
             .put(fetchSuccess(fakeStationAvailabilities))
             .run();

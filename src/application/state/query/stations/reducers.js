@@ -3,28 +3,26 @@ import produce from 'immer';
 
 import * as Types from 'application/state/query/stations/types';
 
-export const INITIAL_STATE = { error: false, stations: [] };
+export const INITIAL_STATE = { error: null, data: null, payload: { isFetching: false } };
 
 export const fetchListStart = (state = INITIAL_STATE, action) => {
   return produce(state, draft => {
-    draft.payload = action.payload
+    draft.payload = action.payload;
   });
 };
 
 export const fetchListSuccess = (state = INITIAL_STATE, action) => {
   return produce(state, draft => {
-    draft.stations = action.payload.data
+    draft.data = action.payload.data;
+    draft.payload.isFetching = action.payload.isFetching;
   });
 }
 
 export const fetchListFailure = (state = INITIAL_STATE, action) => {
   return produce(state, draft => {
-    draft.error = action.payload.error
+    draft.error = action.payload.error;
+    draft.payload.isFetching = action.payload.isFetching;
   });
-}
-
-export const defaultHandler = (state, action) => {
-  return { ...state };
 }
 
 const HANDLERS = {

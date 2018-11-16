@@ -3,7 +3,7 @@ import produce from 'immer';
 import reducer from 'application/state/query/stations/reducers';
 import * as Types from 'application/state/query/stations/types';
 
-const INITIAL_STATE = { error: false, stations: [] };
+const INITIAL_STATE = { error: null, data: null, payload: { isFetching: false } };
 
 describe('application/state/query/stations/reducers', () => {
     it('should have initial state', () => {
@@ -16,14 +16,14 @@ describe('application/state/query/stations/reducers', () => {
 
     it('should affect state for action with type defining a fetch list start', () => {
         const expectedState = produce(INITIAL_STATE, draft => {
-            draft.payload = {};
+            draft.payload = { isFetching: true };
         });
-        expect(reducer(INITIAL_STATE, { type: Types.FETCH_LIST.START, payload: {} })).toEqual(expectedState);
+        expect(reducer(INITIAL_STATE, { type: Types.FETCH_LIST.START, payload: { isFetching: true } })).toEqual(expectedState);
     });
 
     it('should affect state for action with type defining a fetch list success', () => {
         const expectedState = produce(INITIAL_STATE, draft => {
-            draft.stations = [
+            draft.data = [
                 'station 1', 'station 2'
             ];
         });
@@ -31,7 +31,8 @@ describe('application/state/query/stations/reducers', () => {
         expect(reducer(INITIAL_STATE, {
             type: Types.FETCH_LIST.SUCCESS,
             payload: {
-                data: ['station 1', 'station 2']
+                data: ['station 1', 'station 2'],
+                isFetching: false
             }
         })).toEqual(expectedState);
     });
@@ -43,7 +44,8 @@ describe('application/state/query/stations/reducers', () => {
         expect(reducer(INITIAL_STATE, {
             type: Types.FETCH_LIST.FAILURE,
             payload: {
-                error: 'An error occured during fetch list.'
+                error: 'An error occured during fetch list.',
+                isFetching: false
             }
         })).toEqual(expectedState);
     });

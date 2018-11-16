@@ -6,7 +6,7 @@ import stationType from 'domain/types/stationType';
 import MarkerIcon from 'userInterface/react/components/MarkerIcon';
 import MarkerInfoWindow from 'userInterface/react/components/MarkerInfoWindow';
 
-const Marker = ({ markerId, markerActive, station, onMarkerClick, onInfoWindowCloseClick }) => {
+const Marker = ({ markerId, markerActive, station, onMarkerClick, onInfoWindowCloseClick, onInfoWindowViewMoreClick }) => {
     const lastAvailability = station.lastAvailability;
     const status = lastAvailability ? lastAvailability.status : 'CLOSED';
     const availableBikeNumber = lastAvailability ? lastAvailability.availableBikeNumber : 0;
@@ -29,6 +29,8 @@ const Marker = ({ markerId, markerActive, station, onMarkerClick, onInfoWindowCl
                     availableBikeNumber={availableBikeNumber}
                     availableSlotNumber={availableSlotNumber}
                     status={status}
+                    onInfoWindowViewMoreClick={onInfoWindowViewMoreClick}
+                    stationId={station.id}
                 />
             </InfoWindow>
         }
@@ -45,6 +47,7 @@ Marker.propTypes = {
     station: stationType.isRequired,
     onMarkerClick: func.isRequired,
     onInfoWindowCloseClick: func.isRequired,
+    onInfoWindowViewMoreClick: func.isRequired
 };
 
 export default Marker;

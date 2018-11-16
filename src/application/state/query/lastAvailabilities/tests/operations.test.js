@@ -43,7 +43,7 @@ describe('application/state/query/lastAvailabilities/operations', () => {
             .run();
     });
 
-    it('should handle error when api call failed in list() couilles', () => {
+    it('should handle error when api call failed in list()', () => {
         const error = new Error('error_api_call');
 
         return expectSaga(list)

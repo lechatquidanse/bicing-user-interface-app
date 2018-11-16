@@ -1,13 +1,12 @@
 import { createSelector } from 'reselect'
 import produce from 'immer';
-import { stationsDataList as stationsSelector } from 'application/state/query/stations/selectors';
-import { lastAvailabilitiesDataList as lastAvailabilitiesSelector } from 'application/state/query/lastAvailabilities/selectors';
+import { stationsSelector } from 'application/state/query/stations/selectors';
+import { lastAvailabilitiesSelector } from 'application/state/query/lastAvailabilities/selectors';
 
-export const stationsWithLastAvailabilty = createSelector(
+export const stationsWithLastAvailabiltySelector = createSelector(
     [stationsSelector, lastAvailabilitiesSelector],
     (stations, lastAvailabilities) => {
-        //@todo check staions and lastAvailabilities
-        if (stations.length === 0 || lastAvailabilities.length === 0) {
+        if (stations === null || lastAvailabilities === null) {
             return stations;
         }
 

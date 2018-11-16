@@ -1,7 +1,6 @@
-export const stations = (state) => state.query.stations;
-export const stationsData = (state) => state.query.stations.stations;
-export const stationsDataList = (state) => {
-    const stations = state.query.stations.stations;
+export const isFetchingSelector = (state) => state.query.stations.payload.isFetching;
+export const stationsSelector = (state) => {
+    const stations = state.query.stations.data;
 
-    return stations['hydra:member'] ? stations['hydra:member'] : [];
+    return stations && stations['hydra:member'] ? stations['hydra:member'] : null;
 };

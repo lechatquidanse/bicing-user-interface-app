@@ -3,7 +3,7 @@ import produce from 'immer';
 
 import * as Types from 'application/state/flow/map/types';
 
-export const INITIAL_STATE = { error: false, stationsWithLastAvailabilities: [] };
+export const INITIAL_STATE = { error: null, data: null };
 
 export const fetchMapStart = (state = INITIAL_STATE, action) => {
   return produce(state, draft => {

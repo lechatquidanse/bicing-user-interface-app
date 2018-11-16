@@ -3,12 +3,22 @@ import { compose, lifecycle, withStateHandlers, withProps } from 'recompose';
 import { withScriptjs, withGoogleMap } from 'react-google-maps';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import {
 
-import Map from 'userInterface/react/components/Map';
+    Loading as LoadingTemplate,
+    Empty as EmptyTemplate,
+    Map as MapTemplate
+} from 'userInterface/react/components/Map';
+
 import { fetchMapStart } from 'application/state/flow/map/actions';
-import { stationsWithLastAvailabilty } from 'application/state/flow/map/selectors';
-import { fetchStart } from 'application/state/query/stationAvailabilities/actions';
-import { stationAvailabilitiesDataList } from 'application/state/query/stationAvailabilities/selectors';
+import { stationsWithLastAvailabiltySelector } from 'application/state/flow/map/selectors';
+import { isFetchingSelector as isFetchingStationsSelector } from 'application/state/query/stations/selectors';
+import { fetchStationStart } from 'application/state/flow/station/actions';
+import { withMaybe, withEither } from 'userInterface/react/renderers';
+
+const isLoadingStations = (props) => props.isFetchingStations;
+const isNullStations = (props) => !props.stations;
+const isEmptyStations = (props) => props.stations.length === 0;
 
 const withMapProps = withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places",
@@ -18,14 +28,14 @@ const withMapProps = withProps({
 });
 
 const mapStateToProps = state => ({
-    stations: stationsWithLastAvailabilty(state),
-    stationAvailabilities: stationAvailabilitiesDataList(state)
+    stations: stationsWithLastAvailabiltySelector(state),
+    isFetchingStations: isFetchingStationsSelector(state)
 });
 
 const mapDispatchToProps = dispatch =>
     bindActionCreators({
         fetchMapStart: fetchMapStart,
-        onInfoWindowViewMoreClick: fetchStart,
+        onInfoWindowViewMoreClick: fetchStationStart,
     }, dispatch);
 
 const withReduxConnect = connect(mapStateToProps, mapDispatchToProps);
@@ -45,13 +55,16 @@ const withMarkerClickBehaviour = withStateHandlers(
     }
 );
 
-const MapEnhanced = compose(
+const Map = compose(
     withMapProps,
     withScriptjs,
     withGoogleMap,
     withReduxConnect,
     withLifeCycle,
     withMarkerClickBehaviour,
-)(Map);
+    withEither(isLoadingStations, LoadingTemplate),
+    withMaybe(isNullStations),
+    withEither(isEmptyStations, EmptyTemplate)
+)(MapTemplate);
 
-export default MapEnhanced;
+export default Map;

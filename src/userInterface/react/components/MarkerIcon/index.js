@@ -1,5 +1,7 @@
 import { string, number } from 'prop-types';
 
+import { TYPE_ELECTRIC_BIKE } from 'domain/definitions/stationDefinition';
+import { STATUS_CLOSED } from 'domain/definitions/availabilityDefinition';
 import IconClosed from 'userInterface/react/components/MarkerIcon/icons/closed-min.png';
 import IconBike0 from 'userInterface/react/components/MarkerIcon/icons/bike-0-min.png';
 import IconBike25 from 'userInterface/react/components/MarkerIcon/icons/bike-25-min.png';
@@ -45,12 +47,12 @@ const MarkerIcon = (type, status, bikeNumber, slotNumber) => {
     const total = (bikeNumber + slotNumber) > 0 ? bikeNumber + slotNumber : 1;
     const availabilty = (bikeNumber / total) * 100;
 
-    if (status === 'CLOSED') {
+    if (status === STATUS_CLOSED) {
         return IconClosed;
     }
 
     switch (type) {
-        case 'ELECTRIC_BIKE':
+        case TYPE_ELECTRIC_BIKE:
             return getIconElectricBike(availabilty);
         default:
             return getIconBike(availabilty);

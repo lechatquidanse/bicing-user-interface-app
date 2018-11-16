@@ -1,11 +1,13 @@
 import React from 'react';
 
-import MapEnhanced from 'userInterface/react/containers/Map';
 import 'userInterface/react/components/App.css';
+import Map from 'userInterface/react/containers/Map';
+import Station from 'userInterface/react/containers/Station';
 
 const Home = () => (
   <div className="App">
-    <MapEnhanced />
+    <Map />
+    <Station />
   </div>
 );
 

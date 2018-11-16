@@ -4,7 +4,7 @@ import { fetchListPending, fetchListSuccess, fetchListFailure } from 'applicatio
 import * as Types from 'application/state/query/stations/types';
 import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
 
-export function* list(action) {
+export function* list() {
   yield put(fetchListPending());
 
   try {

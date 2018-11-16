@@ -1,1 +1,1 @@
-export const stationData = (state) => state.query.station.station;
+export const dataSelector = (state) => state.query.station.data;

@@ -3,7 +3,7 @@ import produce from 'immer';
 import reducer from 'application/state/query/station/reducers';
 import * as Types from 'application/state/query/station/types';
 
-const INITIAL_STATE = { error: false, station: {} };
+const INITIAL_STATE = { error: null, data: null, payload: { isFetching: false } };
 
 describe('application/state/query/station/reducers', () => {
     it('should have initial state', () => {
@@ -17,18 +17,19 @@ describe('application/state/query/station/reducers', () => {
     it('should affect state for action with type defining a fetch start', () => {
         const stationId = 'f7fa1d7b-4a7b-410d-bae0-549d862a2523';
         const expectedState = produce(INITIAL_STATE, draft => {
-            draft.payload = { stationId };
+            draft.payload = { stationId, isFetching: true };
         });
-        expect(reducer(INITIAL_STATE, { type: Types.FETCH.START, payload: { stationId } })).toEqual(expectedState);
+        expect(reducer(INITIAL_STATE, { type: Types.FETCH.START, payload: { stationId, isFetching: true } })).toEqual(expectedState);
     });
 
     it('should affect state for action with type defining a fetch success', () => {
-        const expectedState = produce(INITIAL_STATE, draft => { draft.station = { name: 'station 1' } });
+        const expectedState = produce(INITIAL_STATE, draft => { draft.data = { name: 'station 1' } });
 
         expect(reducer(INITIAL_STATE, {
             type: Types.FETCH.SUCCESS,
             payload: {
-                data: { name: 'station 1' }
+                data: { name: 'station 1' },
+                isFetching: false
             }
         })).toEqual(expectedState);
     });
@@ -40,7 +41,8 @@ describe('application/state/query/station/reducers', () => {
         expect(reducer(INITIAL_STATE, {
             type: Types.FETCH.FAILURE,
             payload: {
-                error: 'An error occured during fetch.'
+                error: 'An error occured during fetch.',
+                isFetching: false
             }
         })).toEqual(expectedState);
     });

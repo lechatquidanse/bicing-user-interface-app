@@ -1,32 +1,20 @@
-import moment from "moment";
+export const isFetchingSelector = (state) => state.query.stationAvailabilities.payload.isFetching;
+export const dataSelector = (state) => state.query.stationAvailabilities.data;
+export const filterSelector = (state) => {
+    const data = dataSelector(state);
 
-export const stationAvailabilitiesData = (state) => state.query.stationAvailabilities.stationAvailabilities;
-
-export const stationAvailabilitiesDataList = (state) => {
-    const stationAvailabilities = stationAvailabilitiesData(state);
-
-    return stationAvailabilities['availabilities'] ? stationAvailabilities['availabilities'] : [];
+    return data && data['filter'] ? data['filter'] : null;
 };
+export const stationAvailabilitiesSelector = (state) => {
+    const data = dataSelector(state);
 
-export const stationAvailabilitiesFilterAsDate = (state) => {
-    const stationAvailabilities = stationAvailabilitiesData(state);
-
-    if (stationAvailabilities.length === 0) {
-        return {};
-    }
-    //@todo add more test access key
-    return {
-        datePeriodStart: moment(stationAvailabilities['filter'].periodStart, 'YYYY-MM-DD HH:mm:ss'),
-        datePeriodEnd: moment(stationAvailabilities['filter'].periodEnd, 'YYYY-MM-DD HH:mm:ss'),
-        interval: stationAvailabilities['filter'].interval
-    }
+    return data && data['availabilities'] ? data['availabilities'] : null;
 };
+export const stationAvailabilitiesSortedSelector = (state) => {
+    const availabilities = stationAvailabilitiesSelector(state);
 
-export const stationAvailabilitiesSorted = (state) => {
-    const availabilities = stationAvailabilitiesDataList(state);
-
-    if (availabilities.length === 0) {
-        return [];
+    if (availabilities === null) {
+        return null;
     }
 
     const datasetslabels = [];

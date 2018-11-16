@@ -3,7 +3,7 @@ import produce from 'immer';
 import reducer from 'application/state/query/lastAvailabilities/reducers';
 import * as Types from 'application/state/query/lastAvailabilities/types';
 
-const INITIAL_STATE = { error: false, lastAvailabilities: [] };
+const INITIAL_STATE = { error: null, data: null, payload: { isFetching: false } };
 
 describe('application/state/query/lastAvailabilities/reducers', () => {
     it('should have initial state', () => {
@@ -17,14 +17,14 @@ describe('application/state/query/lastAvailabilities/reducers', () => {
 
     it('should affect state for action with type defining a fetch list start', () => {
         const expectedState = produce(INITIAL_STATE, draft => {
-            draft.payload = {};
+            draft.payload = { isFetching: true };
         });
-        expect(reducer(INITIAL_STATE, { type: Types.FETCH_LIST.START, payload: {} })).toEqual(expectedState);
+        expect(reducer(INITIAL_STATE, { type: Types.FETCH_LIST.START, payload: { isFetching: true } })).toEqual(expectedState);
     });
 
     it('should affect state for action with type defining a fetch list success', () => {
         const expectedState = produce(INITIAL_STATE, draft => {
-            draft.lastAvailabilities = [
+            draft.data = [
                 'last availability 1', 'last availability 2'
             ];
         });
@@ -32,7 +32,8 @@ describe('application/state/query/lastAvailabilities/reducers', () => {
         expect(reducer(INITIAL_STATE, {
             type: Types.FETCH_LIST.SUCCESS,
             payload: {
-                data: ['last availability 1', 'last availability 2']
+                data: ['last availability 1', 'last availability 2'],
+                isFetching: false,
             }
         })).toEqual(expectedState);
     });
@@ -44,7 +45,8 @@ describe('application/state/query/lastAvailabilities/reducers', () => {
         expect(reducer(INITIAL_STATE, {
             type: Types.FETCH_LIST.FAILURE,
             payload: {
-                error: 'An error occured during fetch list.'
+                error: 'An error occured during fetch list.',
+                isFetching: false,
             }
         })).toEqual(expectedState);
     });

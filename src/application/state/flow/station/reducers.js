@@ -3,7 +3,7 @@ import produce from 'immer';
 
 import * as Types from 'application/state/flow/station/types';
 
-export const INITIAL_STATE = { error: false, station: {}, availabilities: [] };
+export const INITIAL_STATE = { error: false, station: null, availabilities: null };
 
 export const fetchStationStart = (state = INITIAL_STATE, action) => {
   return produce(state, draft => {

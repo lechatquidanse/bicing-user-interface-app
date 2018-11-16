@@ -8,7 +8,13 @@ export function* fetch(action) {
   yield put(fetchPending());
 
   try {
-    const stationAvailabilities = yield call(HttpStationAvailabilityQuery.find, action.payload.stationId);
+    const stationAvailabilities = yield call(
+      HttpStationAvailabilityQuery.find,
+      action.payload.stationId,
+      action.payload.periodStart,
+      action.payload.periodEnd,
+      action.payload.interval,
+    );
 
     yield put(fetchSuccess(stationAvailabilities));
   } catch (e) {

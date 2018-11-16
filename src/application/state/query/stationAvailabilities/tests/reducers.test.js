@@ -3,7 +3,7 @@ import produce from 'immer';
 import reducer from 'application/state/query/stationAvailabilities/reducers';
 import * as Types from 'application/state/query/stationAvailabilities/types';
 
-const INITIAL_STATE = { error: false, stationAvailabilities: [] };
+const INITIAL_STATE = { data: null, error: null, payload: { isFetching: false } };
 
 describe('application/state/query/stationAvailabilities/reducers', () => {
     it('should have initial state', () => {
@@ -16,14 +16,14 @@ describe('application/state/query/stationAvailabilities/reducers', () => {
 
     it('should affect state for action with type defining a fetch start', () => {
         const expectedState = produce(INITIAL_STATE, draft => {
-            draft.payload = {};
+            draft.payload = { isFetching: true, stationId: 'stationId' };
         });
-        expect(reducer(INITIAL_STATE, { type: Types.FETCH.START, payload: {} })).toEqual(expectedState);
+        expect(reducer(INITIAL_STATE, { type: Types.FETCH.START, payload: { isFetching: true, stationId: 'stationId' } })).toEqual(expectedState);
     });
 
     it('should affect state for action with type defining a fetch success', () => {
         const expectedState = produce(INITIAL_STATE, draft => {
-            draft.stationAvailabilities = [
+            draft.data = [
                 'stationAvailabilities 1', 'stationAvailabilities 2'
             ];
         });
@@ -31,7 +31,8 @@ describe('application/state/query/stationAvailabilities/reducers', () => {
         expect(reducer(INITIAL_STATE, {
             type: Types.FETCH.SUCCESS,
             payload: {
-                data: ['stationAvailabilities 1', 'stationAvailabilities 2']
+                data: ['stationAvailabilities 1', 'stationAvailabilities 2'],
+                isFetching: false
             }
         })).toEqual(expectedState);
     });
@@ -43,7 +44,8 @@ describe('application/state/query/stationAvailabilities/reducers', () => {
         expect(reducer(INITIAL_STATE, {
             type: Types.FETCH.FAILURE,
             payload: {
-                error: 'An error occured during fetch.'
+                error: 'An error occured during fetch.',
+                isFetching: false
             }
         })).toEqual(expectedState);
     });

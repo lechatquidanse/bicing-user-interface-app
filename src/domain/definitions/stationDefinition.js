@@ -1,0 +1,3 @@
+export const TYPE_BIKE = 'BIKE';
+export const TYPE_ELECTRIC_BIKE = 'ELECTRIC_BIKE';
+export const TYPE_ALLOWED = [TYPE_BIKE, TYPE_ELECTRIC_BIKE];

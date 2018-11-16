@@ -1,7 +1,5 @@
-export const lastAvailabilities = state => state.query.lastAvailabilities;
-export const lastAvailabilitiesData = state => state.query.lastAvailabilities.lastAvailabilities;
-export const lastAvailabilitiesDataList = (state) => {
-    const lastAvailabilities = state.query.lastAvailabilities.lastAvailabilities;
+export const lastAvailabilitiesSelector = (state) => {
+    const lastAvailabilities = state.query.lastAvailabilities.data;
 
-    return lastAvailabilities['hydra:member'] ? lastAvailabilities['hydra:member'] : [];
+    return lastAvailabilities && lastAvailabilities['hydra:member'] ? lastAvailabilities['hydra:member'] : null;
 };

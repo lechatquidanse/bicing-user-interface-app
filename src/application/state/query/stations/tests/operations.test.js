@@ -38,7 +38,7 @@ describe('application/state/query/stations/operations', () => {
         ];
 
         // @todo use real stub/mock with https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#srcsetuptestsjs-1
-        return expectSaga(list)
+        return expectSaga(list, { payload: { byFilter: null } })
             .provide([
                 [matchers.call.fn(HttpStationQuery.findAll), fakeStations],
             ])
@@ -49,7 +49,7 @@ describe('application/state/query/stations/operations', () => {
     it('should handle error when api call failed in list()', () => {
         const error = new Error('error_api_call');
 
-        return expectSaga(list)
+        return expectSaga(list, { payload: { byFilter: null } })
             .provide([
                 [matchers.call.fn(HttpStationQuery.findAll), throwError(error)],
             ])

@@ -1,8 +1,9 @@
 import * as Types from 'application/state/flow/map/types';
 
-export const fetchMapStart = () => ({
+export const fetchMapStart = (byFilter = null) => ({
     type: Types.FETCH_MAP.START,
     payload: {
+        byFilter,
         isFetching: true
     }
 });

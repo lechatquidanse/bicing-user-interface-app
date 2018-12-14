@@ -29,6 +29,8 @@ export const stationAvailabilitiesSortedSelector = (state) => {
         datasetsAvailableBikeMin.push(availability['available_bike_min']);
         datasetsAvailableBikeMax.push(availability['available_bike_max']);
         datasetsAvailableBikeAvg.push(availability['available_bike_avg']);
+
+        return null;
     });
 
     return {

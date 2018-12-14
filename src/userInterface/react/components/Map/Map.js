@@ -6,6 +6,7 @@ import stationType from 'domain/types/stationType';
 import Marker from 'userInterface/react/components/Marker';
 
 const Map = ({
+    mapDisplayConfiguration,
     stations,
     markerActive,
     onMapClick,
@@ -13,8 +14,8 @@ const Map = ({
     onInfoWindowCloseClick,
     onInfoWindowViewMoreClick }) => {
     return <GoogleMap
-        defaultZoom={14}
-        defaultCenter={{ lat: 41.390205, lng: 2.154007 }}
+        defaultZoom={mapDisplayConfiguration.zoom}
+        defaultCenter={mapDisplayConfiguration.center}
         onClick={() => onMapClick()}
     >
         {stations.map(station =>

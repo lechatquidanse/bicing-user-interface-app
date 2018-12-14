@@ -5,7 +5,7 @@ describe('application/state/query/station/actions', () => {
     it('should create an action to start fetching a station with function fetchStart()', () => {
         const stationId = '630863d3-510c-4dba-8a39-bb1404ebbb78';
 
-        expect(actions.fetchStart(stationId)).toEqual({ type: Types.FETCH.START, payload: { stationId, isFetching: true, isFetching: true } });
+        expect(actions.fetchStart(stationId)).toEqual({ type: Types.FETCH.START, payload: { stationId, isFetching: true } });
     });
     it('should create an action pending while fetching a station with function fetchPending()', () => {
         expect(actions.fetchPending()).toEqual({ type: Types.FETCH.PENDING, payload: { isFetching: true } });

@@ -9,10 +9,10 @@ import * as StationsTypes from 'application/state/query/stations/types';
 import { fetchListStart as lastAvailabilitiesFetchListStart } from 'application/state/query/lastAvailabilities/actions';
 import * as LastAvailabilitiesTypes from 'application/state/query/lastAvailabilities/types';
 
-export function* initFetch() {
+export function* initFetch(action) {
   try {
     yield all([
-      put(stationFetchListStart()),
+      put(stationFetchListStart(action.payload.byFilter)),
       put(lastAvailabilitiesFetchListStart()),
     ]);
   } catch (e) {

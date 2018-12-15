@@ -4,11 +4,10 @@ import { fetchListPending, fetchListSuccess, fetchListFailure } from 'applicatio
 import * as Types from 'application/state/query/stations/types';
 import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
 
-export function* list() {
+export function* list(action) {
   yield put(fetchListPending());
-
   try {
-    const stations = yield call(HttpStationQuery.findAll);
+    const stations = yield call(HttpStationQuery.findAll, action.payload.byFilter);
 
     yield put(fetchListSuccess(stations));
   } catch (e) {

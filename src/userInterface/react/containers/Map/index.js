@@ -11,7 +11,7 @@ import {
 } from 'userInterface/react/components/Map';
 
 import { fetchMapStart } from 'application/state/flow/map/actions';
-import { stationsWithLastAvailabiltySelector } from 'application/state/flow/map/selectors';
+import { mapDisplayConfigurationSelector, stationsWithLastAvailabiltySelector } from 'application/state/flow/map/selectors';
 import { isFetchingSelector as isFetchingStationsSelector } from 'application/state/query/stations/selectors';
 import { fetchStationStart } from 'application/state/flow/station/actions';
 import { withMaybe, withEither } from 'userInterface/react/renderers';
@@ -28,6 +28,7 @@ const withMapProps = withProps({
 });
 
 const mapStateToProps = state => ({
+    mapDisplayConfiguration: mapDisplayConfigurationSelector(state),
     stations: stationsWithLastAvailabiltySelector(state),
     isFetchingStations: isFetchingStationsSelector(state)
 });

@@ -3,7 +3,7 @@ import produce from 'immer';
 
 import * as Types from 'application/state/flow/map/types';
 
-export const INITIAL_STATE = { error: null, data: null };
+export const INITIAL_STATE = { error: null, data: null, payload: { byFilter: null, isFetching: false } };
 
 export const fetchMapStart = (state = INITIAL_STATE, action) => {
   return produce(state, draft => {
@@ -13,7 +13,7 @@ export const fetchMapStart = (state = INITIAL_STATE, action) => {
 
 export const fetchMapSuccess = (state = INITIAL_STATE, action) => {
   return produce(state, draft => {
-    draft.payload = action.payload
+    draft.payload.isFetching = action.payload.isFetching
   })
 }
 

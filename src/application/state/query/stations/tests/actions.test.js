@@ -3,7 +3,10 @@ import * as Types from 'application/state/query/stations/types';
 
 describe('application/state/query/stations/actions', () => {
     it('should create an action to start fetching a list of stations with function fetchListStart()', () => {
-        expect(actions.fetchListStart()).toEqual({ type: Types.FETCH_LIST.START, payload: { isFetching: true } });
+        expect(actions.fetchListStart()).toEqual({ type: Types.FETCH_LIST.START, payload: { byFilter: null, isFetching: true } });
+    });
+    it('should create an action to start fetching a list of stations filtered with function fetchListStart()', () => {
+        expect(actions.fetchListStart({ latitude: 41.345 })).toEqual({ type: Types.FETCH_LIST.START, payload: { byFilter: { latitude: 41.345 }, isFetching: true } });
     });
     it('should create an action pending while fetching a list of stations with function fetchListPending()', () => {
         expect(actions.fetchListPending()).toEqual({ type: Types.FETCH_LIST.PENDING, payload: { isFetching: true } });

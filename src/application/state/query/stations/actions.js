@@ -1,6 +1,6 @@
 import * as Types from 'application/state/query/stations/types';
 
-export const fetchListStart = () => ({ type: Types.FETCH_LIST.START, payload: { isFetching: true } });
+export const fetchListStart = (byFilter = null) => ({ type: Types.FETCH_LIST.START, payload: { byFilter, isFetching: true } });
 export const fetchListPending = () => ({ type: Types.FETCH_LIST.PENDING, payload: { isFetching: true } });
 export const fetchListCancelled = () => ({ type: Types.FETCH_LIST.CANCELLED, payload: { isFetching: false } });
 export const fetchListSuccess = data => ({

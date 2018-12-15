@@ -3,7 +3,7 @@ import produce from 'immer';
 
 import * as Types from 'application/state/query/stations/types';
 
-export const INITIAL_STATE = { error: null, data: null, payload: { isFetching: false } };
+export const INITIAL_STATE = { error: null, data: null, payload: { byFilter: null, isFetching: false } };
 
 export const fetchListStart = (state = INITIAL_STATE, action) => {
   return produce(state, draft => {

@@ -1,38 +1,45 @@
-import { all, put, takeLatest, race } from 'redux-saga/effects';
+import { flowSuccess } from 'application/state/flow/station/actions';
+import { FLOW } from 'application/state/flow/station/types';
+import {
+  actions as queryStationActions,
+  types as QUERY_STATION_TYPES,
+} from 'application/state/query/station';
+import {
+  actions as queryStationAvailabilitiesActions,
+  types as QUERY_STATION_AVAILABILITIES_TYPES,
+} from 'application/state/query/stationAvailabilities';
+import {
+  all, put, race, takeLatest,
+} from 'redux-saga/effects';
 
-import { fetchStationSuccess } from 'application/state/flow/station/actions';
-import * as Types from 'application/state/flow/station/types';
-
-import { fetchStart as stationFetchStart } from 'application/state/query/station/actions';
-import * as StationTypes from 'application/state/query/station/types';
-
-import { fetchStart as stationAvailabilitiesFetchStart } from 'application/state/query/stationAvailabilities/actions';
-import * as stationAvailabilitiesTypes from 'application/state/query/stationAvailabilities/types';
-
-export function* initFetch(action) {
+export function* initFlow(action) {
   try {
-    const stationId = action.payload.stationId;
+    const { stationId, byIntervalInPeriodFilter } = action.payload;
 
     yield all([
-      put(stationFetchStart(stationId)),
-      put(stationAvailabilitiesFetchStart(stationId)),
+      put(queryStationActions.fetchStart(stationId)),
+      put(queryStationAvailabilitiesActions.fetchStart(stationId, byIntervalInPeriodFilter)),
     ]);
-  } catch (e) {
-    console.log('INIT FETCHED LALAL ERROR operations.js', e);
+  } catch (exception) {
+    // @todo log exception
   }
 }
-export function* dataFetched(action) {
+
+export function* dataFetched() {
   try {
-    yield put(fetchStationSuccess());
-  } catch (e) {
-    console.log('DATA FETCHED LALAL ERROR operations.js', e);
+    yield put(flowSuccess());
+  } catch (exception) {
+    // @todo log exception
   }
 }
 
 export default function* operation() {
-  yield takeLatest(Types.FETCH_STATION.START, initFetch);
+  yield takeLatest(FLOW.START, initFlow);
   yield race({
-    station: takeLatest(StationTypes.FETCH.SUCCESS, dataFetched),
-    stationAvailabilities: takeLatest(stationAvailabilitiesTypes.FETCH.SUCCESS, dataFetched),
+    station: takeLatest(QUERY_STATION_TYPES.FETCH.SUCCESS, dataFetched),
+    stationAvailabilities: takeLatest(
+      QUERY_STATION_AVAILABILITIES_TYPES.FETCH.SUCCESS,
+      dataFetched,
+    ),
   });
 }

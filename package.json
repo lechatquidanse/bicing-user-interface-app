@@ -7,6 +7,8 @@
     "chart.js": "^2.7.3",
     "http-status": "^1.2.0",
     "immer": "^1.7.2",
+    "moment": "^2.23.0",
+    "prop-types": "^15.6.2",
     "react": "^16.5.0",
     "react-chartjs-2": "^2.7.4",
     "react-datepicker": "^1.8.0",
@@ -20,7 +22,8 @@
     "redux-define": "^1.1.1",
     "redux-saga": "^0.16.0",
     "reduxsauce": "^1.0.0",
-    "reselect": "^3.0.1"
+    "reselect": "^3.0.1",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,7 +34,15 @@
   },
   "devDependencies": {
     "cucumber": "^5.0.0",
+    "eslint": "5.6.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "flux-standard-action": "^2.0.3",
     "puppeteer": "^1.9.0",
+    "react-test-renderer": "^16.6.3",
+    "react-testing-library": "^5.4.0",
     "redux-saga-test-plan": "^3.7.0",
     "request-promise-native": "^1.0.5"
   },

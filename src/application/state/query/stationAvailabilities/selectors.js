@@ -1,45 +1,49 @@
-export const isFetchingSelector = (state) => state.query.stationAvailabilities.payload.isFetching;
-export const dataSelector = (state) => state.query.stationAvailabilities.data;
-export const filterSelector = (state) => {
-    const data = dataSelector(state);
+const selector = state => state.query.stationAvailabilities;
 
-    return data && data['filter'] ? data['filter'] : null;
+export const data = state => selector(state).data;
+export const error = state => selector(state).error;
+export const isFetching = state => selector(state).isFetching;
+export const stationId = state => selector(state).stationId;
+
+export const byIntervalInPeriodFilter = (state) => {
+  if (data(state) == null) {
+    return null;
+  }
+
+  return data(state).filter;
 };
-export const stationAvailabilitiesSelector = (state) => {
-    const data = dataSelector(state);
+export const stationAvailabilitiesSorted = (state) => {
+  if (data(state) == null || data(state).availabilities == null) {
+    return null;
+  }
 
-    return data && data['availabilities'] ? data['availabilities'] : null;
-};
-export const stationAvailabilitiesSortedSelector = (state) => {
-    const availabilities = stationAvailabilitiesSelector(state);
+  const datasetslabels = [];
+  const datasetsAvailableSlotMin = [];
+  const datasetsAvailableSlotMax = [];
+  const datasetsAvailableSlotAvg = [];
+  const datasetsAvailableBikeMin = [];
+  const datasetsAvailableBikeMax = [];
+  const datasetsAvailableBikeAvg = [];
 
-    if (availabilities === null) {
-        return null;
-    }
+  data(state).availabilities.map((availability) => {
+    datasetslabels.push(availability.interval);
+    datasetsAvailableSlotMin.push(availability.available_slot_min);
+    datasetsAvailableSlotMax.push(availability.available_slot_max);
+    datasetsAvailableSlotAvg.push(availability.available_slot_avg);
+    datasetsAvailableBikeMin.push(availability.available_bike_min);
+    datasetsAvailableBikeMax.push(availability.available_bike_max);
+    datasetsAvailableBikeAvg.push(availability.available_bike_avg);
 
-    const datasetslabels = [];
-    const datasetsAvailableSlotMin = [], datasetsAvailableSlotMax = [], datasetsAvailableSlotAvg = [];
-    const datasetsAvailableBikeMin = [], datasetsAvailableBikeMax = [], datasetsAvailableBikeAvg = [];
+    return null;
+  });
 
-    availabilities.map(availability => {
-        datasetslabels.push(availability['interval']);
-        datasetsAvailableSlotMin.push(availability['available_slot_min']);
-        datasetsAvailableSlotMax.push(availability['available_slot_max']);
-        datasetsAvailableSlotAvg.push(availability['available_slot_avg']);
-        datasetsAvailableBikeMin.push(availability['available_bike_min']);
-        datasetsAvailableBikeMax.push(availability['available_bike_max']);
-        datasetsAvailableBikeAvg.push(availability['available_bike_avg']);
-
-        return null;
-    });
-
-    return {
-        datasetslabels,
-        datasetsAvailableSlotMin,
-        datasetsAvailableSlotMax,
-        datasetsAvailableSlotAvg,
-        datasetsAvailableBikeMin,
-        datasetsAvailableBikeMax,
-        datasetsAvailableBikeAvg,
-    };
+  return {
+    datasetslabels,
+    datasetsAvailableSlotMin,
+    datasetsAvailableSlotMax,
+    datasetsAvailableSlotAvg,
+    datasetsAvailableBikeMin,
+    datasetsAvailableBikeMax,
+    datasetsAvailableBikeAvg,
+  };
 };

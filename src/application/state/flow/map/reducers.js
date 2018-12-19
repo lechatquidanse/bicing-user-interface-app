@@ -1,25 +1,28 @@
-import { createReducer } from 'reduxsauce'
+import { FLOW } from 'application/state/flow/map/types';
 import produce from 'immer';
+import { createReducer } from 'reduxsauce';
 
-import * as Types from 'application/state/flow/map/types';
-
-export const INITIAL_STATE = { error: null, data: null, payload: { byFilter: null, isFetching: false } };
-
-export const fetchMapStart = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.payload = action.payload
-  })
+export const INITIAL_STATE = {
+  byGeoLocationFilter: null,
+  error: false,
 };
 
-export const fetchMapSuccess = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.payload.isFetching = action.payload.isFetching
-  })
-}
+export const flowStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.byGeoLocationFilter = action.payload.byGeoLocationFilter;
+});
+
+export const flowSuccess = (state = INITIAL_STATE) => produce(state, () => {
+});
+
+export const flowFailure = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.data = action.payload;
+  draft.error = action.error;
+});
 
 export const HANDLERS = {
-  [Types.FETCH_MAP.START]: fetchMapStart,
-  [Types.FETCH_MAP.SUCCESS]: fetchMapSuccess,
-}
+  [FLOW.START]: flowStart,
+  [FLOW.SUCCESS]: flowSuccess,
+  [FLOW.FAILURE]: flowFailure,
+};
 
 export default createReducer(INITIAL_STATE, HANDLERS);

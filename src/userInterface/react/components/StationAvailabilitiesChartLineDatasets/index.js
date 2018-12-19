@@ -6,10 +6,10 @@ import AvailableSlotMaxChartLineDatasets from 'userInterface/react/components/St
 import AvailableSlotAvgChartLineDatasets from 'userInterface/react/components/StationAvailabilitiesChartLineDatasets/AvailableSlotAvgChartLineDatasets';
 
 export {
-    AvailableBikeMinChartLineDatasets,
-    AvailableBikeMaxChartLineDatasets,
-    AvailableBikeAvgChartLineDatasets,
-    AvailableSlotMinChartLineDatasets,
-    AvailableSlotMaxChartLineDatasets,
-    AvailableSlotAvgChartLineDatasets,
+  AvailableBikeMinChartLineDatasets,
+  AvailableBikeMaxChartLineDatasets,
+  AvailableBikeAvgChartLineDatasets,
+  AvailableSlotMinChartLineDatasets,
+  AvailableSlotMaxChartLineDatasets,
+  AvailableSlotAvgChartLineDatasets,
 };

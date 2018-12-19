@@ -33,6 +33,7 @@ test:
 
   - docker-compose up -d
   - docker-compose run --rm node yarn install
+  - docker-compose run --rm node eslint src/**/*.js src/**/*.jsx
   - docker-compose run --rm node yarn test
   - docker-compose down -v --remove-orphans
 
@@ -51,6 +52,7 @@ build:
 
   - docker-compose up -d
   - docker-compose run --rm node yarn install
+  - docker-compose run --rm node eslint src/**/*.js src/**/*.jsx
   - docker-compose run --rm node yarn test
   - docker-compose down -v --remove-orphans
 

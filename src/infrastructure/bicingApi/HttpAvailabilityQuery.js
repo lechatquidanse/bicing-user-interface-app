@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from 'axios';
 import { OK } from 'http-status';
 
@@ -9,18 +10,18 @@ class HttpAvailabilityQuery {
     return new Promise((resolve, reject) => {
       axios
         .get(`${process.env.REACT_APP_BICING_API_URL}/last-availabilities-by-station`)
-        .then(response => {
+        .then((response) => {
           if (OK !== response.status) {
             reject({
-              error: HttpAvailabilityQueryError.withUnexpectedResponseStatus(response.status)
+              error: HttpAvailabilityQueryError.withUnexpectedResponseStatus(response.status),
             });
           }
           resolve(response.data);
-        }).catch(error => {
+        }).catch((error) => {
           reject({
-            error: HttpAvailabilityQueryError.withRequestError(error)
+            error: HttpAvailabilityQueryError.withRequestError(error),
           });
-        })
+        });
     });
   }
 }

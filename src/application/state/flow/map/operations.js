@@ -1,43 +1,44 @@
-import { all, put, takeLatest, race } from 'redux-saga/effects';
+import { actions as commandMapActions } from 'application/state/command/map';
+import { flowSuccess } from 'application/state/flow/map/actions';
+import { FLOW } from 'application/state/flow/map/types';
+import {
+  actions as queryLastAvailabilitiesActions,
+  types as queryLastAvailabilitiesTypes,
+} from 'application/state/query/lastAvailabilities';
+import {
+  actions as queryStationsActions,
+  types as queryStationTypes,
+} from 'application/state/query/stations';
+import { all, put, takeLatest } from 'redux-saga/effects';
 
-import { fetchMapSuccess } from 'application/state/flow/map/actions';
-import * as Types from 'application/state/flow/map/types';
-
-import { fetchListStart as stationFetchListStart } from 'application/state/query/stations/actions';
-import * as StationsTypes from 'application/state/query/stations/types';
-
-import { fetchListStart as lastAvailabilitiesFetchListStart } from 'application/state/query/lastAvailabilities/actions';
-import * as LastAvailabilitiesTypes from 'application/state/query/lastAvailabilities/types';
-
-export function* initFetch(action) {
+export function* initFlow(action) {
   try {
+    const { byGeoLocationFilter } = action.payload;
+
+    // @todo add check if byGeolocationFilter is well formatted
     yield all([
-      put(stationFetchListStart(action.payload.byFilter)),
-      put(lastAvailabilitiesFetchListStart()),
+      put(queryStationsActions.fetchStart(byGeoLocationFilter)),
+      put(queryLastAvailabilitiesActions.fetchStart()),
+      put(commandMapActions.displayStart(byGeoLocationFilter)),
     ]);
-  } catch (e) {
-    console.log('INIT FETCHED LALAL ERROR operations.js', e);
+  } catch (exception) {
+    //  @todo do something with exception
   }
 }
 
-// export function* stationDataFailure(action) {
-//   console.log(action);
-//   // yield put(fetchMapFailure())
-// }
-
-export function* dataFetched(action) {
+export function* dataFetched() {
   try {
-    yield put(fetchMapSuccess());
-  } catch (e) {
-    console.log('DATA FETCHED LALAL ERROR operations.js', e);
+    yield put(flowSuccess());
+  } catch (exception) {
+    //  @todo do something with exception
   }
 }
 
 export default function* operation() {
-  yield takeLatest(Types.FETCH_MAP.START, initFetch);
-  // yield takeLatest(StationsTypes.FETCH_LIST.FAILURE, stationDataFailure);
-  yield race({
-    stationsSuccess: takeLatest(StationsTypes.FETCH_LIST.SUCCESS, dataFetched),
-    lastAvailabilities: takeLatest(LastAvailabilitiesTypes.FETCH_LIST.SUCCESS, dataFetched),
+  yield takeLatest(FLOW.START, initFlow);
+
+  yield all({
+    stationsSuccess: takeLatest(queryStationTypes.FETCH.SUCCESS, dataFetched),
+    lastAvailabilitiesSuccess: takeLatest(queryLastAvailabilitiesTypes.FETCH.SUCCESS, dataFetched),
   });
 }

@@ -1,21 +1,24 @@
+import {
+  fetchFailure,
+  fetchPending,
+  fetchSuccess,
+} from 'application/state/query/lastAvailabilities/actions';
+import { FETCH } from 'application/state/query/lastAvailabilities/types';
+import HttpAvailabilityQuery from 'infrastructure/bicingApi/HttpAvailabilityQuery';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { fetchListPending, fetchListSuccess, fetchListFailure } from 'application/state/query/lastAvailabilities/actions';
-import * as Types from 'application/state/query/lastAvailabilities/types';
-import HttpAvailabilityQuery from 'infrastructure/bicingApi/HttpAvailabilityQuery';
-
-export function* list() {
-  yield put(fetchListPending());
+export function* fetch() {
+  yield put(fetchPending());
 
   try {
     const lastAvailabilities = yield call(HttpAvailabilityQuery.findAll);
 
-    yield put(fetchListSuccess(lastAvailabilities));
-  } catch (e) {
-    yield put(fetchListFailure(e));
+    yield put(fetchSuccess(lastAvailabilities));
+  } catch (exception) {
+    yield put(fetchFailure(exception));
   }
 }
 
 export default function* operation() {
-  yield takeLatest(Types.FETCH_LIST.START, list);
+  yield takeLatest(FETCH.START, fetch);
 }

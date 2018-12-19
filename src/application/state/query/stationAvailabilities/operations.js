@@ -1,21 +1,23 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
-
-import { fetchPending, fetchSuccess, fetchFailure } from 'application/state/query/stationAvailabilities/actions';
-import * as Types from 'application/state/query/stationAvailabilities/types';
+import {
+  fetchFailure,
+  fetchPending,
+  fetchSuccess,
+} from 'application/state/query/stationAvailabilities/actions';
+import { FETCH } from 'application/state/query/stationAvailabilities/types';
 import HttpStationAvailabilityQuery from 'infrastructure/bicingApi/HttpStationAvailabilityQuery';
+import { call, put, takeLatest } from 'redux-saga/effects';
 
 export function* fetch(action) {
   yield put(fetchPending());
 
+  const { stationId, byIntervalInPeriodFilter } = action.payload;
+  // @todo add check stationID and byFilter
   try {
     const stationAvailabilities = yield call(
       HttpStationAvailabilityQuery.find,
-      action.payload.stationId,
-      action.payload.periodStart,
-      action.payload.periodEnd,
-      action.payload.interval,
+      stationId,
+      byIntervalInPeriodFilter,
     );
-
     yield put(fetchSuccess(stationAvailabilities));
   } catch (e) {
     yield put(fetchFailure(e));
@@ -23,5 +25,5 @@ export function* fetch(action) {
 }
 
 export default function* operation() {
-  yield takeLatest(Types.FETCH.START, fetch);
+  yield takeLatest(FETCH.START, fetch);
 }

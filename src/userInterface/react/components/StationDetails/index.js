@@ -1,22 +1,9 @@
-import React from 'react';
+import Error from 'userInterface/react/components/StationDetails/Error';
+import Loading from 'userInterface/react/components/StationDetails/Loading';
+import StationDetails from 'userInterface/react/components/StationDetails/StationDetails';
 
-import stationType from 'domain/types/stationType';
-
-const StationDetails = ({ station }) => {
-    return <div>
-        <h6>{station.name}</h6>
-        <p>
-            {station.type}
-            {station.address}
-            {station.addressNumber}
-            {station.zipCode}
-            {/* {station.lastAvailability} */}
-        </p>
-    </div>
+export {
+  Error,
+  Loading,
+  StationDetails,
 };
-
-StationDetails.propTypes = {
-    station: stationType.isRequired,
-};
-
-export default StationDetails;

@@ -1,5 +1,24 @@
-import * as Types from 'application/state/flow/station/types';
+import { FLOW } from 'application/state/flow/station/types';
 
-export const fetchStationStart = (stationId) => ({ type: Types.FETCH_STATION.START, payload: { stationId } });
-export const fetchStationSuccess = () => ({ type: Types.FETCH_STATION.SUCCESS, payload: {} });
-export const fetchStationFailure = (error) => ({ type: Types.FETCH_STATION.Failure, payload: { error } });
+export const flowStart = (stationId, byIntervalInPeriodFilter = null) => ({
+  error: false,
+  meta: { isFetching: true },
+  payload: { stationId, byIntervalInPeriodFilter },
+  type: FLOW.START,
+});
+export const flowPending = () => ({
+  error: false,
+  meta: { isFetching: true },
+  type: FLOW.PENDING,
+});
+export const flowSuccess = () => ({
+  error: false,
+  meta: { isFetching: false },
+  type: FLOW.SUCCESS,
+});
+export const flowFailure = error => ({
+  error: false,
+  meta: { isFetching: false },
+  payload: error,
+  type: FLOW.FAILURE,
+});

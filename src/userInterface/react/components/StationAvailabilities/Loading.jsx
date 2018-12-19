@@ -1,8 +1,9 @@
 import React from 'react';
 
-const Loading = () =>
-    <div>
+const Loading = () => (
+  <div>
         Loading ....
-    </div>;
+  </div>
+);
 
 export default Loading;

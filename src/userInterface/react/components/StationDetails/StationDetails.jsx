@@ -1,20 +1,37 @@
+/* eslint-disable */
+import { shape, string } from 'prop-types';
 import React from 'react';
-import stationType from 'domain/types/stationType';
 
-const StationDetails = ({ station }) => (
+const StationDetails = ({
+  station: {
+    name, type, address, addressNumber, zipCode,
+  },
+}) => (
   <div>
-    <h6>{station.name}</h6>
+    <h6>{name}</h6>
     <p>
-      {station.type}
-      {station.address}
-      {station.addressNumber}
-      {station.zipCode}
+      {type}
+      {address}
+      {addressNumber}
+      {zipCode}
     </p>
   </div>
 );
 
 StationDetails.propTypes = {
-  station: stationType.isRequired,
+  station: shape({
+    name: string.isRequired,
+    type: string.isRequired,
+    address: string,
+    addressNumber: string,
+    zipCode: string,
+  }),
+};
+
+StationDetails.defaultProps = {
+  address: '',
+  addressNumber: '',
+  zipCode: '',
 };
 
 export default StationDetails;

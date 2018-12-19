@@ -1,8 +1,9 @@
 import React from 'react';
 
-const Empty = () =>
-    <div>
+const Empty = () => (
+  <div>
         No StationAvailabilities
-    </div>;
+  </div>
+);
 
 export default Empty;

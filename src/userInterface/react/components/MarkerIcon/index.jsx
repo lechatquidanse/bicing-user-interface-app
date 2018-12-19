@@ -16,60 +16,60 @@ import IconElectricBike100 from 'userInterface/react/components/MarkerIcon/icons
 
 // @todo improve logic here and transform it as hoc to be used as children
 const getIconElectricBike = (availabilty) => {
-    if (availabilty === 0) {
-        return IconElectricBike0;
-    } else if (availabilty < 25) {
-        return IconElectricBike25;
-    } else if (availabilty < 50) {
-        return IconElectricBike50;
-    } else if (availabilty < 75) {
-        return IconElectricBike75;
-    }
+  if (availabilty === 0) {
+    return IconElectricBike0;
+  } if (availabilty < 25) {
+    return IconElectricBike25;
+  } if (availabilty < 50) {
+    return IconElectricBike50;
+  } if (availabilty < 75) {
+    return IconElectricBike75;
+  }
 
-    return IconElectricBike100;
+  return IconElectricBike100;
 };
 
 const getIconBike = (availabilty) => {
-    if (availabilty === 0) {
-        return IconBike0;
-    } else if (availabilty < 25) {
-        return IconBike25;
-    } else if (availabilty < 50) {
-        return IconBike50;
-    } else if (availabilty < 75) {
-        return IconBike75;
-    }
+  if (availabilty === 0) {
+    return IconBike0;
+  } if (availabilty < 25) {
+    return IconBike25;
+  } if (availabilty < 50) {
+    return IconBike50;
+  } if (availabilty < 75) {
+    return IconBike75;
+  }
 
-    return IconBike100;
+  return IconBike100;
 };
 
 const MarkerIcon = (type, status, bikeNumber, slotNumber) => {
-    const total = (bikeNumber + slotNumber) > 0 ? bikeNumber + slotNumber : 1;
-    const availabilty = (bikeNumber / total) * 100;
+  const total = (bikeNumber + slotNumber) > 0 ? bikeNumber + slotNumber : 1;
+  const availabilty = (bikeNumber / total) * 100;
 
-    if (status === STATUS_CLOSED) {
-        return IconClosed;
-    }
+  if (status === STATUS_CLOSED) {
+    return IconClosed;
+  }
 
-    switch (type) {
-        case TYPE_ELECTRIC_BIKE:
-            return getIconElectricBike(availabilty);
-        default:
-            return getIconBike(availabilty);
-    }
+  switch (type) {
+    case TYPE_ELECTRIC_BIKE:
+      return getIconElectricBike(availabilty);
+    default:
+      return getIconBike(availabilty);
+  }
 };
 
 MarkerIcon.defaultProps = {
-    availableBikeNumber: 0,
-    availableSlotNumber: 0,
-    status: 'CLOSED',
+  availableBikeNumber: 0,
+  availableSlotNumber: 0,
+  status: 'CLOSED',
 };
 
 MarkerIcon.propTypes = {
-    type: string.isRequired,
-    availableBikeNumber: number,
-    availableSlotNumber: number,
-    status: string,
+  type: string.isRequired,
+  availableBikeNumber: number,
+  availableSlotNumber: number,
+  status: string,
 };
 
 export default MarkerIcon;

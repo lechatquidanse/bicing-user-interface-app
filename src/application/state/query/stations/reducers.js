@@ -1,34 +1,39 @@
-import { createReducer } from 'reduxsauce'
+import { FETCH } from 'application/state/query/stations/types';
 import produce from 'immer';
+import { createReducer } from 'reduxsauce';
 
-import * as Types from 'application/state/query/stations/types';
-
-export const INITIAL_STATE = { error: null, data: null, payload: { byFilter: null, isFetching: false } };
-
-export const fetchListStart = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.payload = action.payload;
-  });
+export const INITIAL_STATE = {
+  byGeoLocationFilter: null,
+  data: null,
+  error: false,
+  isFetching: false,
 };
 
-export const fetchListSuccess = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.data = action.payload.data;
-    draft.payload.isFetching = action.payload.isFetching;
-  });
-}
+export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.isFetching = action.meta.isFetching;
+  draft.byGeoLocationFilter = action.payload.byGeoLocationFilter;
+});
 
-export const fetchListFailure = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.error = action.payload.error;
-    draft.payload.isFetching = action.payload.isFetching;
-  });
-}
+export const fetchPending = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.isFetching = action.meta.isFetching;
+});
+
+export const fetchSuccess = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.data = action.payload;
+  draft.isFetching = action.meta.isFetching;
+});
+
+export const fetchFailure = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.data = action.payload;
+  draft.error = action.error;
+  draft.isFetching = action.meta.isFetching;
+});
 
 const HANDLERS = {
-  [Types.FETCH_LIST.START]: fetchListStart,
-  [Types.FETCH_LIST.SUCCESS]: fetchListSuccess,
-  [Types.FETCH_LIST.FAILURE]: fetchListFailure,
-}
+  [FETCH.START]: fetchStart,
+  [FETCH.PENDING]: fetchPending,
+  [FETCH.SUCCESS]: fetchSuccess,
+  [FETCH.FAILURE]: fetchFailure,
+};
 
 export default createReducer(INITIAL_STATE, HANDLERS);

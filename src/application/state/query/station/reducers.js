@@ -1,34 +1,33 @@
-import { createReducer } from 'reduxsauce'
+import { FETCH } from 'application/state/query/station/types';
 import produce from 'immer';
+import { createReducer } from 'reduxsauce';
 
-import * as Types from 'application/state/query/station/types';
+export const INITIAL_STATE = { data: null, error: false, isFetching: false };
 
-export const INITIAL_STATE = { error: null, data: null, payload: { isFetching: false } };
+export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.isFetching = action.meta.isFetching;
+});
 
-export const fetchStart = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.payload = action.payload;
-  });
-};
+export const fetchPending = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.isFetching = action.meta.isFetching;
+});
 
-export const fetchSuccess = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.data = action.payload.data;
-    draft.payload.isFetching = action.payload.isFetching;
-  });
-}
+export const fetchSuccess = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.data = action.payload;
+  draft.isFetching = action.meta.isFetching;
+});
 
-export const fetchFailure = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.error = action.payload.error
-    draft.payload.isFetching = action.payload.isFetching;
-  });
-}
+export const fetchFailure = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.data = action.payload;
+  draft.error = action.error;
+  draft.isFetching = action.meta.isFetching;
+});
 
 const HANDLERS = {
-  [Types.FETCH.START]: fetchStart,
-  [Types.FETCH.SUCCESS]: fetchSuccess,
-  [Types.FETCH.FAILURE]: fetchFailure,
-}
+  [FETCH.START]: fetchStart,
+  [FETCH.PENDING]: fetchPending,
+  [FETCH.SUCCESS]: fetchSuccess,
+  [FETCH.FAILURE]: fetchFailure,
+};
 
 export default createReducer(INITIAL_STATE, HANDLERS);

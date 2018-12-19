@@ -1,14 +1,14 @@
-import reducer from 'application/state/query/lastAvailabilities/reducers';
-import operation from 'application/state/query/lastAvailabilities/operations';
 import * as actions from 'application/state/query/lastAvailabilities/actions';
-import * as Types from 'application/state/query/lastAvailabilities/types';
+import operation from 'application/state/query/lastAvailabilities/operations';
+import reducer from 'application/state/query/lastAvailabilities/reducers';
 import * as selectors from 'application/state/query/lastAvailabilities/selectors';
+import * as types from 'application/state/query/lastAvailabilities/types';
 
 export {
-    actions,
-    Types,
-    operation,
-    selectors
+  actions,
+  operation,
+  selectors,
+  types,
 };
 
 export default reducer;

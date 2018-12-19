@@ -1,24 +1,21 @@
-import * as Types from 'application/state/flow/map/types';
+import { FLOW } from 'application/state/flow/map/types';
 
-export const fetchMapStart = (byFilter = null) => ({
-    type: Types.FETCH_MAP.START,
-    payload: {
-        byFilter,
-        isFetching: true
-    }
+export const flowStart = (byGeoLocationFilter = null) => ({
+  error: false,
+  meta: { isFetching: true },
+  payload: { byGeoLocationFilter },
+  type: FLOW.START,
 });
 
-export const fetchMapSuccess = () => ({
-    type: Types.FETCH_MAP.SUCCESS,
-    payload: {
-        isFetching: false
-    },
+export const flowSuccess = () => ({
+  error: false,
+  meta: { isFetching: false },
+  type: FLOW.SUCCESS,
 });
 
-export const fetchMapFailure = (error) => ({
-    type: Types.FETCH_MAP.Failure,
-    payload: {
-        isFetching: false,
-        error
-    },
+export const flowFailure = error => ({
+  data: error,
+  error: true,
+  meta: { isFetching: false },
+  type: FLOW.FAILURE,
 });

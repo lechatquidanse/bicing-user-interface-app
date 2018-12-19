@@ -1,20 +1,21 @@
+import { fetchFailure, fetchPending, fetchSuccess } from 'application/state/query/stations/actions';
+import { FETCH } from 'application/state/query/stations/types';
+import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { fetchListPending, fetchListSuccess, fetchListFailure } from 'application/state/query/stations/actions';
-import * as Types from 'application/state/query/stations/types';
-import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
+export function* fetch(action) {
+  yield put(fetchPending());
+  const { byGeoLocationFilter } = action.payload;
 
-export function* list(action) {
-  yield put(fetchListPending());
   try {
-    const stations = yield call(HttpStationQuery.findAll, action.payload.byFilter);
+    const stations = yield call(HttpStationQuery.findAll, byGeoLocationFilter);
 
-    yield put(fetchListSuccess(stations));
+    yield put(fetchSuccess(stations));
   } catch (e) {
-    yield put(fetchListFailure(e));
+    yield put(fetchFailure(e));
   }
 }
 
 export default function* operation() {
-  yield takeLatest(Types.FETCH_LIST.START, list);
+  yield takeLatest(FETCH.START, fetch);
 }

@@ -1,11 +1,12 @@
+import {
+  FAILURE, PENDING, START, SUCCESS,
+} from 'application/state/stateConstants';
 import { defineAction } from 'redux-define';
 
-import { START, PENDING, CANCELLED, SUCCESS, FAILURE } from 'application/state/stateConstants';
-
-const domain = defineAction('map');
-
-export const FETCH_MAP = defineAction(
-    'FETCH_MAP',
-    [START, PENDING, CANCELLED, SUCCESS, FAILURE],
-    domain
+export const FLOW = defineAction(
+  'FLOW',
+  [START, PENDING, SUCCESS, FAILURE],
+  defineAction('flow/map'),
 );
+
+export default FLOW;

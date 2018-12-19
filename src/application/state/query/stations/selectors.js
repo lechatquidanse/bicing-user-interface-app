@@ -1,6 +1,11 @@
-export const isFetchingSelector = (state) => state.query.stations.payload.isFetching;
-export const stationsSelector = (state) => {
-    const stations = state.query.stations.data;
+const selector = state => state.query.stations;
 
-    return stations && stations['hydra:member'] ? stations['hydra:member'] : null;
+export const data = state => selector(state).data;
+export const error = state => selector(state).error;
+export const isFetching = state => selector(state).isFetching;
+export const byGeoLocationFilter = state => selector(state).byGeoLocationFilter;
+export const stations = (state) => {
+  const stationsData = data(state);
+
+  return stationsData && stationsData['hydra:member'] ? stationsData['hydra:member'] : null;
 };

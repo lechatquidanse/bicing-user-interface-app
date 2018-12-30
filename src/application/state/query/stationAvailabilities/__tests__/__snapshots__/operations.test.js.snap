@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`application/state/query/stationAvailabilities/operations should handle error when ByIntervalInPeriodFilter is not validated 1`] = `
+Object {
+  "put": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "PUT": Object {
+        "action": Object {
+          "error": false,
+          "meta": Object {
+            "isFetching": true,
+          },
+          "type": "query/stationAvailabilities/FETCH_PENDING",
+        },
+        "channel": null,
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "PUT": Object {
+        "action": Object {
+          "error": true,
+          "meta": Object {
+            "isFetching": false,
+          },
+          "payload": Object {
+            "actual": false,
+            "code": "ERR_ASSERTION",
+            "expected": true,
+            "generatedMessage": false,
+            "name": "AssertionError [ERR_ASSERTION]",
+            "operator": "==",
+          },
+          "type": "query/stationAvailabilities/FETCH_FAILURE",
+        },
+        "channel": null,
+      },
+    },
+  ],
+}
+`;
+
+exports[`application/state/query/stationAvailabilities/operations should handle error when api call response does not contains expected schema type 1`] = `
+Object {
+  "call": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "CALL": Object {
+        "args": Array [
+          "a41070e4-3866-490d-a8ab-5195eae71f93",
+          Object {
+            "interval": "5 min",
+            "periodEnd": "2018-08-05 14:51:56",
+            "periodStart": "2017-08-05 14:43:56",
+          },
+        ],
+        "context": null,
+        "fn": "@@redux-saga-test-plan/json/function/find",
+      },
+    },
+  ],
+  "put": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "PUT": Object {
+        "action": Object {
+          "error": false,
+          "meta": Object {
+            "isFetching": true,
+          },
+          "type": "query/stationAvailabilities/FETCH_PENDING",
+        },
+        "channel": null,
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "PUT": Object {
+        "action": Object {
+          "error": true,
+          "meta": Object {
+            "isFetching": false,
+          },
+          "payload": Object {
+            "_object": Array [
+              Object {
+                "available_bike_avg": "20.0000000000000000",
+              },
+            ],
+            "annotate": "@@redux-saga-test-plan/json/function/<anonymous>",
+            "details": Array [
+              Object {
+                "context": Object {
+                  "key": "interval",
+                  "label": "interval",
+                },
+                "message": "\\"interval\\" is required",
+                "path": Array [
+                  0,
+                  "interval",
+                ],
+                "type": "any.required",
+              },
+            ],
+            "isJoi": true,
+            "name": "ValidationError",
+          },
+          "type": "query/stationAvailabilities/FETCH_FAILURE",
+        },
+        "channel": null,
+      },
+    },
+  ],
+}
+`;
+
+exports[`application/state/query/stationAvailabilities/operations should handle error when stationId is not validated 1`] = `
+Object {
+  "put": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "PUT": Object {
+        "action": Object {
+          "error": false,
+          "meta": Object {
+            "isFetching": true,
+          },
+          "type": "query/stationAvailabilities/FETCH_PENDING",
+        },
+        "channel": null,
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "PUT": Object {
+        "action": Object {
+          "error": true,
+          "meta": Object {
+            "isFetching": false,
+          },
+          "payload": Object {
+            "_object": "not an uuid",
+            "annotate": "@@redux-saga-test-plan/json/function/<anonymous>",
+            "details": Array [
+              Object {
+                "context": Object {
+                  "key": undefined,
+                  "label": "value",
+                  "value": "not an uuid",
+                },
+                "message": "\\"value\\" must be a valid GUID",
+                "path": Array [],
+                "type": "string.guid",
+              },
+            ],
+            "isJoi": true,
+            "name": "ValidationError",
+          },
+          "type": "query/stationAvailabilities/FETCH_FAILURE",
+        },
+        "channel": null,
+      },
+    },
+  ],
+}
+`;

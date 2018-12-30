@@ -1,2 +1,2 @@
-/* eslint-disable */
-export { default as map } from 'application/state/command/map';
+export { default as configureMap } from 'application/state/command/configureMap';
+export { default as toggleInfoWindow } from 'application/state/command/toggleInfoWindow';

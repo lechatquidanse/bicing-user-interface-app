@@ -40,6 +40,30 @@ describe('application/state/query/lastAvailabilities/operations', () => {
       .run();
   });
 
+  test('should handle error when api call response does not contains expected schema type', () => {
+    const fakeLastAvailabilitiesWithMissingRequiredProperties = [{ availableBikeNumber: 1 }];
+
+    const action = {
+      error: false,
+      meta: { isFetching: true },
+      payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
+      type: FETCH.START,
+    };
+
+    return expectSaga(fetch, action)
+      .provide([
+        [matchers.call.fn(
+          HttpAvailabilityQuery.findAll,
+        ),
+        fakeLastAvailabilitiesWithMissingRequiredProperties,
+        ],
+      ])
+      .run()
+      .then((result) => {
+        expect(result.toJSON()).toMatchSnapshot();
+      });
+  });
+
   test('should handle error when api call failed in fetch() generator', () => {
     const error = new Error('error_api_call');
 

@@ -3,15 +3,19 @@ import produce from 'immer';
 import { createReducer } from 'reduxsauce';
 
 export const INITIAL_STATE = {
-  byGeoLocationFilter: null,
-  data: null,
+  data: undefined,
   error: false,
   isFetching: false,
+  latitude: undefined,
+  longitude: undefined,
+  limit: undefined,
 };
 
 export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
   draft.isFetching = action.meta.isFetching;
-  draft.byGeoLocationFilter = action.payload.byGeoLocationFilter;
+  draft.latitude = action.payload.latitude;
+  draft.longitude = action.payload.longitude;
+  draft.limit = action.payload.limit;
 });
 
 export const fetchPending = (state = INITIAL_STATE, action) => produce(state, (draft) => {

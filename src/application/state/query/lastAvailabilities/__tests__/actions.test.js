@@ -23,16 +23,6 @@ describe('application/state/query/lastAvailabilities/actions', () => {
       type: FETCH.PENDING,
     });
   });
-  test('should create an action to cancel fetching lastAvailabilities with function fetchCancelled()', () => {
-    const action = actions.fetchCancelled();
-
-    expect(isFSA(action)).toBeTruthy();
-    expect(action).toEqual({
-      error: false,
-      meta: { isFetching: false },
-      type: FETCH.CANCELLED,
-    });
-  });
   test('should create an action to notify the success of fetching lastAvailabilities with function fetchSuccess()', () => {
     const data = [
       {

@@ -3,16 +3,20 @@ import produce from 'immer';
 import { createReducer } from 'reduxsauce';
 
 export const INITIAL_STATE = {
-  data: null,
+  data: undefined,
   error: false,
   isFetching: false,
-  stationId: null,
-  byIntervalInPeriodFilter: null,
+  stationId: undefined,
+  periodStart: undefined,
+  periodEnd: undefined,
+  interval: undefined,
 };
 
 export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
   draft.stationId = action.payload.stationId;
-  draft.byIntervalInPeriodFilter = action.payload.byIntervalInPeriodFilter;
+  draft.periodStart = action.payload.periodStart;
+  draft.periodEnd = action.payload.periodEnd;
+  draft.interval = action.payload.interval;
   draft.isFetching = action.meta.isFetching;
 });
 

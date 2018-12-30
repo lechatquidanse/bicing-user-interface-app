@@ -1,11 +1,10 @@
-import { FETCH } from 'application/state/query/lastAvailabilities/types';
+import { FETCH } from 'application/state/query/stations/types';
 
-describe('application/state/query/lastAvailabilities/types', () => {
+describe('application/state/query/stations/types', () => {
   test('it can return expected FETCH types', () => {
-    expect(FETCH.START).toEqual('query/lastAvailabilities/FETCH_START');
-    expect(FETCH.PENDING).toEqual('query/lastAvailabilities/FETCH_PENDING');
-    expect(FETCH.CANCELLED).toEqual('query/lastAvailabilities/FETCH_CANCELLED');
-    expect(FETCH.SUCCESS).toEqual('query/lastAvailabilities/FETCH_SUCCESS');
-    expect(FETCH.FAILURE).toEqual('query/lastAvailabilities/FETCH_FAILURE');
+    expect(FETCH.START).toEqual('query/stations/FETCH_START');
+    expect(FETCH.PENDING).toEqual('query/stations/FETCH_PENDING');
+    expect(FETCH.SUCCESS).toEqual('query/stations/FETCH_SUCCESS');
+    expect(FETCH.FAILURE).toEqual('query/stations/FETCH_FAILURE');
   });
 });

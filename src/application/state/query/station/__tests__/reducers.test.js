@@ -2,7 +2,7 @@ import reducer from 'application/state/query/station/reducers';
 import { FETCH } from 'application/state/query/station/types';
 import produce from 'immer';
 
-const INITIAL_STATE = { data: null, error: false, isFetching: false };
+const INITIAL_STATE = { data: undefined, error: false, isFetching: false };
 
 describe('application/state/query/station/reducers', () => {
   test('should have initial state', () => {

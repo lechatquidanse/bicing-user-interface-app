@@ -11,11 +11,6 @@ export const fetchPending = () => ({
   meta: { isFetching: true },
   type: FETCH.PENDING,
 });
-export const fetchCancelled = () => ({
-  error: false,
-  meta: { isFetching: false },
-  type: FETCH.CANCELLED,
-});
 export const fetchSuccess = data => ({
   error: false,
   meta: { isFetching: false },

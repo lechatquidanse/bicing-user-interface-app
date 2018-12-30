@@ -1,11 +1,11 @@
 import {
-  FAILURE, PENDING, START, SUCCESS,
+  START,
 } from 'application/state/stateConstants';
 import { defineAction } from 'redux-define';
 
 export const FLOW = defineAction(
   'FLOW',
-  [START, PENDING, SUCCESS, FAILURE],
+  [START],
   defineAction('flow/map'),
 );
 

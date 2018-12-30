@@ -2,7 +2,6 @@ import * as actions from 'application/state/query/stations/actions';
 import { FETCH } from 'application/state/query/stations/types';
 import { isFSA, isError } from 'flux-standard-action';
 
-// @todo add logic with byGeoLocationFilter
 describe('application/state/query/lastAvailabilities/actions', () => {
   test('should create an action to start fetching stations with function fetchStart()', () => {
     const action = actions.fetchStart();
@@ -11,7 +10,22 @@ describe('application/state/query/lastAvailabilities/actions', () => {
     expect(action).toEqual({
       error: false,
       meta: { isFetching: true },
-      payload: { byGeoLocationFilter: null },
+      payload: { latitude: undefined, longitude: undefined, limit: undefined },
+      type: FETCH.START,
+    });
+  });
+  test('should create an action to start fetching stations with function fetchStart() and parameters', () => {
+    const latitude = 41.3244;
+    const longitude = 2.345;
+    const limit = 5000;
+
+    const action = actions.fetchStart(latitude, longitude, limit);
+
+    expect(isFSA(action)).toBeTruthy();
+    expect(action).toEqual({
+      error: false,
+      meta: { isFetching: true },
+      payload: { latitude, longitude, limit },
       type: FETCH.START,
     });
   });
@@ -23,16 +37,6 @@ describe('application/state/query/lastAvailabilities/actions', () => {
       error: false,
       meta: { isFetching: true },
       type: FETCH.PENDING,
-    });
-  });
-  test('should create an action to cancel fetching stations with function fetchCancelled()', () => {
-    const action = actions.fetchCancelled();
-
-    expect(isFSA(action)).toBeTruthy();
-    expect(action).toEqual({
-      error: false,
-      meta: { isFetching: false },
-      type: FETCH.CANCELLED,
     });
   });
   test('should create an action to notify the success of fetching stations with function fetchSuccess()', () => {

@@ -5,14 +5,20 @@ import { v4 as uuid } from 'uuid';
 
 describe('application/state/query/stationAvailabilities/actions', () => {
   test('should create an action to start fetching a stationAvailabilities with function fetchStart()', () => {
-    const stationId = uuid();
-    const action = actions.fetchStart(stationId);
+    const stationId = uuid(); const periodStart = '2017-08-13 23:56:23';
+
+
+    const periodEnd = '2017-09-13 23:56:23'; const
+      interval = '5 min';
+    const action = actions.fetchStart(stationId, periodStart, periodEnd, interval);
 
     expect(isFSA(action)).toBeTruthy();
     expect(action).toEqual({
       error: false,
       meta: { isFetching: true },
-      payload: { stationId, byIntervalInPeriodFilter: null },
+      payload: {
+        stationId, periodStart, periodEnd, interval,
+      },
       type: FETCH.START,
     });
   });
@@ -24,16 +30,6 @@ describe('application/state/query/stationAvailabilities/actions', () => {
       error: false,
       meta: { isFetching: true },
       type: FETCH.PENDING,
-    });
-  });
-  test('should create an action to cancel fetching a stationAvailabilities with function fetchCancelled()', () => {
-    const action = actions.fetchCancelled();
-
-    expect(isFSA(action)).toBeTruthy();
-    expect(action).toEqual({
-      error: false,
-      meta: { isFetching: false },
-      type: FETCH.CANCELLED,
     });
   });
   test('should create an action to notify the success of fetching a stationAvailabilities with function fetchSuccess()', () => {

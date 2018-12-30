@@ -19,6 +19,21 @@ describe('application/state/query/stations/operations', () => {
       .put(actions.fetchPending());
   });
 
+  test('should handle error when byGeoLocationFilter creation is not validated', () => {
+    const action = {
+      error: false,
+      meta: { isFetching: true },
+      payload: { latitude: 'bad_value', longitude: 'bad_value', limit: 'bad_value' },
+      type: FETCH.START,
+    };
+
+    return expectSaga(fetch, action)
+      .run()
+      .then((result) => {
+        expect(result.toJSON()).toMatchSnapshot();
+      });
+  });
+
   test('should list expected stations with fetch() generator', () => {
     const fakeStations = [
       {
@@ -34,10 +49,11 @@ describe('application/state/query/stations/operations', () => {
         longitude: 2.166871,
       },
     ];
+
     const action = {
       error: false,
       meta: { isFetching: true },
-      payload: { byGeoLocationFilter: null },
+      payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
       type: FETCH.START,
     };
 
@@ -49,12 +65,32 @@ describe('application/state/query/stations/operations', () => {
       .run();
   });
 
+  test('should handle error when api call response does not contains expected schema type', () => {
+    const fakeStationsWithMissingRequiredProperties = [{ name: '233 - C/NOU DE LA RAMBLA, 164' }];
+
+    const action = {
+      error: false,
+      meta: { isFetching: true },
+      payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
+      type: FETCH.START,
+    };
+
+    return expectSaga(fetch, action)
+      .provide([
+        [matchers.call.fn(HttpStationQuery.findAll), fakeStationsWithMissingRequiredProperties],
+      ])
+      .run()
+      .then((result) => {
+        expect(result.toJSON()).toMatchSnapshot();
+      });
+  });
+
   test('should handle error when api call failed in fetch() generator', () => {
     const error = new Error('error_api_call');
     const action = {
       error: false,
       meta: { isFetching: true },
-      payload: { byGeoLocationFilter: null },
+      payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
       type: FETCH.START,
     };
 

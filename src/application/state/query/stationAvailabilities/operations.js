@@ -6,7 +6,7 @@ import {
 } from 'application/state/query/stationAvailabilities/actions';
 import { FETCH } from 'application/state/query/stationAvailabilities/types';
 import { stationIdType } from 'domain/types/stationType';
-import HttpStationAvailabilityQuery from 'infrastructure/bicingApi/HttpStationAvailabilityQuery';
+import HttpStationAvailabilitiesQuery from 'infrastructure/bicingApi/HttpStationAvailabilitiesQuery';
 import Joi from 'joi';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { stationAvailabilitiesType } from '../../../../domain/types/stationAvailabilitiesType';
@@ -22,7 +22,7 @@ export function* fetch(action) {
     Joi.assert(stationId, stationIdType);
 
     const stationAvailabilities = yield call(
-      HttpStationAvailabilityQuery.find,
+      HttpStationAvailabilitiesQuery.find,
       stationId,
       ByIntervalInPeriodFilter.fromRawValues(periodStart, periodEnd, interval),
     );

@@ -1,7 +1,7 @@
 import * as actions from 'application/state/query/stations/actions';
 import operation, { fetch } from 'application/state/query/stations/operations';
 import { FETCH } from 'application/state/query/stations/types';
-import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
+import HttpStationsQuery from 'infrastructure/bicingApi/HttpStationsQuery';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { throwError } from 'redux-saga-test-plan/providers';
@@ -59,7 +59,7 @@ describe('application/state/query/stations/operations', () => {
 
     return expectSaga(fetch, action)
       .provide([
-        [matchers.call.fn(HttpStationQuery.findAll), fakeStations],
+        [matchers.call.fn(HttpStationsQuery.find), fakeStations],
       ])
       .put(actions.fetchSuccess(fakeStations))
       .run();
@@ -77,7 +77,7 @@ describe('application/state/query/stations/operations', () => {
 
     return expectSaga(fetch, action)
       .provide([
-        [matchers.call.fn(HttpStationQuery.findAll), fakeStationsWithMissingRequiredProperties],
+        [matchers.call.fn(HttpStationsQuery.find), fakeStationsWithMissingRequiredProperties],
       ])
       .run()
       .then((result) => {
@@ -96,7 +96,7 @@ describe('application/state/query/stations/operations', () => {
 
     return expectSaga(fetch, action)
       .provide([
-        [matchers.call.fn(HttpStationQuery.findAll), throwError(error)],
+        [matchers.call.fn(HttpStationsQuery.find), throwError(error)],
       ])
       .put(actions.fetchFailure(error))
       .run();

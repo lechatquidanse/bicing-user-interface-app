@@ -8,7 +8,7 @@ Object {
       "CALL": Object {
         "args": Array [],
         "context": null,
-        "fn": "@@redux-saga-test-plan/json/function/findAll",
+        "fn": "@@redux-saga-test-plan/json/function/find",
       },
     },
   ],

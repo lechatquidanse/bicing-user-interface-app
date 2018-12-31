@@ -1,7 +1,7 @@
 import * as actions from 'application/state/query/lastAvailabilities/actions';
 import operation, { fetch } from 'application/state/query/lastAvailabilities/operations';
 import { FETCH } from 'application/state/query/lastAvailabilities/types';
-import HttpAvailabilityQuery from 'infrastructure/bicingApi/HttpAvailabilityQuery';
+import HttpAvailabilitiesQuery from 'infrastructure/bicingApi/HttpAvailabilitiesQuery';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { throwError } from 'redux-saga-test-plan/providers';
@@ -34,7 +34,7 @@ describe('application/state/query/lastAvailabilities/operations', () => {
 
     return expectSaga(fetch)
       .provide([
-        [matchers.call.fn(HttpAvailabilityQuery.findAll), fakeLastAvailabilities],
+        [matchers.call.fn(HttpAvailabilitiesQuery.find), fakeLastAvailabilities],
       ])
       .put(actions.fetchSuccess(fakeLastAvailabilities))
       .run();
@@ -53,7 +53,7 @@ describe('application/state/query/lastAvailabilities/operations', () => {
     return expectSaga(fetch, action)
       .provide([
         [matchers.call.fn(
-          HttpAvailabilityQuery.findAll,
+          HttpAvailabilitiesQuery.find,
         ),
         fakeLastAvailabilitiesWithMissingRequiredProperties,
         ],
@@ -69,7 +69,7 @@ describe('application/state/query/lastAvailabilities/operations', () => {
 
     return expectSaga(fetch)
       .provide([
-        [matchers.call.fn(HttpAvailabilityQuery.findAll), throwError(error)],
+        [matchers.call.fn(HttpAvailabilitiesQuery.find), throwError(error)],
       ])
       .put(actions.fetchFailure(error))
       .run();

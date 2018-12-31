@@ -7,23 +7,7 @@ Object {
       "@@redux-saga/IO": true,
       "PUT": Object {
         "action": Object {
-          "error": false,
-          "meta": Object {
-            "isFetching": true,
-          },
-          "type": "query/stations/FETCH_PENDING",
-        },
-        "channel": null,
-      },
-    },
-    Object {
-      "@@redux-saga/IO": true,
-      "PUT": Object {
-        "action": Object {
           "error": true,
-          "meta": Object {
-            "isFetching": false,
-          },
           "payload": Object {
             "_object": Object {
               "latitude": "bad_value",
@@ -48,7 +32,7 @@ Object {
             "isJoi": true,
             "name": "ValidationError",
           },
-          "type": "query/stations/FETCH_FAILURE",
+          "type": "command/configureMap/CONFIGURE_FAILURE",
         },
         "channel": null,
       },

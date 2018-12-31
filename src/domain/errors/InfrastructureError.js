@@ -3,6 +3,10 @@ class InfrastructureError extends Error {
     super(...args);
     Error.captureStackTrace(this, InfrastructureError);
   }
+
+  toString() {
+    return this.message;
+  }
 }
 
 export default InfrastructureError;

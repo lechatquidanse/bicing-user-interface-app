@@ -2,7 +2,7 @@ import ByGeoLocationFilter from 'application/state/filter/ByGeoLocationFilter';
 import { fetchFailure, fetchPending, fetchSuccess } from 'application/state/query/stations/actions';
 import { FETCH } from 'application/state/query/stations/types';
 import { stationsType } from 'domain/types/stationType';
-import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
+import HttpStationsQuery from 'infrastructure/bicingApi/HttpStationsQuery';
 import Joi from 'joi';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
@@ -13,7 +13,7 @@ export function* fetch(action) {
     const { latitude, longitude, limit } = action.payload;
 
     const stations = yield call(
-      HttpStationQuery.findAll,
+      HttpStationsQuery.find,
       ByGeoLocationFilter.fromRawValues(latitude, longitude, limit),
     );
 

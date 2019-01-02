@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Loading = () => (
+const MarkersLoading = () => (
   <div>
-        MAP Loading ....
+    Marker Loading ....
   </div>
 );
 
-export default Loading;
+export default MarkersLoading;

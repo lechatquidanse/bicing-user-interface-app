@@ -10,16 +10,10 @@ services:
     volumes: ['.:/usr/src/app', './node_modules:/usr/src/app/node_modules']
 
   apimock:
-    image: 'clue/json-server'
+    image: 'fabriciomendonca/json-server-https'
     networks: ['app']
-    ports: ['8080:80']
-    volumes: ['./docker/stages/development/mock/:/data/']
-    entrypoint: [
-      'json-server',
-      'db.json',
-      '-p', '80',
-      '--routes', 'routes.json',
-      ]
+    ports: ['8443:8000']
+    volumes: ['./docker/stages/development/mock/:/data/custom']
 
   # test-feature:
   #   build: './docker/chrome'

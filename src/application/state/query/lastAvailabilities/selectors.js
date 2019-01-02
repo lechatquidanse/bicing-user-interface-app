@@ -4,7 +4,8 @@ export const data = state => selector(state).data;
 export const error = state => selector(state).error;
 export const isFetching = state => selector(state).isFetching;
 
-export const lastAvailabilityById = (state, id) => data(state).find(model => model.id === id);
+export const lastAvailabilityById = (state, id) => (data(state) === undefined
+  ? undefined : data(state).find(model => model.id === id));
 
 const property = (state, propertyKey, id) => (lastAvailabilityById(state, id) === undefined
   ? undefined : lastAvailabilityById(state, id)[propertyKey]);

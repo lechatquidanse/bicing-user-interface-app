@@ -1,7 +1,9 @@
 import React from 'react';
-import GeoLocation from 'userInterface/react/components/GeoLocation';
-import Geolocation from 'react-geolocation';
+import GeoLocator from 'userInterface/react/containers/GeoLocation/GeoLocator';
+import GeoSuggestion from 'userInterface/react/containers/GeoLocation/GeoSuggestion';
 
-const GeoLocator = () => <Geolocation/>;
-
-export default GeoLocator;
+const GeoLocation = () => <>
+  <GeoLocator />
+  <GeoSuggestion />
+  </>;
+export default GeoLocation;

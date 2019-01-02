@@ -1,7 +1,7 @@
 import { TYPE_ALLOWED } from 'domain/definitions/stationDefinition';
 import Joi from 'joi';
 
-const stationIdType = Joi.string().guid({version: ['uuidv4']}).required();
+const stationIdType = Joi.string().guid({ version: ['uuidv4'] }).required();
 
 const stationType = Joi.object().keys({
   id: stationIdType,
@@ -16,7 +16,7 @@ const stationType = Joi.object().keys({
 
 const stationsType = Joi.array().items(stationType);
 
-export{
+export {
   stationIdType,
   stationType,
   stationsType,

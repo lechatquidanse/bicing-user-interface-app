@@ -11,6 +11,7 @@ import { operation as queryStationAvailabilitiesOperation } from 'application/st
 import { operation as queryStationsOperation } from 'application/state/query/stations';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import { operation as queryReverseGeoCodeOperation } from 'application/state/query/reverseGeoCode';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -27,6 +28,7 @@ sagaMiddleware.run(commandConfigureMapOperation);
 sagaMiddleware.run(flowMapOperation);
 sagaMiddleware.run(flowStationOperation);
 sagaMiddleware.run(queryLastAvailabilitiesOperation);
+sagaMiddleware.run(queryReverseGeoCodeOperation);
 sagaMiddleware.run(queryStationAvailabilitiesOperation);
 sagaMiddleware.run(queryStationOperation);
 sagaMiddleware.run(queryStationsOperation);

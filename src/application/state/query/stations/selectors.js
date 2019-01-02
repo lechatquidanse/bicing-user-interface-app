@@ -7,7 +7,8 @@ export const latitude = state => selector(state).latitude;
 export const longitude = state => selector(state).longitude;
 export const limit = state => selector(state).limit;
 
-export const stationById = (state, id) => data(state).find(station => station.id === id);
+export const stationById = (state, id) => (data(state) === undefined
+  ? undefined : data(state).find(station => station.id === id));
 
 const property = (state, propertyKey, id) => (stationById(state, id) === undefined
   ? undefined : stationById(state, id)[propertyKey]);

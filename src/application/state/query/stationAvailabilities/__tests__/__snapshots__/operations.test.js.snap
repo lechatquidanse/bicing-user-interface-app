@@ -92,15 +92,17 @@ Object {
             "details": Array [
               Object {
                 "context": Object {
-                  "key": "interval",
-                  "label": "interval",
+                  "key": undefined,
+                  "label": "value",
+                  "value": Array [
+                    Object {
+                      "available_bike_avg": "20.0000000000000000",
+                    },
+                  ],
                 },
-                "message": "\\"interval\\" is required",
-                "path": Array [
-                  0,
-                  "interval",
-                ],
-                "type": "any.required",
+                "message": "\\"value\\" must be an object",
+                "path": Array [],
+                "type": "object.base",
               },
             ],
             "isJoi": true,

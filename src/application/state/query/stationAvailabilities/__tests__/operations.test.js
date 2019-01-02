@@ -27,26 +27,21 @@ describe('application/state/query/stationAvailabilities/operations', () => {
     const periodEnd = '2018-08-05 14:51:56';
     const interval = '5 min';
 
-    const fakeStationAvailabilities = [
-      {
-        interval: '2018-11-05 14:45:00',
-        available_bike_avg: '20.0000000000000000',
-        available_bike_min: 20,
-        available_bike_max: 20,
-        available_slot_avg: '9.0000000000000000',
-        available_slot_min: 9,
-        available_slot_max: 9,
-      },
-      {
-        interval: '2018-11-05 14:50:00',
-        available_bike_avg: '20.0000000000000000',
-        available_bike_min: 19,
-        available_bike_max: 21,
-        available_slot_avg: '9.0000000000000000',
-        available_slot_min: 8,
-        available_slot_max: 10,
-      },
-    ];
+    const fakeStationAvailabilities = {
+      stationId: 'cc90eb4e-4988-4443-aedf-6464f79eeb12',
+      availabilities: [
+        {
+          interval: '2018-12-24 16:10:00',
+          available_bike_avg: '11.5000000000000000',
+          available_bike_min: 11,
+          available_bike_max: 12,
+          available_slot_avg: '13.5000000000000000',
+          available_slot_min: 13,
+          available_slot_max: 14,
+        },
+      ],
+    };
+
     const action = {
       type: FETCH.START,
       payload: {

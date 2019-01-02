@@ -5,11 +5,12 @@ import {
   fetchSuccess,
 } from 'application/state/query/stationAvailabilities/actions';
 import { FETCH } from 'application/state/query/stationAvailabilities/types';
+import { stationAvailabilitiesType } from 'domain/types/stationAvailabilitiesType';
 import { stationIdType } from 'domain/types/stationType';
-import HttpStationAvailabilitiesQuery from 'infrastructure/bicingApi/HttpStationAvailabilitiesQuery';
+import HttpStationAvailabilitiesQuery
+  from 'infrastructure/bicingApi/HttpStationAvailabilitiesQuery';
 import Joi from 'joi';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { stationAvailabilitiesType } from '../../../../domain/types/stationAvailabilitiesType';
 
 export function* fetch(action) {
   yield put(fetchPending());

@@ -24,7 +24,7 @@ class HttpStationAvailabilitiesQuery {
     const uri = `/stations/${stationId}/availabilities`;
 
     if (byFilter instanceof ByIntervalInPeriodFilter) {
-      return `${uri}?periodStart=${byFilter.periodStart}&periodEnd${byFilter.periodEnd}&interval=${byFilter.interval}`;
+      return `${uri}?periodStart=${byFilter.periodStart}&periodEnd=${byFilter.periodEnd}&interval=${byFilter.interval}`;
     }
 
     return uri;

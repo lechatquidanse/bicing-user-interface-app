@@ -4,16 +4,16 @@ services:
   node:
     build:
       context: .
-      target: 'bicing_app_node'
+      target: 'bicing_app_node_dev'
     networks: ['app']
     ports: ['3000:3000']
     volumes: ['.:/usr/src/app', './node_modules:/usr/src/app/node_modules']
 
-  apimock:
+  bicinapi-mock:
     image: 'fabriciomendonca/json-server-https'
     networks: ['app']
     ports: ['8443:8000']
-    volumes: ['./docker/stages/development/mock/:/data/custom']
+    volumes: ['./docker/stages/development/mock/custom:/data/custom', './docker/stages/development/mock/server.js:/data/server.js']
 
   # test-feature:
   #   build: './docker/chrome'

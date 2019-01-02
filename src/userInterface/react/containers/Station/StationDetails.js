@@ -6,7 +6,7 @@ import {
 import {
   Loading as LoadingTemplate,
   StationDetails as StationDetailsTemplate,
-} from 'userInterface/react/components/StationDetails';
+} from 'userInterface/react/components/Station/StationDetails';
 
 const isNullStation = props => !props.station;
 const isFetching = props => props.isFetching;

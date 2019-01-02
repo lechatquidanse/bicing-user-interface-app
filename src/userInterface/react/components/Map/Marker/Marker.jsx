@@ -19,7 +19,7 @@ const Marker = ({
   children,
 }) => (
   <BaseMarker
-    defaultIcon={MarkerIcon(type, status, availableBikeNumber, availableSlotNumber)}
+    icon={MarkerIcon(type, status, availableBikeNumber, availableSlotNumber)}
     position={{ lat: latitude, lng: longitude }}
     onClick={onMarkerClick}
   >

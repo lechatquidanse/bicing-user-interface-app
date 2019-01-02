@@ -2,8 +2,8 @@ import {
   actions as commandToggleInfoWindowActions,
   selectors as commandToggleInfoWindowSelectors,
 } from 'application/state/command/toggleInfoWindow';
+import { actions as flowStationAction } from 'application/state/flow/station';
 import { selectors as queryLastAvailabilitiesSelectors } from 'application/state/query/lastAvailabilities';
-import { actions as queryStationActions } from 'application/state/query/station';
 import { selectors as queryStationsSelectors } from 'application/state/query/stations';
 import { connect } from 'react-redux';
 import { branch, compose, renderNothing } from 'recompose';
@@ -12,6 +12,7 @@ import { InfoWindow as InfoWindowTemplate } from 'userInterface/react/components
 
 // @todo add error if no latitude and longitude etc... and wait for lastAvailabilitiy to be ready
 const mapStateToProps = (state, props) => ({
+  stationId: props.stationId,
   activeInfoWindowKey: commandToggleInfoWindowSelectors.key(state),
   station: queryStationsSelectors.stationById(state, props.stationId),
   latitude: queryStationsSelectors.latitudeByStationId(state, props.stationId),
@@ -31,13 +32,22 @@ const mapStateToProps = (state, props) => ({
   ),
 });
 
-// @todo add call queryStationAvailabilitiesActions.fetchStart(props.stationId)
-const mapDispatchToProps = (dispatch, props) => bindActionCreators({
-  onInfoWindowViewMoreClick: () => queryStationActions.fetchStart(props.stationId),
-  onInfoWindowCloseClick: () => commandToggleInfoWindowActions.toggle(props.stationId),
+const mapDispatchToProps = dispatch => bindActionCreators({
+  dispatchFlowAction: stationId => flowStationAction.flow(stationId),
+  dispatchToggleInfoWindow: stationId => commandToggleInfoWindowActions.toggle(stationId),
 }, dispatch);
 
-const withReduxConnect = connect(mapStateToProps, mapDispatchToProps);
+const mergeProps = (propsFromState, propsFromDispatch, ownProps) => ({
+  ...propsFromState,
+  ...propsFromDispatch,
+  ...ownProps,
+  onInfoWindowViewMoreClick: () => propsFromDispatch.dispatchFlowAction(propsFromState.stationId),
+  onInfoWindowCloseClick: () => propsFromDispatch.dispatchToggleInfoWindow(
+    propsFromState.stationId,
+  ),
+});
+
+const withReduxConnect = connect(mapStateToProps, mapDispatchToProps, mergeProps);
 
 const isDisabled = props => props.activeInfoWindowKey !== props.stationId;
 

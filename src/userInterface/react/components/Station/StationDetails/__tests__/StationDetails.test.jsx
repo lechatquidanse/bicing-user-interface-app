@@ -1,6 +1,6 @@
 import React from 'react';
 import { create } from 'react-test-renderer';
-import { StationDetails } from 'userInterface/react/components/StationDetails';
+import { StationDetails } from 'userInterface/react/components/Station/StationDetails';
 
 describe('userInterface/react/components/FilterWithDateRangeAndSelect/index.js', () => {
   test('it can renders with default values as expected', () => {

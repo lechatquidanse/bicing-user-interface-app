@@ -6,7 +6,7 @@ import { branch, compose, renderNothing } from 'recompose';
 import { bindActionCreators } from 'redux';
 import { Marker as MarkerTemplate } from 'userInterface/react/components/Map/Marker';
 
-const isNullMarker = props => props.station === null || props.lastAvailability === null;
+const isNullMarker = props => props.type === null || props.status === null;
 
 const mapStateToProps = (state, props) => ({
   station: queryStationsSelectors.stationById(state, props.stationId),
@@ -23,6 +23,7 @@ const mapStateToProps = (state, props) => ({
     state,
     props.stationId,
   ),
+  isNullMarker: props.isNullMarker,
 });
 
 const mapDispatchToProps = (dispatch, props) => bindActionCreators({

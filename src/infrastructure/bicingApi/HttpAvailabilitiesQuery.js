@@ -1,9 +1,11 @@
 import { OK } from 'http-status';
+import HttpAvailabilitiesQueryError
+  from 'infrastructure/bicingApi/errors/HttpAvailabilitiesQueryError';
 import httpClient from 'infrastructure/bicingApi/httpClient';
 import httpHydraCollectionResponse
   from 'infrastructure/bicingApi/types/httpHydraCollectionResponse';
-import HttpAvailabilitiesQueryError from 'infrastructure/bicingApi/errors/HttpAvailabilitiesQueryError';
 
+// @todo use middleware rather than hydraCollection
 class HttpAvailabilitiesQuery {
   static async find() {
     const apiResponse = await httpClient.get('/last-availabilities-by-station')

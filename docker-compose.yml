@@ -4,7 +4,7 @@ services:
   node:
     build:
       context: .
-      target: 'bicing_app_node_dev'
+      target: 'bicing_app_node'
     networks: ['app']
     ports: ['3000:3000']
     volumes: ['.:/usr/src/app', './node_modules:/usr/src/app/node_modules']

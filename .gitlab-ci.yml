@@ -2,13 +2,11 @@ image: docker:latest
 services:
 - docker:dind
 
-# Project stages
 stages:
 - test
 - build
 - production
 
-# Install the required packages / tools for this project before doing anything else
 before_script:
 - apk update && apk upgrade
 - apk add --update bash curl git gettext openssh python python-dev py-pip build-base openssl wget
@@ -16,67 +14,63 @@ before_script:
 
 - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
 
-# Get the release branch name to be used as tag for the newly built Docker image
 - ENVIRONMENT=$(echo $CI_BUILD_REF_NAME | awk -F'/' '{print $1}')
-
 - PRODUCTION_TAG=$(echo $CI_BUILD_REF_NAME | awk -F'/' '{print $2}')
 - export PRODUCTION_IMAGE="$CI_REGISTRY_IMAGE:$PRODUCTION_TAG"
 
-# test environment
+.cache_template: &cache
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - ./node_modules
+
+.quality_assurance_script_template: &quality_assurance_script
+  script:
+    - cp .env.dist .env
+    - docker-compose -f docker-compose.yml -f ./docker/docker-compose.ci.yml up -d
+    - docker-compose run --rm ui_app yarn install
+    - docker-compose run --rm ui_app eslint src/**/*.js src/**/*.jsx
+    - docker-compose run --rm ui_app yarn test
+    - docker-compose down -v --remove-orphans
+
+.build_script_template: &build_script
+  script:
+    - cp .env.dist .env
+    - docker-compose -f docker-compose.yml -f ./docker/docker-compose.ci.yml up -d
+    - docker-compose run --rm ui_app yarn install
+    - docker-compose run --rm ui_app eslint src/**/*.js src/**/*.jsx
+    - docker-compose run --rm ui_app yarn test
+    - docker-compose down -v --remove-orphans
+
+    - rm .env && envsubst < ./docker/production/.env.dist > ./.env
+    - docker build --target bicing_ui_app_prod -t $PRODUCTION_IMAGE .
+
+.production_script_template: &production_script
+  script:
+    - chmod +x ./docker/production/deploy.sh
+    - ./docker/production/deploy.sh
+
 test:
-  stage: test
+  <<: *cache
+  <<: *quality_assurance_script
   environment: test
-  script:
-  - echo "Hello We will now be preparing the Test $ENVIRONMENT environment for you. Please be patient as this might take a while"
-
-  - cp .env.dist .env
-
-  - docker-compose up -d
-  - docker-compose run --rm node yarn install
-  - docker-compose run --rm node eslint src/**/*.js src/**/*.jsx
-  - docker-compose run --rm node yarn test
-  - docker-compose down -v --remove-orphans
-
-  - echo "TESTING BRANCH HAS BEEN BUILT SUCCESSFULY!"
   only:
-  - /^[F|f]eature\/.*$/
+    - /^[F|f]eature\/.*$/
+  stage: test
 
-## Build Environment
 build:
-  stage: build
+  <<: *build_script
   environment: build
-  script:
-  - echo "Hello We will now be preparing the Build $ENVIRONMENT environment for you."
-
-  - cp .env.dist .env
-
-  - docker-compose up -d
-  - docker-compose run --rm node yarn install
-  - docker-compose run --rm node eslint src/**/*.js src/**/*.jsx
-  - docker-compose run --rm node yarn test
-  - docker-compose down -v --remove-orphans
-
-  - rm .env && envsubst < ./docker/stages/production/.env.dist > ./.env
-  - docker build --target bicing_app_nginx -t $PRODUCTION_IMAGE .
-  - docker push $PRODUCTION_IMAGE
-
-  - echo "$ENVIRONMENT ENVIRONMENT HAS BEEN BUILT SUCCESSFULY!"
   only:
-  - /^[R|r]elease\/.*$/
-  - /^[H|h]otfix\/.*$/
+    - /^[R|r]elease\/.*$/
+    - /^[H|h]otfix\/.*$/
+  stage: build
 
-### Production Environment
 production:
-  stage: production
+  <<: *production_script
   environment: production
-  script:
-  - echo "Hello We will now be preparing the Build $ENVIRONMENT environment for you."
-
-  - chmod +x ./docker/stages/production/deploy.sh
-  - ./docker/stages/production/deploy.sh
-
-  - echo "$ENVIRONMENT ENVIRONMENT HAS BEEN DEPLOY SUCCESSFULY!"
-  when: manual
   only:
-  - /^[R|r]elease\/.*$/
-  - /^[H|h]otfix\/.*$/
+    - /^[R|r]elease\/.*$/
+    - /^[H|h]otfix\/.*$/
+  stage: production
+  when: manual

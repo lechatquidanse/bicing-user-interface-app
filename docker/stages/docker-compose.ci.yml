@@ -1,0 +1,11 @@
+version: '2.3'
+
+services:
+  ui_app:
+    build:
+      context: .
+      target: 'bicing_ui_app_dev'
+    networks: []
+
+  bicingapi-mock:
+    image: 'scratch'

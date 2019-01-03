@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Prepare environment file and docker-compose
-envsubst < ./docker/stages/production/docker-compose.yml.dist > ./docker/stages/production/docker-compose.yml
+envsubst < ./docker/docker-compose.production.yml > ./docker/docker-compose.yml
 
 # Prepare ssh connection with production server
 eval $(ssh-agent -s)
@@ -10,8 +10,7 @@ mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 
 # Copy environment file and docker-compose to production server
-scp -o 'StrictHostKeyChecking no' ./docker/stages/production/.env ${SERVER_PRODUCTION}:/var/www/bicing-app/
-scp -o 'StrictHostKeyChecking no' ./docker/stages/production/docker-compose.yml ${SERVER_PRODUCTION}:/var/www/bicing-app/
+scp -o 'StrictHostKeyChecking no' ./docker/docker-compose.yml ${SERVER_PRODUCTION}:/var/www/bicing-app/
 
 # Run commands to update docker containers and run migrations
 ssh -o "StrictHostKeyChecking no" ${SERVER_PRODUCTION} "docker login -u ${REGISTRY_PRODUCTION_LOGIN} -p ${REGISTRY_PRODUCTION_PASSOWRD} registry.gitlab.com"

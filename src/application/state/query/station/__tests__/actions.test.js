@@ -26,16 +26,6 @@ describe('application/state/query/station/actions', () => {
       type: FETCH.PENDING,
     });
   });
-  test('should create an action to cancel fetching a station with function fetchCancelled()', () => {
-    const action = actions.fetchCancelled();
-
-    expect(isFSA(action)).toBeTruthy();
-    expect(action).toEqual({
-      error: false,
-      meta: { isFetching: false },
-      type: FETCH.CANCELLED,
-    });
-  });
   test('should create an action to notify the success of fetching a station with function fetchSuccess()', () => {
     const data = { name: '87 - C/ MALLORCA 41-43', type: 'BIKE' };
 

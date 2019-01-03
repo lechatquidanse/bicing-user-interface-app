@@ -1,24 +1,20 @@
 import { FLOW } from 'application/state/flow/station/types';
+import {
+  DEFAULT_INTERVAL,
+  DEFAULT_PERIOD_END,
+  DEFAULT_PERIOD_START,
+} from 'domain/definitions/byIntervalInPeriodDefinition';
 
-export const flowStart = (stationId, byIntervalInPeriodFilter = null) => ({
-  error: false,
-  meta: { isFetching: true },
-  payload: { stationId, byIntervalInPeriodFilter },
+export const flow = (
+  stationId,
+  periodStart = DEFAULT_PERIOD_START,
+  periodEnd = DEFAULT_PERIOD_END,
+  interval = DEFAULT_INTERVAL,
+) => ({
+  payload: {
+    stationId, periodStart, periodEnd, interval,
+  },
   type: FLOW.START,
 });
-export const flowPending = () => ({
-  error: false,
-  meta: { isFetching: true },
-  type: FLOW.PENDING,
-});
-export const flowSuccess = () => ({
-  error: false,
-  meta: { isFetching: false },
-  type: FLOW.SUCCESS,
-});
-export const flowFailure = error => ({
-  error: false,
-  meta: { isFetching: false },
-  payload: error,
-  type: FLOW.FAILURE,
-});
+
+export default flow;

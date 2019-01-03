@@ -1,15 +1,16 @@
-import byIntervalInPeriodFilter from 'application/state/filter/byIntervalInPeriodFilter';
 import reducer from 'application/state/query/stationAvailabilities/reducers';
 import { FETCH } from 'application/state/query/stationAvailabilities/types';
 import produce from 'immer';
 import { v4 as uuid } from 'uuid';
 
 const INITIAL_STATE = {
-  data: null,
+  data: undefined,
   error: false,
   isFetching: false,
-  stationId: null,
-  byIntervalInPeriodFilter: null,
+  stationId: undefined,
+  periodStart: undefined,
+  periodEnd: undefined,
+  interval: undefined,
 };
 
 describe('application/state/query/stationAvailabilities/reducers', () => {
@@ -23,18 +24,25 @@ describe('application/state/query/stationAvailabilities/reducers', () => {
 
   test('should affect state for action with type defining a fetch start', () => {
     const stationId = uuid();
-    const filter = byIntervalInPeriodFilter('2017-08-12 15:56:00', '2018-08-12 15:56:00', '5 min');
+    const periodStart = '2017-08-12 15:56:00';
+    const periodEnd = '2018-08-12 15:56:00';
+    const
+      interval = '5 min';
 
     const expectedState = produce(INITIAL_STATE, (draft) => {
       draft.isFetching = true;
       draft.stationId = stationId;
-      draft.byIntervalInPeriodFilter = filter;
+      draft.periodStart = periodStart;
+      draft.periodEnd = periodEnd;
+      draft.interval = interval;
     });
 
     expect(reducer(INITIAL_STATE, {
       type: FETCH.START,
       meta: { isFetching: true },
-      payload: { stationId, byIntervalInPeriodFilter: filter },
+      payload: {
+        stationId, periodStart, periodEnd, interval,
+      },
     })).toEqual(expectedState);
   });
 

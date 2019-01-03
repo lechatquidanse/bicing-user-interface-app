@@ -20,6 +20,19 @@ describe('application/state/query/station/operations', () => {
       .put(actions.fetchPending());
   });
 
+  test('should handle error when stationId is not validated', () => {
+    const action = {
+      type: FETCH.START,
+      payload: { stationId: 'not an uuid' },
+    };
+
+    return expectSaga(fetch, action)
+      .run()
+      .then((result) => {
+        expect(result.toJSON()).toMatchSnapshot();
+      });
+  });
+
   test('should list expected station with fetch() generator', () => {
     const stationId = uuid();
     const fakeStation = {
@@ -42,6 +55,27 @@ describe('application/state/query/station/operations', () => {
       ])
       .put(actions.fetchSuccess(fakeStation))
       .run();
+  });
+
+
+  test('should handle error when api call response does not contains expected schema type', () => {
+    const stationId = 'a41070e4-3866-490d-a8ab-5195eae71f93';
+    const fakeResponseWithMissingRequiredProperties = { name: '233 - C/NOU DE LA RAMBLA, 164' };
+
+    const action = { type: FETCH.START, payload: { stationId } };
+
+    return expectSaga(fetch, action)
+      .provide([
+        [matchers.call.fn(
+          HttpStationQuery.find, stationId,
+        ),
+        fakeResponseWithMissingRequiredProperties,
+        ],
+      ])
+      .run()
+      .then((result) => {
+        expect(result.toJSON()).toMatchSnapshot();
+      });
   });
 
   test('should handle error when api call failed in fetch() generator', () => {

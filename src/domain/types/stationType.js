@@ -1,20 +1,23 @@
-import {
-  shape, number, string, oneOf,
-} from 'prop-types';
-
 import { TYPE_ALLOWED } from 'domain/definitions/stationDefinition';
-import lastAvailabilityType from 'domain/types/lastAvailabilityType';
+import Joi from 'joi';
 
-const stationType = shape({
-  id: string.isRequired,
-  name: string.isRequired,
-  type: oneOf(TYPE_ALLOWED),
-  address: string,
-  addressNumber: string,
-  latitude: number.isRequired,
-  longitude: number.isRequired,
-  zipCode: string.isRequired,
-  lastAvailability: lastAvailabilityType,
-});
+const stationIdType = Joi.string().guid({ version: ['uuidv4'] }).required();
 
-export default stationType;
+const stationType = Joi.object().keys({
+  id: stationIdType,
+  name: Joi.string().required(),
+  type: Joi.string().valid(TYPE_ALLOWED),
+  address: Joi.string(),
+  addressNumber: Joi.string().allow(null),
+  latitude: Joi.number().required(),
+  longitude: Joi.number().required(),
+  zipCode: Joi.string().required(),
+}).unknown(true);
+
+const stationsType = Joi.array().items(stationType);
+
+export {
+  stationIdType,
+  stationType,
+  stationsType,
+};

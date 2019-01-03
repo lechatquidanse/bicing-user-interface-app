@@ -1,4 +1,3 @@
-import byIntervalInPeriodFilter from 'application/state/filter/byIntervalInPeriodFilter';
 import * as selectors from 'application/state/query/stationAvailabilities/selectors';
 import { v4 as uuid } from 'uuid';
 
@@ -19,11 +18,23 @@ describe('application/state/query/stationAvailabilities/selectors', () => {
 
     expect(selectors.data(state)).toEqual(data);
   });
-  test('it can return byIntervalInPeriodFilter', () => {
-    const filter = byIntervalInPeriodFilter('2017-08-12 15:56:00', '2018-08-12 15:56:00', '5 min');
-    const state = { query: { stationAvailabilities: { data: { filter } } } };
+  test('it can return periodStart', () => {
+    const periodStart = '2017-08-12 15:56:00';
+    const state = { query: { stationAvailabilities: { periodStart } } };
 
-    expect(selectors.byIntervalInPeriodFilter(state)).toEqual(filter);
+    expect(selectors.periodStart(state)).toEqual(periodStart);
+  });
+  test('it can return periodEnd', () => {
+    const periodEnd = '2017-08-12 15:56:00';
+    const state = { query: { stationAvailabilities: { periodEnd } } };
+
+    expect(selectors.periodEnd(state)).toEqual(periodEnd);
+  });
+  test('it can return interval', () => {
+    const interval = '15 min';
+    const state = { query: { stationAvailabilities: { interval } } };
+
+    expect(selectors.interval(state)).toEqual(interval);
   });
   test('it can return stationId', () => {
     const stationId = uuid();

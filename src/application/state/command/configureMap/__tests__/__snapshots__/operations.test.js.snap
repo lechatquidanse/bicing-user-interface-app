@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`application/state/command/configureMap/operations should handle error when byGeoLocationFilter creation is not validated 1`] = `
+Object {
+  "put": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "PUT": Object {
+        "action": Object {
+          "error": true,
+          "payload": Object {
+            "_object": Object {
+              "latitude": "bad_value",
+              "limit": "bad_value",
+              "longitude": "bad_value",
+            },
+            "annotate": "@@redux-saga-test-plan/json/function/<anonymous>",
+            "details": Array [
+              Object {
+                "context": Object {
+                  "key": "latitude",
+                  "label": "latitude",
+                  "value": "bad_value",
+                },
+                "message": "\\"latitude\\" must be a number",
+                "path": Array [
+                  "latitude",
+                ],
+                "type": "number.base",
+              },
+            ],
+            "isJoi": true,
+            "name": "ValidationError",
+          },
+          "type": "command/configureMap/CONFIGURE_FAILURE",
+        },
+        "channel": null,
+      },
+    },
+  ],
+}
+`;

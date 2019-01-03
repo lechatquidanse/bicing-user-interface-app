@@ -3,13 +3,14 @@ import { FETCH } from 'application/state/query/stations/types';
 import produce from 'immer';
 
 const INITIAL_STATE = {
-  byGeoLocationFilter: null,
-  data: null,
+  data: undefined,
   error: false,
   isFetching: false,
+  latitude: undefined,
+  longitude: undefined,
+  limit: undefined,
 };
 
-// @todo add byGeoLocationFilter logic
 describe('application/state/query/stations/reducers', () => {
   test('should have initial state', () => {
     expect(reducer()).toEqual(INITIAL_STATE);
@@ -20,14 +21,19 @@ describe('application/state/query/stations/reducers', () => {
   });
 
   test('should affect state for action with type defining a fetch start', () => {
+    const latitude = 41.213; const longitude = 2.134; const
+      limit = 200;
     const expectedState = produce(INITIAL_STATE, (draft) => {
       draft.isFetching = true;
+      draft.latitude = latitude;
+      draft.longitude = longitude;
+      draft.limit = limit;
     });
 
     expect(reducer(INITIAL_STATE, {
       type: FETCH.START,
       meta: { isFetching: true },
-      payload: { byGeoLocationFilter: null },
+      payload: { latitude, longitude, limit },
     })).toEqual(expectedState);
   });
 

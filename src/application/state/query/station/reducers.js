@@ -2,7 +2,7 @@ import { FETCH } from 'application/state/query/station/types';
 import produce from 'immer';
 import { createReducer } from 'reduxsauce';
 
-export const INITIAL_STATE = { data: null, error: false, isFetching: false };
+export const INITIAL_STATE = { data: undefined, error: false, isFetching: false };
 
 export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
   draft.isFetching = action.meta.isFetching;

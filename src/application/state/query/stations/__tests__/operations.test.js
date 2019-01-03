@@ -1,7 +1,7 @@
 import * as actions from 'application/state/query/stations/actions';
 import operation, { fetch } from 'application/state/query/stations/operations';
 import { FETCH } from 'application/state/query/stations/types';
-import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
+import HttpStationsQuery from 'infrastructure/bicingApi/HttpStationsQuery';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { throwError } from 'redux-saga-test-plan/providers';
@@ -19,6 +19,21 @@ describe('application/state/query/stations/operations', () => {
       .put(actions.fetchPending());
   });
 
+  test('should handle error when byGeoLocationFilter creation is not validated', () => {
+    const action = {
+      error: false,
+      meta: { isFetching: true },
+      payload: { latitude: 'bad_value', longitude: 'bad_value', limit: 'bad_value' },
+      type: FETCH.START,
+    };
+
+    return expectSaga(fetch, action)
+      .run()
+      .then((result) => {
+        expect(result.toJSON()).toMatchSnapshot();
+      });
+  });
+
   test('should list expected stations with fetch() generator', () => {
     const fakeStations = [
       {
@@ -34,19 +49,40 @@ describe('application/state/query/stations/operations', () => {
         longitude: 2.166871,
       },
     ];
+
     const action = {
       error: false,
       meta: { isFetching: true },
-      payload: { byGeoLocationFilter: null },
+      payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
       type: FETCH.START,
     };
 
     return expectSaga(fetch, action)
       .provide([
-        [matchers.call.fn(HttpStationQuery.findAll), fakeStations],
+        [matchers.call.fn(HttpStationsQuery.find), fakeStations],
       ])
       .put(actions.fetchSuccess(fakeStations))
       .run();
+  });
+
+  test('should handle error when api call response does not contains expected schema type', () => {
+    const fakeStationsWithMissingRequiredProperties = [{ name: '233 - C/NOU DE LA RAMBLA, 164' }];
+
+    const action = {
+      error: false,
+      meta: { isFetching: true },
+      payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
+      type: FETCH.START,
+    };
+
+    return expectSaga(fetch, action)
+      .provide([
+        [matchers.call.fn(HttpStationsQuery.find), fakeStationsWithMissingRequiredProperties],
+      ])
+      .run()
+      .then((result) => {
+        expect(result.toJSON()).toMatchSnapshot();
+      });
   });
 
   test('should handle error when api call failed in fetch() generator', () => {
@@ -54,13 +90,13 @@ describe('application/state/query/stations/operations', () => {
     const action = {
       error: false,
       meta: { isFetching: true },
-      payload: { byGeoLocationFilter: null },
+      payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
       type: FETCH.START,
     };
 
     return expectSaga(fetch, action)
       .provide([
-        [matchers.call.fn(HttpStationQuery.findAll), throwError(error)],
+        [matchers.call.fn(HttpStationsQuery.find), throwError(error)],
       ])
       .put(actions.fetchFailure(error))
       .run();

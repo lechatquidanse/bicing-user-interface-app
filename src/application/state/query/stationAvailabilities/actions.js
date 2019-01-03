@@ -1,20 +1,17 @@
 import { FETCH } from 'application/state/query/stationAvailabilities/types';
 
-export const fetchStart = (stationId, byIntervalInPeriodFilter = null) => ({
+export const fetchStart = (stationId, periodStart, periodEnd, interval) => ({
   error: false,
   meta: { isFetching: true },
-  payload: { stationId, byIntervalInPeriodFilter },
+  payload: {
+    stationId, periodStart, periodEnd, interval,
+  },
   type: FETCH.START,
 });
 export const fetchPending = () => ({
   error: false,
   meta: { isFetching: true },
   type: FETCH.PENDING,
-});
-export const fetchCancelled = () => ({
-  error: false,
-  meta: { isFetching: false },
-  type: FETCH.CANCELLED,
 });
 export const fetchSuccess = data => ({
   error: false,

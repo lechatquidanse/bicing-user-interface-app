@@ -1,13 +1,13 @@
 import React from 'react';
 
-import StationDetails from 'userInterface/react/containers/StationDetails';
-import StationAvailabilities from 'userInterface/react/containers/StationAvailabilities';
+import StationDetails from 'userInterface/react/containers/Station/StationDetails';
+import StationAvailabilities from 'userInterface/react/containers/Station/StationAvailabilities';
 
 const Station = () => (
-  <div>
+  <>
     <StationDetails />
     <StationAvailabilities />
-  </div>
+  </>
 );
 
 export default Station;

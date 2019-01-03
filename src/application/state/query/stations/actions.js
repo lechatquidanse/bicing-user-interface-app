@@ -1,20 +1,15 @@
 import { FETCH } from 'application/state/query/stations/types';
 
-export const fetchStart = (byGeoLocationFilter = null) => ({
+export const fetchStart = (latitude, longitude, limit) => ({
   error: false,
   meta: { isFetching: true },
-  payload: { byGeoLocationFilter },
+  payload: { latitude, longitude, limit },
   type: FETCH.START,
 });
 export const fetchPending = () => ({
   error: false,
   meta: { isFetching: true },
   type: FETCH.PENDING,
-});
-export const fetchCancelled = () => ({
-  error: false,
-  meta: { isFetching: false },
-  type: FETCH.CANCELLED,
 });
 export const fetchSuccess = data => ({
   error: false,

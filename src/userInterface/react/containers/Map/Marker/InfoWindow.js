@@ -10,7 +10,6 @@ import { branch, compose, renderNothing } from 'recompose';
 import { bindActionCreators } from 'redux';
 import { InfoWindow as InfoWindowTemplate } from 'userInterface/react/components/Map/Marker';
 
-// @todo add error if no latitude and longitude etc... and wait for lastAvailabilitiy to be ready
 const mapStateToProps = (state, props) => ({
   stationId: props.stationId,
   activeInfoWindowKey: commandToggleInfoWindowSelectors.key(state),

@@ -1,19 +1,79 @@
-ifndef NODE_ENV
-include .env
-endif
+.DEFAULT_GOAL := help
+.SILENT:
 
-install:
-	cp .env.dist .env
-	docker-compose up -d --build
-	docker-compose run --rm node yarn install
+## Colors
+COLOR_RESET   = \033[0m
+COLOR_INFO    = \033[32m
+COLOR_COMMENT = \033[33m
 
-run:
-	docker-compose up -d
-	docker-compose run --rm node yarn install
+## Help
+help:
+	printf "${COLOR_COMMENT}Usage:${COLOR_RESET}\n"
+	printf " make [target]\n\n"
+	printf "${COLOR_COMMENT}Available targets:${COLOR_RESET}\n"
+	awk '/^[a-zA-Z\-\_0-9\.@]+:/ { \
+		helpMessage = match(lastLine, /^## (.*)/); \
+		if (helpMessage) { \
+			helpCommand = substr($$1, 0, index($$1, ":")); \
+			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
+			printf " ${COLOR_INFO}%-16s${COLOR_RESET} %s\n", helpCommand, helpMessage; \
+		} \
+	} \
+	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
+##################
+# Useful targets #
+##################
+
+## Install all install_* requirements and launch project.
+install: env_file env_run install_vendor
+
+## Run project, install vendors
+run: env_run install_vendor
+
+## Stop project.
+stop:
+	docker-compose stop
+
+## Down project and remove volumes (databases).
 down:
 	docker-compose down -v --remove-orphans
 
-qa:
-	docker-compose run --rm node yarn test
-	# docker-compose up -d test-feature && docker-compose run --rm node yarn test-feature
+## Run all quality assurance tools (tests and code inspection).
+qa: code_correct test
+
+########
+# Code #
+########
+
+## Run eslint to correct violations of a defined coding project standards.
+code_correct:
+	docker-compose run --rm ui_app eslint src/**/*.js src/**/*.jsx
+
+###############
+# Environment #
+###############
+
+## Set default environment variables by copying env.dist file as .env.
+env_file:
+	cp .env.dist .env
+
+## Launch docker environment.
+env_run:
+	docker-compose up -d
+
+###########
+# Install #
+###########
+
+## Install vendors.
+install_vendor:
+	docker-compose run --rm ui_app yarn install
+
+########
+# Test#
+########
+
+## Run unit&integration tests
+test:
+	docker-compose run --rm ui_app yarn test

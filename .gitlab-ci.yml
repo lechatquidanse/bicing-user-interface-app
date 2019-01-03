@@ -28,18 +28,18 @@ before_script:
   script:
     - cp .env.dist .env
     - docker-compose -f docker-compose.yml -f ./docker/docker-compose.ci.yml up -d
-    - docker-compose run --rm node yarn install
-    - docker-compose run --rm node eslint src/**/*.js src/**/*.jsx
-    - docker-compose run --rm node yarn test
+    - docker-compose run --rm ui_app yarn install
+    - docker-compose run --rm ui_app eslint src/**/*.js src/**/*.jsx
+    - docker-compose run --rm ui_app yarn test
     - docker-compose down -v --remove-orphans
 
 .build_script_template: &build_script
   script:
     - cp .env.dist .env
     - docker-compose -f docker-compose.yml -f ./docker/docker-compose.ci.yml up -d
-    - docker-compose run --rm node yarn install
-    - docker-compose run --rm node eslint src/**/*.js src/**/*.jsx
-    - docker-compose run --rm node yarn test
+    - docker-compose run --rm ui_app yarn install
+    - docker-compose run --rm ui_app eslint src/**/*.js src/**/*.jsx
+    - docker-compose run --rm ui_app yarn test
     - docker-compose down -v --remove-orphans
 
     - rm .env && envsubst < ./docker/production/.env.dist > ./.env

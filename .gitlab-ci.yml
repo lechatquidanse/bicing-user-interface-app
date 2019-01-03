@@ -42,7 +42,7 @@ before_script:
     - docker-compose run --rm node yarn test
     - docker-compose down -v --remove-orphans
 
-    - rm .env && envsubst < ./docker/stages/production/.env.dist > ./.env
+    - rm .env && envsubst < ./docker/production/.env.dist > ./.env
     - docker build --target bicing_ui_app_prod -t $PRODUCTION_IMAGE .
 
 .production_script_template: &production_script

@@ -18,7 +18,7 @@ FROM nginx:1.15.1-alpine AS bicing_ui_app_prod
 
 # uncomment when using react router
 #RUN rm -rf /etc/nginx/conf.d
-#COPY docker/nginx /etc/nginx
+#COPY docker/production/conf /etc/nginx
 
 COPY --from=bicing_ui_app_dev /usr/src/app/build /usr/share/nginx/html
 

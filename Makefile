@@ -48,7 +48,7 @@ qa: code_correct test
 
 ## Run eslint to correct violations of a defined coding project standards.
 code_correct:
-	docker-compose run --rm ui_app eslint src/**/*.js src/**/*.jsx
+	docker-compose run --rm ui_app eslint src/**/*.js src/**/*.jsx --fix
 
 ###############
 # Environment #

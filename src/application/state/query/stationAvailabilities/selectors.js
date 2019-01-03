@@ -9,7 +9,6 @@ export const periodEnd = state => selector(state).periodEnd;
 export const interval = state => selector(state).interval;
 export const stationId = state => selector(state).stationId;
 
-// @todo clean this
 export const stationAvailabilitiesSorted = (state) => {
   if (data(state) === undefined || data(state).availabilities === undefined) {
     return null;

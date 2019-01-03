@@ -1,9 +1,4 @@
 import { actions } from 'application/state/flow/map';
-import {
-  DEFAULT_LATITUDE,
-  DEFAULT_LIMIT,
-  DEFAULT_LONGITUDE,
-} from 'domain/definitions/configurationMapDefinition';
 import React from 'react';
 import { withScriptjs } from 'react-google-maps';
 import { connect } from 'react-redux';
@@ -22,9 +17,8 @@ const Home = () => (
     <Station />
   </div>
 );
-// @todo create flowDefault actions
 const mapDispatchToProps = dispatch => bindActionCreators({
-  initMap: () => actions.flow(DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_LIMIT),
+  initMap: () => actions.flow(),
 }, dispatch);
 
 const withReduxConnect = connect(null, mapDispatchToProps);

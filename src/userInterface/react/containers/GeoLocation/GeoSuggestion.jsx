@@ -1,9 +1,4 @@
 import { actions } from 'application/state/flow/map';
-import {
-  DEFAULT_LATITUDE,
-  DEFAULT_LIMIT,
-  DEFAULT_LONGITUDE,
-} from 'domain/definitions/configurationMapDefinition';
 import React from 'react';
 import { withScriptjs } from 'react-google-maps';
 import { connect } from 'react-redux';
@@ -14,7 +9,7 @@ import { GeoSuggestion as GeoSuggestionTemplate } from 'userInterface/react/comp
 const mapDispatchToProps = dispatch => bindActionCreators({
   onSuggestSelect: (suggest) => {
     if (suggest === undefined) {
-      return actions.flow(DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_LIMIT);
+      return actions.flow();
     }
 
     return actions.flow(suggest.location.lat, suggest.location.lng, 900);

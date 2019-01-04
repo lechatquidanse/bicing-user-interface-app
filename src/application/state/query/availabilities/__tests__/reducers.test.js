@@ -1,10 +1,10 @@
-import reducer from 'application/state/query/lastAvailabilities/reducers';
-import { FETCH } from 'application/state/query/lastAvailabilities/types';
+import reducer from 'application/state/query/availabilities/reducers';
+import { FETCH } from 'application/state/query/availabilities/types';
 import produce from 'immer';
 
 const INITIAL_STATE = { data: undefined, error: false, isFetching: false };
 
-describe('application/state/query/lastAvailabilities/reducers', () => {
+describe('application/state/query/availabilities/reducers', () => {
   test('should have initial state', () => {
     expect(reducer()).toEqual(INITIAL_STATE);
   });

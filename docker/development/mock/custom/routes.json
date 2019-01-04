@@ -1,4 +1,5 @@
 {
+    "/1.0/stations/:id*": "/forecast-availabilities/:id",
     "/api/*": "/$1",
     "/stations/:id/availabilities*": "/station-availabilities/:id"
 }

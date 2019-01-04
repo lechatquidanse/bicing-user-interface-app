@@ -3,7 +3,7 @@ import {
   selectors as commandToggleInfoWindowSelectors,
 } from 'application/state/command/toggleInfoWindow';
 import { actions as flowStationAction } from 'application/state/flow/station';
-import { selectors as queryLastAvailabilitiesSelectors } from 'application/state/query/lastAvailabilities';
+import { selectors as queryAvailabilitiesSelectors } from 'application/state/query/availabilities';
 import { selectors as queryStationsSelectors } from 'application/state/query/stations';
 import { connect } from 'react-redux';
 import { branch, compose, renderNothing } from 'recompose';
@@ -19,13 +19,13 @@ const mapStateToProps = (state, props) => ({
   type: queryStationsSelectors.typeByStationId(state, props.stationId),
   name: queryStationsSelectors.nameByStationId(state, props.stationId),
   zipCode: queryStationsSelectors.zipCodeByStationId(state, props.stationId),
-  lastAvailability: queryLastAvailabilitiesSelectors.lastAvailabilityById(state, props.stationId),
-  status: queryLastAvailabilitiesSelectors.statusByStationId(state, props.stationId),
-  availableBikeNumber: queryLastAvailabilitiesSelectors.availableBikeNumberByStationId(
+  lastAvailability: queryAvailabilitiesSelectors.lastAvailabilityById(state, props.stationId),
+  status: queryAvailabilitiesSelectors.statusByStationId(state, props.stationId),
+  availableBikeNumber: queryAvailabilitiesSelectors.availableBikeNumberByStationId(
     state,
     props.stationId,
   ),
-  availableSlotNumber: queryLastAvailabilitiesSelectors.availableSlotNumberByStationId(
+  availableSlotNumber: queryAvailabilitiesSelectors.availableSlotNumberByStationId(
     state,
     props.stationId,
   ),

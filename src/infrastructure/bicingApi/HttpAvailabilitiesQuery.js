@@ -1,3 +1,4 @@
+/* eslint class-methods-use-this: ["error", { "exceptMethods": ["find"] }] */
 import { OK } from 'http-status';
 import HttpAvailabilitiesQueryError
   from 'infrastructure/bicingApi/errors/HttpAvailabilitiesQueryError';
@@ -6,7 +7,7 @@ import httpHydraCollectionResponse
   from 'infrastructure/bicingApi/types/httpHydraCollectionResponse';
 
 class HttpAvailabilitiesQuery {
-  static async find() {
+  async find() {
     const apiResponse = await httpClient.get('/last-availabilities-by-station')
       .then(response => response)
       .catch((error) => {

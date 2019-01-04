@@ -12,7 +12,7 @@ const fixtures = [
 const GeoSuggestion = ({ initialValue, onSuggestSelect }) => (
   <Geosuggest
     initialValue={initialValue}
-    placeholder="Start typing!"
+    placeholder="Where!"
     fixtures={fixtures}
     onSuggestSelect={onSuggestSelect}
   />

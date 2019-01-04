@@ -1,8 +1,16 @@
-import { FETCH } from 'application/state/query/lastAvailabilities/types';
+import { FETCH } from 'application/state/query/availabilities/types';
 
-export const fetchStart = () => ({
+export const fetchStart = (
+  periodStart = null,
+  periodEnd = null,
+  interval = null,
+  ...stationIds
+) => ({
   error: false,
   meta: { isFetching: true },
+  payload: {
+    periodStart, periodEnd, interval, stationIds,
+  },
   type: FETCH.START,
 });
 export const fetchPending = () => ({

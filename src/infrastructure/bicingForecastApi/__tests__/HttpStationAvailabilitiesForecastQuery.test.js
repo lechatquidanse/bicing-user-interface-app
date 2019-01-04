@@ -6,7 +6,7 @@ import HttpStationAvailabilitiesForecastQuery
   from 'infrastructure/bicingForecastApi/HttpStationAvailabilitiesForecastQuery';
 import { v4 as uuid } from 'uuid';
 
-describe('infrastructure/bicingApi/HttpStationAvailabilitiesQuery', () => {
+describe('infrastructure/bicingForecastApi/HttpStationAvailabilitiesForecastQuery', () => {
   test('should find stationAvailabilities by stationId', async () => {
     const stationId = uuid();
     const periodStart = '2017-08-12 12:12:12';
@@ -42,14 +42,14 @@ describe('infrastructure/bicingApi/HttpStationAvailabilitiesQuery', () => {
 
     expect(results).toEqual([
       {
-        stationId: '76fc88f9-aa4e-4fbf-9852-f23a8cc7c525',
+        id: '76fc88f9-aa4e-4fbf-9852-f23a8cc7c525',
         availableBikeNumber: 13.5,
         availableSlotNumber: 12,
         status: 'OPENED',
         statedAt: '2018-12-24 16:10:00',
       },
       {
-        stationId: '76fc88f9-aa4e-4fbf-9852-f23a8cc7c525',
+        id: '76fc88f9-aa4e-4fbf-9852-f23a8cc7c525',
         availableBikeNumber: 14.5,
         availableSlotNumber: 12.667,
         status: 'CLOSED',

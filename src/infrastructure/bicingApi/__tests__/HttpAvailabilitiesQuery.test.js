@@ -18,7 +18,7 @@ describe('infrastructure/bicingApi/HttpAvailabilitiesQuery', () => {
       status: OK,
     }));
 
-    const availabilities = await HttpAvailabilitiesQuery.find();
+    const availabilities = await (new HttpAvailabilitiesQuery()).find();
 
     expect(availabilities).toEqual(expectedAvailabilities);
     expect(mockAxios.get).toHaveBeenCalledTimes(1);
@@ -36,7 +36,7 @@ describe('infrastructure/bicingApi/HttpAvailabilitiesQuery', () => {
       status,
     }));
 
-    expect(HttpAvailabilitiesQuery.find())
+    expect((new HttpAvailabilitiesQuery()).find())
       .rejects
       .toEqual(HttpAvailabilitiesQueryError.withUnexpectedResponseStatus(status));
   });
@@ -51,7 +51,7 @@ describe('infrastructure/bicingApi/HttpAvailabilitiesQuery', () => {
       status: OK,
     }));
 
-    expect(HttpAvailabilitiesQuery.find(ByGeoLocationFilter.fromRawValues(41.12, 2.12, 10)))
+    expect((new HttpAvailabilitiesQuery()).find(ByGeoLocationFilter.fromRawValues(41.12, 2.12, 10)))
       .rejects
       .toEqual(HttpAvailabilitiesQueryError.withResponseFormatValidationErrors('"hydra:member" is required'));
   });
@@ -59,7 +59,7 @@ describe('infrastructure/bicingApi/HttpAvailabilitiesQuery', () => {
     const error = 'error during request';
     mockAxios.get.mockImplementationOnce(() => Promise.reject(error));
 
-    expect(HttpAvailabilitiesQuery.find(ByGeoLocationFilter.fromRawValues(41.12, 2.12, 10)))
+    expect((new HttpAvailabilitiesQuery()).find(ByGeoLocationFilter.fromRawValues(41.12, 2.12, 10)))
       .rejects
       .toEqual(HttpAvailabilitiesQueryError.withRequestError(error));
   });

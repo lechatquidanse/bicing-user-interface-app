@@ -6,7 +6,7 @@ import { defineAction } from 'redux-define';
 export const FETCH = defineAction(
   'FETCH',
   [START, PENDING, SUCCESS, FAILURE],
-  defineAction('query/lastAvailabilities'),
+  defineAction('query/availabilities'),
 );
 
 export default FETCH;

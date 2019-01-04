@@ -1,20 +1,20 @@
-import * as selectors from 'application/state/query/lastAvailabilities/selectors';
+import * as selectors from 'application/state/query/availabilities/selectors';
 import { v4 as uuid } from 'uuid';
 
-describe('application/state/query/lastAvailabilities/selectors', () => {
+describe('application/state/query/availabilities/selectors', () => {
   test('it can return error flag', () => {
-    const state = { query: { lastAvailabilities: { error: true } } };
+    const state = { query: { availabilities: { error: true } } };
 
     expect(selectors.error(state)).toBeTruthy();
   });
   test('it can return isFetching flag', () => {
-    const state = { query: { lastAvailabilities: { isFetching: true } } };
+    const state = { query: { availabilities: { isFetching: true } } };
 
     expect(selectors.isFetching(state)).toBeTruthy();
   });
-  test('it can return lastAvailabilities data', () => {
+  test('it can return availabilities data', () => {
     const data = ['last availabilities 1', 'last availabilities 2'];
-    const state = { query: { lastAvailabilities: { data } } };
+    const state = { query: { availabilities: { data } } };
 
     expect(selectors.data(state)).toEqual(data);
   });
@@ -26,7 +26,7 @@ describe('application/state/query/lastAvailabilities/selectors', () => {
       lastAvailability,
       { id: uuid(), status: 'CLOSED' },
     ];
-    const state = { query: { lastAvailabilities: { data } } };
+    const state = { query: { availabilities: { data } } };
 
     expect(selectors.lastAvailabilityById(state, stationId)).toEqual(lastAvailability);
   });
@@ -37,7 +37,7 @@ describe('application/state/query/lastAvailabilities/selectors', () => {
       { id: stationId, status },
       { id: uuid(), status: 'OPENED' },
     ];
-    const state = { query: { lastAvailabilities: { data } } };
+    const state = { query: { availabilities: { data } } };
 
     expect(selectors.statusByStationId(state, stationId)).toEqual(status);
   });
@@ -48,7 +48,7 @@ describe('application/state/query/lastAvailabilities/selectors', () => {
       { id: uuid(), availableBikeNumber: 12 },
       { id: stationId, availableBikeNumber },
     ];
-    const state = { query: { lastAvailabilities: { data } } };
+    const state = { query: { availabilities: { data } } };
 
     expect(selectors.availableBikeNumberByStationId(state, stationId)).toEqual(availableBikeNumber);
   });
@@ -59,7 +59,7 @@ describe('application/state/query/lastAvailabilities/selectors', () => {
       { id: uuid(), availableSlotNumber: 12 },
       { id: stationId, availableSlotNumber },
     ];
-    const state = { query: { lastAvailabilities: { data } } };
+    const state = { query: { availabilities: { data } } };
 
     expect(selectors.availableSlotNumberByStationId(state, stationId)).toEqual(availableSlotNumber);
   });

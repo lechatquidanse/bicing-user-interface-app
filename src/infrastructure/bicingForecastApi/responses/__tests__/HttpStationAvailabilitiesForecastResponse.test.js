@@ -75,14 +75,14 @@ describe('infrastructure/bicingForecastApi/responses/HttpStationAvailabilitiesFo
     expect(HttpStationAvailabilitiesForecastResponse.fromRawValues(stationId, availabilities)
       .toModelAvailabilities()).toEqual([
       {
-        stationId: '76fc88f9-aa4e-4fbf-9852-f23a8cc7c525',
+        id: '76fc88f9-aa4e-4fbf-9852-f23a8cc7c525',
         availableBikeNumber: 13.5,
         availableSlotNumber: 12,
         status: 'OPENED',
         statedAt: '2018-12-24 16:10:00',
       },
       {
-        stationId: '76fc88f9-aa4e-4fbf-9852-f23a8cc7c525',
+        id: '76fc88f9-aa4e-4fbf-9852-f23a8cc7c525',
         availableBikeNumber: 14.5,
         availableSlotNumber: 12.667,
         status: 'CLOSED',

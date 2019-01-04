@@ -1,7 +1,7 @@
 import { actions as commandConfigureMapActions } from 'application/state/command/configureMap';
 import operation, { flow } from 'application/state/flow/map/operations';
 import { FLOW } from 'application/state/flow/map/types';
-import { actions as queryLastAvailabilitiesActions } from 'application/state/query/lastAvailabilities';
+import { actions as queryAvailabilitiesActions } from 'application/state/query/availabilities';
 import { actions as queryStationsActions } from 'application/state/query/stations';
 import { testSaga } from 'redux-saga-test-plan';
 import { put } from 'redux-saga/effects';
@@ -24,7 +24,7 @@ describe('application/state/flow/map/operations', () => {
     testSaga(flow, action)
       .next()
       .all([
-        put(queryLastAvailabilitiesActions.fetchStart()),
+        put(queryAvailabilitiesActions.fetchStart()),
         put(queryStationsActions.fetchStart(latitude, longitude, limit)),
         put(commandConfigureMapActions.configureStart(latitude, longitude, limit)),
       ]);

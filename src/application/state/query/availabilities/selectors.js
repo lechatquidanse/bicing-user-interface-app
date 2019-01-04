@@ -1,10 +1,12 @@
-const selector = state => state.query.lastAvailabilities;
+const selector = state => state.query.availabilities;
 
 export const data = state => selector(state).data;
 export const error = state => selector(state).error;
 export const isFetching = state => selector(state).isFetching;
 
+// @todo maybe error ici add check if data and no error
 export const lastAvailabilityById = (state, id) => (data(state) === undefined
+|| error(state) === true
   ? undefined : data(state).find(model => model.id === id));
 
 const property = (state, propertyKey, id) => (lastAvailabilityById(state, id) === undefined

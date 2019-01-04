@@ -1,4 +1,4 @@
-import { FETCH } from 'application/state/query/lastAvailabilities/types';
+import { FETCH } from 'application/state/query/availabilities/types';
 import produce from 'immer';
 import { createReducer } from 'reduxsauce';
 

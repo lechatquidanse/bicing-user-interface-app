@@ -24,12 +24,13 @@ class HttpStationAvailabilitiesForecastResponse {
     return Joi.attempt(availabilities, predictionsType);
   }
 
+  // @todo check if add valid model type
   toModelAvailabilities() {
     const model = [];
 
     this.availabilities.map((availability) => {
       model.push({
-        stationId: this.stationId,
+        id: this.stationId,
         availableBikeNumber: availability.available_bike_number,
         availableSlotNumber: availability.available_slot_number,
         status: availability.status,

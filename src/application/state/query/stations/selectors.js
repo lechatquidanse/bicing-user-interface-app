@@ -36,15 +36,16 @@ export const latitudeByItineraryStep = (state, itineraryStep) =>
 export const longitudeByItineraryStep = (state, itineraryStep) =>
   step(state, itineraryStep).longitude === undefined ?
     undefined :
-    step(state , itineraryStep).longitude;
+    step(state, itineraryStep).longitude;
 export const limitByItineraryStep = (state, itineraryStep) =>
   step(state, itineraryStep).limit === undefined ?
     undefined :
     step(state, itineraryStep).limit;
 
-//@todo add stationIds
-// export const stationIdsByItineraryStep = (state, itineraryStep) => error(state) === true || data(state) === undefined
-//   ? undefined : [...new Set(data(state).map(station => station.id))];
+export const stationIdsByItineraryStep = (state, itineraryStep) =>
+  step(state, itineraryStep).data === undefined ?
+    undefined :
+    [...new Set(step(state, itineraryStep).data.map(station => station.id))];
 
 export const nameByItineraryStepAndStationId = (state, itineraryStep, stationId) =>
   stationPropertyByKeyAndItineraryStepAndId(

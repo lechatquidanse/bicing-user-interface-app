@@ -13,9 +13,9 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { itineraryStep, data },
-            { itineraryStep: 2, data: undefined }],
-        },
-      },
+            { itineraryStep: 2, data: undefined }]
+        }
+      }
     };
 
     expect(selectors.stationByItineraryStepAndId(state, itineraryStep, stationId))
@@ -28,10 +28,10 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { error: true, itineraryStep },
-            { error: false, itineraryStep: 3 },
-          ],
-        },
-      },
+            { error: false, itineraryStep: 3 }
+          ]
+        }
+      }
     };
 
     expect(selectors.isErrorByItineraryStep(state, itineraryStep)).toBeTruthy();
@@ -45,10 +45,10 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { error: true, itineraryStep, data: error },
-            { error: false, itineraryStep: 3 },
-          ],
-        },
-      },
+            { error: false, itineraryStep: 3 }
+          ]
+        }
+      }
     };
 
     expect(selectors.errorByItineraryStep(state, itineraryStep)).toEqual(error);
@@ -60,10 +60,10 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { isFetching: false, itineraryStep },
-            { isFetching: true, itineraryStep: 3 },
-          ],
-        },
-      },
+            { isFetching: true, itineraryStep: 3 }
+          ]
+        }
+      }
     };
 
     expect(selectors.isFetchingByItineraryStep(state, itineraryStep)).toBeFalsy();
@@ -77,10 +77,10 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { latitude: 10.0, itineraryStep: 3 },
-            { latitude, itineraryStep },
-          ],
-        },
-      },
+            { latitude, itineraryStep }
+          ]
+        }
+      }
     };
 
     expect(selectors.latitudeByItineraryStep(state, itineraryStep)).toEqual(latitude);
@@ -94,10 +94,10 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { longitude: 8.234, itineraryStep: 3 },
-            { longitude, itineraryStep },
-          ],
-        },
-      },
+            { longitude, itineraryStep }
+          ]
+        }
+      }
     };
 
     expect(selectors.longitudeByItineraryStep(state, itineraryStep)).toEqual(longitude);
@@ -111,37 +111,39 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { limit, itineraryStep },
-            { limit: 5, itineraryStep: 1 },
-          ],
-        },
-      },
+            { limit: 5, itineraryStep: 1 }
+          ]
+        }
+      }
     };
 
     expect(selectors.limitByItineraryStep(state, itineraryStep)).toEqual(limit);
   });
-  // test('it can return stationIds by Itinerary step', () => {
-  //   const stationIds = [uuid(), uuid(), uuid()];
-  //   const itineraryStep = 0;
-  //   const state = {
-  //     query: {
-  //       availabilities: {
-  //         itinerarySteps: [
-  //           { stationIds, itineraryStep },
-  //           { stationIds: [], itineraryStep: 1 }
-  //         ]
-  //       }
-  //     }
-  //   };
-  //
-  //   expect(selectors.stationIdsByItineraryStep(state, itineraryStep)).toEqual(stationIds);
-  // });
+  test('it can return stationIds by Itinerary step', () => {
+    const stationId1 = uuid();
+    const stationId2 = uuid();
+    const itineraryStep = 0;
+    const state = {
+      query: {
+        stations: {
+          itinerarySteps: [
+            { data: [{ id:  stationId1 }, { id: stationId2 }], itineraryStep },
+            { data: [], itineraryStep: 1 }
+          ]
+        }
+      }
+    };
+
+    expect(selectors.stationIdsByItineraryStep(state, itineraryStep))
+      .toEqual([stationId1, stationId2]);
+  });
 
   test('it can return a station name by its stationId and Itinerary step', () => {
     const stationId = uuid();
     const name = 'Rocafort';
     const data = [
       { id: stationId, name },
-      { id: uuid(), name: 'Catalunya' },
+      { id: uuid(), name: 'Catalunya' }
     ];
     const itineraryStep = 0;
     const state = {
@@ -149,10 +151,10 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { data, itineraryStep },
-            { data: undefined, itineraryStep: 1 },
-          ],
-        },
-      },
+            { data: undefined, itineraryStep: 1 }
+          ]
+        }
+      }
     };
 
     expect(selectors.nameByItineraryStepAndStationId(state, itineraryStep, stationId))
@@ -163,7 +165,7 @@ describe('application/state/query/stations/selectors', () => {
     const zipCode = '08024';
     const data = [
       { id: stationId, zipCode },
-      { id: uuid(), zipCode: '0823' },
+      { id: uuid(), zipCode: '0823' }
     ];
     const itineraryStep = 0;
     const state = {
@@ -171,10 +173,10 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { data, itineraryStep },
-            { data: undefined, itineraryStep: 1 },
-          ],
-        },
-      },
+            { data: undefined, itineraryStep: 1 }
+          ]
+        }
+      }
     };
 
     expect(selectors.zipCodeByItineraryStepAndStationId(state, itineraryStep, stationId))
@@ -185,7 +187,7 @@ describe('application/state/query/stations/selectors', () => {
     const type = 'BIKE';
     const data = [
       { id: stationId, type },
-      { id: uuid(), type: 'ELECTRIC_BIKE' },
+      { id: uuid(), type: 'ELECTRIC_BIKE' }
     ];
     const itineraryStep = 0;
     const state = {
@@ -193,10 +195,10 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { data, itineraryStep },
-            { data: undefined, itineraryStep: 1 },
-          ],
-        },
-      },
+            { data: undefined, itineraryStep: 1 }
+          ]
+        }
+      }
     };
 
     expect(selectors.typeByItineraryStepAndStationId(state, itineraryStep, stationId))
@@ -207,7 +209,7 @@ describe('application/state/query/stations/selectors', () => {
     const latitude = 41.322;
     const data = [
       { id: stationId, latitude },
-      { id: uuid(), latitude: 23.23 },
+      { id: uuid(), latitude: 23.23 }
     ];
     const itineraryStep = 0;
     const state = {
@@ -215,10 +217,10 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { data, itineraryStep },
-            { data: undefined, itineraryStep: 1 },
-          ],
-        },
-      },
+            { data: undefined, itineraryStep: 1 }
+          ]
+        }
+      }
     };
 
     expect(selectors.latitudeByItineraryStepAndStationId(state, itineraryStep, stationId))
@@ -229,7 +231,7 @@ describe('application/state/query/stations/selectors', () => {
     const longitude = 1.322;
     const data = [
       { id: stationId, longitude },
-      { id: uuid(), longitude: 23.23 },
+      { id: uuid(), longitude: 23.23 }
     ];
     const itineraryStep = 0;
     const state = {
@@ -237,10 +239,10 @@ describe('application/state/query/stations/selectors', () => {
         stations: {
           itinerarySteps: [
             { data, itineraryStep },
-            { data: undefined, itineraryStep: 1 },
-          ],
-        },
-      },
+            { data: undefined, itineraryStep: 1 }
+          ]
+        }
+      }
     };
 
     expect(selectors.longitudeByItineraryStepAndStationId(state, itineraryStep, stationId))

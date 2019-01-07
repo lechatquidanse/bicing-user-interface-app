@@ -119,7 +119,7 @@ describe('application/state/query/availabilities/selectors', () => {
 
     expect(selectors.intervalByItineraryStep(state, itineraryStep)).toEqual(interval);
   });
-  test('it can return stationId by Itinerary step', () => {
+  test('it can return stationIds by Itinerary step', () => {
     const stationIds = [uuid(), uuid(), uuid()];
     const itineraryStep = 0;
     const state = {
@@ -134,6 +134,22 @@ describe('application/state/query/availabilities/selectors', () => {
     };
 
     expect(selectors.stationIdsByItineraryStep(state, itineraryStep)).toEqual(stationIds);
+  });
+  test('it can return itineraryAt by Itinerary step', () => {
+    const itineraryAt = '2016-04-28 14:34:00';
+    const itineraryStep = 0;
+    const state = {
+      query: {
+        availabilities: {
+          itinerarySteps: [
+            { itineraryAt, itineraryStep },
+            { itineraryAt: '2000-10-08 14:34:00', itineraryStep: 1 },
+          ],
+        },
+      },
+    };
+
+    expect(selectors.itineraryAtByItineraryStep(state, itineraryStep)).toEqual(itineraryAt);
   });
 
   test('it can return an availability status by its stationId and Itinerary step', () => {

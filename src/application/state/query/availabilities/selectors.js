@@ -46,11 +46,10 @@ export const stationIdsByItineraryStep = (state, itineraryStep) =>
     undefined :
     step(state, itineraryStep).stationIds;
 
-//@todo add itineray selected
-// export const itineraryDateByItineraryStep = (state, itineraryStep) =>
-//   step(state, itineraryStep).stationIds === undefined ?
-//     undefined :
-//     step(state, itineraryStep).stationIds;
+export const itineraryAtByItineraryStep = (state, itineraryStep) =>
+  step(state, itineraryStep).itineraryAt === undefined ?
+    undefined :
+    step(state, itineraryStep).itineraryAt;
 
 export const statusByItineraryStepAndStationId = (state, itineraryStep, stationId) =>
   availabilityPropertyByKeyAndItineraryStepAndId(

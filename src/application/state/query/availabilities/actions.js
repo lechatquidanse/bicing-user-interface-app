@@ -6,7 +6,7 @@ export const fetchStart = (
   periodStartAt,
   periodEndAt,
   interval,
-  ...stationIds
+  stationIds
 ) => ({
   error: false,
   meta: { isFetching: true, itineraryStep, itineraryAt },

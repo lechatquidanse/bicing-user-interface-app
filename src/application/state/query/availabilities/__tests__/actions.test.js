@@ -15,7 +15,7 @@ describe('application/state/query/availabilities/actions', () => {
     const stationIds = [stationId1, stationId2];
 
     const action = actions.fetchStart(
-      itineraryStep, itineraryAt, periodStartAt, periodEndAt, interval, stationId1, stationId2,
+      itineraryStep, itineraryAt, periodStartAt, periodEndAt, interval, stationIds
     );
 
     expect(isFSA(action)).toBeTruthy();

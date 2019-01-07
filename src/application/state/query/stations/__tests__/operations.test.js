@@ -14,15 +14,23 @@ describe('application/state/query/stations/operations', () => {
   });
 
   test('should dispatch a fetchListPending action with fetch() generator', () => {
-    testSaga(fetch)
+    const itineraryStep = 5;
+    const action = {
+      error: false,
+      meta: { isFetching: true, itineraryStep },
+      payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
+      type: FETCH.START,
+    };
+    testSaga(fetch, action)
       .next()
-      .put(actions.fetchPending());
+      .put(actions.fetchPending(itineraryStep));
   });
 
   test('should handle error when byGeoLocationFilter creation is not validated', () => {
+    const itineraryStep = 5;
     const action = {
       error: false,
-      meta: { isFetching: true },
+      meta: { isFetching: true, itineraryStep },
       payload: { latitude: 'bad_value', longitude: 'bad_value', limit: 'bad_value' },
       type: FETCH.START,
     };
@@ -49,10 +57,10 @@ describe('application/state/query/stations/operations', () => {
         longitude: 2.166871,
       },
     ];
-
+    const itineraryStep = 5;
     const action = {
       error: false,
-      meta: { isFetching: true },
+      meta: { isFetching: true, itineraryStep },
       payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
       type: FETCH.START,
     };
@@ -61,16 +69,16 @@ describe('application/state/query/stations/operations', () => {
       .provide([
         [matchers.call.fn(HttpStationsQuery.find), fakeStations],
       ])
-      .put(actions.fetchSuccess(fakeStations))
+      .put(actions.fetchSuccess(itineraryStep, fakeStations))
       .run();
   });
 
   test('should handle error when api call response does not contains expected schema type', () => {
     const fakeStationsWithMissingRequiredProperties = [{ name: '233 - C/NOU DE LA RAMBLA, 164' }];
-
+    const itineraryStep = 0;
     const action = {
       error: false,
-      meta: { isFetching: true },
+      meta: { isFetching: true, itineraryStep },
       payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
       type: FETCH.START,
     };
@@ -87,9 +95,10 @@ describe('application/state/query/stations/operations', () => {
 
   test('should handle error when api call failed in fetch() generator', () => {
     const error = new Error('error_api_call');
+    const itineraryStep = 0;
     const action = {
       error: false,
-      meta: { isFetching: true },
+      meta: { isFetching: true, itineraryStep },
       payload: { latitude: 41.3244, longitude: 2.345, limit: 5000 },
       type: FETCH.START,
     };
@@ -98,7 +107,7 @@ describe('application/state/query/stations/operations', () => {
       .provide([
         [matchers.call.fn(HttpStationsQuery.find), throwError(error)],
       ])
-      .put(actions.fetchFailure(error))
+      .put(actions.fetchFailure(itineraryStep, error))
       .run();
   });
 });

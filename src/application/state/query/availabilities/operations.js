@@ -11,24 +11,27 @@ import Joi from 'joi';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
 export function* fetch(action) {
-  yield put(fetchPending());
+  const {
+    meta: { itineraryStep },
+    payload: {
+      periodStartAt, periodEndAt, interval, stationIds,
+    },
+  } = action;
+
+  yield put(fetchPending(itineraryStep));
 
   try {
-    const {
-      periodStart, periodEnd, interval, stationIds,
-    } = action;
-
     const availabilities = yield call(availabilitiesProvider,
-      periodStart,
-      periodEnd,
+      periodStartAt,
+      periodEndAt,
       interval,
       stationIds);
 
     Joi.assert(availabilities, availabilitiesType);
 
-    yield put(fetchSuccess(availabilities));
+    yield put(fetchSuccess(itineraryStep, availabilities));
   } catch (exception) {
-    yield put(fetchFailure(exception));
+    yield put(fetchFailure(itineraryStep, exception));
   }
 }
 

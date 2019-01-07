@@ -7,11 +7,14 @@ import Joi from 'joi';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
 export function* fetch(action) {
-  yield put(fetchPending());
+  const {
+    meta: { itineraryStep },
+    payload: { latitude, longitude, limit },
+  } = action;
+
+  yield put(fetchPending(itineraryStep));
 
   try {
-    const { latitude, longitude, limit } = action.payload;
-
     const stations = yield call(
       HttpStationsQuery.find,
       ByGeoLocationFilter.fromRawValues(latitude, longitude, limit),
@@ -19,9 +22,9 @@ export function* fetch(action) {
 
     Joi.assert(stations, stationsType);
 
-    yield put(fetchSuccess(stations));
+    yield put(fetchSuccess(itineraryStep, stations));
   } catch (exception) {
-    yield put(fetchFailure(exception));
+    yield put(fetchFailure(itineraryStep, exception));
   }
 }
 

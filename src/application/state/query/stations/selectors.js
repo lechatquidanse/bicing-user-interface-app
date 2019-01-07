@@ -1,20 +1,78 @@
-const selector = state => state.query.stations;
+/* eslint-disable */
+const selector = state => state.query.stations.itinerarySteps;
+const step = (state, itineraryStep) =>
+  selector(state).find((step) => step.itineraryStep === itineraryStep);
 
-export const data = state => selector(state).data;
-export const error = state => selector(state).error;
-export const isFetching = state => selector(state).isFetching;
-export const latitude = state => selector(state).latitude;
-export const longitude = state => selector(state).longitude;
-export const limit = state => selector(state).limit;
+export const stationByItineraryStepAndId = (state, itineraryStep, id) => {
+  if (isErrorByItineraryStep(state, itineraryStep)
+    || step(state, itineraryStep) === undefined
+    || step(state, itineraryStep).data === undefined) {
+    return undefined;
+  }
 
-export const stationById = (state, id) => (data(state) === undefined
-  ? undefined : data(state).find(station => station.id === id));
+  return step(state, itineraryStep).data.find(model => model.id === id);
+};
+export const stationPropertyByKeyAndItineraryStepAndId = (state, key, itineraryStep, id) =>
+  stationByItineraryStepAndId(state, itineraryStep, id) === undefined ?
+    undefined :
+    stationByItineraryStepAndId(state, itineraryStep, id)[key];
 
-const property = (state, propertyKey, id) => (stationById(state, id) === undefined
-  ? undefined : stationById(state, id)[propertyKey]);
+//////////////////////////////
+//// Interfaced selectors ////
+//////////////////////////////
 
-export const nameByStationId = (state, stationId) => property(state, 'name', stationId);
-export const zipCodeByStationId = (state, stationId) => property(state, 'zipCode', stationId);
-export const typeByStationId = (state, stationId) => property(state, 'type', stationId);
-export const latitudeByStationId = (state, stationId) => property(state, 'latitude', stationId);
-export const longitudeByStationId = (state, stationId) => property(state, 'longitude', stationId);
+export const isErrorByItineraryStep = (state, itineraryStep) =>
+  step(state, itineraryStep) === undefined ? false : step(state, itineraryStep).error;
+export const errorByItineraryStep = (state, itineraryStep) =>
+  isErrorByItineraryStep(state, itineraryStep) === false || step(state, itineraryStep) === undefined ?
+    undefined :
+    step(state, itineraryStep).data;
+export const isFetchingByItineraryStep = (state, itineraryStep) =>
+  step(state, itineraryStep) === undefined ? false : step(state, itineraryStep).isFetching;
+export const latitudeByItineraryStep = (state, itineraryStep) =>
+  step(state, itineraryStep).latitude === undefined ?
+    undefined :
+    step(state, itineraryStep).latitude;
+export const longitudeByItineraryStep = (state, itineraryStep) =>
+  step(state, itineraryStep).longitude === undefined ?
+    undefined :
+    step(state , itineraryStep).longitude;
+export const limitByItineraryStep = (state, itineraryStep) =>
+  step(state, itineraryStep).limit === undefined ?
+    undefined :
+    step(state, itineraryStep).limit;
+
+//@todo add stationIds
+// export const stationIdsByItineraryStep = (state, itineraryStep) => error(state) === true || data(state) === undefined
+//   ? undefined : [...new Set(data(state).map(station => station.id))];
+
+export const nameByItineraryStepAndStationId = (state, itineraryStep, stationId) =>
+  stationPropertyByKeyAndItineraryStepAndId(
+    state,
+    'name',
+    itineraryStep,
+    stationId);
+export const zipCodeByItineraryStepAndStationId = (state, itineraryStep, stationId) =>
+  stationPropertyByKeyAndItineraryStepAndId(
+    state,
+    'zipCode',
+    itineraryStep,
+    stationId);
+export const typeByItineraryStepAndStationId = (state, itineraryStep, stationId) =>
+  stationPropertyByKeyAndItineraryStepAndId(
+    state,
+    'type',
+    itineraryStep,
+    stationId);
+export const latitudeByItineraryStepAndStationId = (state, itineraryStep, stationId) =>
+  stationPropertyByKeyAndItineraryStepAndId(
+    state,
+    'latitude',
+    itineraryStep,
+    stationId);
+export const longitudeByItineraryStepAndStationId = (state, itineraryStep, stationId) =>
+  stationPropertyByKeyAndItineraryStepAndId(
+    state,
+    'longitude',
+    itineraryStep,
+    stationId);

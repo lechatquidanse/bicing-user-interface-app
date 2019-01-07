@@ -26,6 +26,7 @@ Object {
           "error": false,
           "meta": Object {
             "isFetching": true,
+            "itineraryStep": 0,
           },
           "type": "query/stations/FETCH_PENDING",
         },
@@ -39,6 +40,7 @@ Object {
           "error": true,
           "meta": Object {
             "isFetching": false,
+            "itineraryStep": 0,
           },
           "payload": Object {
             "_object": Array [
@@ -83,6 +85,7 @@ Object {
           "error": false,
           "meta": Object {
             "isFetching": true,
+            "itineraryStep": 5,
           },
           "type": "query/stations/FETCH_PENDING",
         },
@@ -96,6 +99,7 @@ Object {
           "error": true,
           "meta": Object {
             "isFetching": false,
+            "itineraryStep": 5,
           },
           "payload": Object {
             "_object": Object {

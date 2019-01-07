@@ -16,9 +16,21 @@ describe('application/state/query/availabilities/operations', () => {
   });
 
   test('should dispatch a fetchPending action with fetch() generator', () => {
-    testSaga(fetch)
+    const itineraryStep = 5;
+    const action = {
+      error: false,
+      meta: { isFetching: true, itineraryStep, itineraryAt: '2017-08-08 12:22:12' },
+      payload: {
+        periodStartAt: '2017-08-08 12:12:12',
+        periodEndAt: '2017-08-08 12:12:12',
+        interval: '5T',
+        stationIds: [],
+      },
+      type: FETCH.START,
+    };
+    testSaga(fetch, action)
       .next()
-      .put(actions.fetchPending());
+      .put(actions.fetchPending(itineraryStep));
   });
 
   test('should list expected availabilities with fetch() generator', () => {
@@ -33,16 +45,15 @@ describe('application/state/query/availabilities/operations', () => {
         status: 'OPENED',
       },
     ];
-
-    const periodStart = '2017-08-08 12:12:12';
-    const periodEnd = '2017-08-08 12:12:12';
-    const interval = '5T';
-    const stationIds = [uuid(), uuid(), uuid()];
+    const itineraryStep = 2;
     const action = {
       error: false,
-      meta: { isFetching: true },
+      meta: { isFetching: true, itineraryStep, itineraryAt: '2017-08-08 12:22:12' },
       payload: {
-        periodStart, periodEnd, interval, stationIds,
+        periodStartAt: '2017-08-08 12:12:12',
+        periodEndAt: '2017-10-08 12:32:12',
+        interval: '5T',
+        stationIds: [uuid(), uuid()],
       },
       type: FETCH.START,
     };
@@ -50,25 +61,28 @@ describe('application/state/query/availabilities/operations', () => {
     return expectSaga(fetch, action)
       .provide([
         [
-          matchers.call.fn(availabilitiesProvider, periodStart, periodEnd, interval, stationIds),
+          matchers.call.fn(availabilitiesProvider),
           fakeLastAvailabilities,
         ],
       ])
-      .put(actions.fetchSuccess(fakeLastAvailabilities))
+      .put(actions.fetchSuccess(itineraryStep, fakeLastAvailabilities))
       .run();
   });
 
   test('should handle error when api call response does not contains expected schema type', () => {
     const fakeLastAvailabilitiesWithMissingRequiredProperties = [{ availableBikeNumber: 1 }];
-    const periodStart = '2017-08-08 12:12:12';
-    const periodEnd = '2017-08-08 12:12:12';
-    const interval = '5T';
-    const stationIds = [uuid(), uuid(), uuid()];
+    const itineraryStep = 2;
     const action = {
       error: false,
-      meta: { isFetching: true },
+      meta: { isFetching: true, itineraryStep, itineraryAt: '2017-08-08 12:22:12' },
       payload: {
-        periodStart, periodEnd, interval, stationIds,
+        periodStartAt: '2017-08-08 12:12:12',
+        periodEndAt: '2017-10-08 12:32:12',
+        interval: '5T',
+        stationIds: [
+          '499cf165-9d02-4bfb-b150-6ba18f5a63fb',
+          '1ee10d1e-5618-4441-a182-062dcf5fdaf1',
+        ],
       },
       type: FETCH.START,
     };
@@ -76,7 +90,7 @@ describe('application/state/query/availabilities/operations', () => {
     return expectSaga(fetch, action)
       .provide([
         [
-          matchers.call.fn(availabilitiesProvider, periodStart, periodEnd, interval, stationIds),
+          matchers.call.fn(availabilitiesProvider),
           fakeLastAvailabilitiesWithMissingRequiredProperties,
         ],
       ])
@@ -88,16 +102,15 @@ describe('application/state/query/availabilities/operations', () => {
 
   test('should handle error when api call failed in fetch() generator', () => {
     const error = new Error('error_api_call');
-
-    const periodStart = '2017-08-08 12:12:12';
-    const periodEnd = '2017-08-08 12:12:12';
-    const interval = '5T';
-    const stationIds = [uuid(), uuid(), uuid()];
+    const itineraryStep = 0;
     const action = {
       error: false,
-      meta: { isFetching: true },
+      meta: { isFetching: true, itineraryStep, itineraryAt: '2017-08-08 12:22:12' },
       payload: {
-        periodStart, periodEnd, interval, stationIds,
+        periodStartAt: '2017-08-08 12:12:12',
+        periodEndAt: '2017-10-08 12:32:12',
+        interval: '5T',
+        stationIds: [uuid(), uuid()],
       },
       type: FETCH.START,
     };
@@ -109,7 +122,7 @@ describe('application/state/query/availabilities/operations', () => {
           throwError(error),
         ],
       ])
-      .put(actions.fetchFailure(error))
+      .put(actions.fetchFailure(itineraryStep, error))
       .run();
   });
 });

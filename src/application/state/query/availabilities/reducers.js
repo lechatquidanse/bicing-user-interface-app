@@ -2,25 +2,72 @@ import { FETCH } from 'application/state/query/availabilities/types';
 import produce from 'immer';
 import { createReducer } from 'reduxsauce';
 
-export const INITIAL_STATE = { data: undefined, error: false, isFetching: false };
+export const INITIAL_STATE = {
+  itinerarySteps: [],
+};
+
+const findIndexByItineraryStep = (itineraryStep, itinerarySteps) => itinerarySteps.findIndex(
+  step => step.itineraryStep === itineraryStep,
+);
 
 export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
-  draft.isFetching = action.meta.isFetching;
+  const { itineraryStep } = action.meta;
+  const draftByItineraryStep = {
+    data: undefined,
+    error: false,
+    isFetching: action.meta.isFetching,
+    interval: action.payload.interval,
+    itineraryAt: action.meta.itineraryAt,
+    itineraryStep,
+    periodStartAt: action.payload.periodStartAt,
+    periodEndAt: action.payload.periodEndAt,
+    stationIds: action.payload.stationIds,
+  };
+
+  const index = findIndexByItineraryStep(action.meta.itineraryStep, draft.itinerarySteps);
+
+  if (index === -1) {
+    draft.itinerarySteps.push(draftByItineraryStep);
+  } else {
+    draft.itinerarySteps[index] = draftByItineraryStep;
+  }
 });
 
 export const fetchPending = (state = INITIAL_STATE, action) => produce(state, (draft) => {
-  draft.isFetching = action.meta.isFetching;
+  const index = findIndexByItineraryStep(action.meta.itineraryStep, draft.itinerarySteps);
+
+  if (index !== -1) {
+    const draftByItineraryStep = draft.itinerarySteps[index];
+
+    draftByItineraryStep.isFetching = action.meta.isFetching;
+
+    draft.itinerarySteps[index] = draftByItineraryStep;
+  }
 });
 
 export const fetchSuccess = (state = INITIAL_STATE, action) => produce(state, (draft) => {
-  draft.data = action.payload;
-  draft.isFetching = action.meta.isFetching;
+  const index = findIndexByItineraryStep(action.meta.itineraryStep, draft.itinerarySteps);
+
+  if (index !== -1) {
+    const draftByItineraryStep = draft.itinerarySteps[index];
+
+    draftByItineraryStep.isFetching = action.meta.isFetching;
+    draftByItineraryStep.data = action.payload;
+
+    draft.itinerarySteps[index] = draftByItineraryStep;
+  }
 });
 
 export const fetchFailure = (state = INITIAL_STATE, action) => produce(state, (draft) => {
-  draft.data = action.payload;
-  draft.error = action.error;
-  draft.isFetching = action.meta.isFetching;
+  const index = findIndexByItineraryStep(action.meta.itineraryStep, draft.itinerarySteps);
+
+  if (index !== -1) {
+    const draftByItineraryStep = draft.itinerarySteps[index];
+
+    draftByItineraryStep.data = action.payload;
+    draftByItineraryStep.error = action.error;
+    draftByItineraryStep.isFetching = action.meta.isFetching;
+  }
 });
 
 const HANDLERS = {

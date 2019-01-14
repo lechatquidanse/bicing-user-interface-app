@@ -6,24 +6,31 @@ import { branch, compose, renderNothing } from 'recompose';
 import { bindActionCreators } from 'redux';
 import { Marker as MarkerTemplate } from 'userInterface/react/components/Map/Marker';
 
-const isNullMarker = props => props.type === null || props.status === null;
-
 const mapStateToProps = (state, props) => ({
-  station: queryStationsSelectors.stationById(state, props.stationId),
-  latitude: queryStationsSelectors.latitudeByStationId(state, props.stationId),
-  longitude: queryStationsSelectors.longitudeByStationId(state, props.stationId),
-  type: queryStationsSelectors.typeByStationId(state, props.stationId),
-  lastAvailability: queryAvailabilitiesSelectors.lastAvailabilityById(state, props.stationId),
-  status: queryAvailabilitiesSelectors.statusByStationId(state, props.stationId),
-  availableBikeNumber: queryAvailabilitiesSelectors.availableBikeNumberByStationId(
-    state,
+  latitude: queryStationsSelectors.latitudeByItineraryStepAndStationId(
+    props.itineraryStep,
     props.stationId,
-  ),
-  availableSlotNumber: queryAvailabilitiesSelectors.availableSlotNumberByStationId(
-    state,
+  )(state),
+  longitude: queryStationsSelectors.longitudeByItineraryStepAndStationId(
+    props.itineraryStep,
     props.stationId,
-  ),
-  isNullMarker: props.isNullMarker,
+  )(state),
+  type: queryStationsSelectors.typeByItineraryStepAndStationId(
+    props.itineraryStep,
+    props.stationId,
+  )(state),
+  status: queryAvailabilitiesSelectors.statusByItineraryStepAndStationId(
+    props.itineraryStep,
+    props.stationId,
+  )(state),
+  availableBikeNumber: queryAvailabilitiesSelectors.availableBikeNumberByItineraryStepAndStationId(
+    props.itineraryStep,
+    props.stationId,
+  )(state),
+  availableSlotNumber: queryAvailabilitiesSelectors.availableSlotNumberByItineraryStepAndStationId(
+    props.itineraryStep,
+    props.stationId,
+  )(state),
 });
 
 const mapDispatchToProps = (dispatch, props) => bindActionCreators({
@@ -31,6 +38,8 @@ const mapDispatchToProps = (dispatch, props) => bindActionCreators({
 }, dispatch);
 
 const withReduxConnect = connect(mapStateToProps, mapDispatchToProps);
+
+const isNullMarker = props => !props.latitude || !props.longitude;
 
 const Marker = compose(
   withReduxConnect,

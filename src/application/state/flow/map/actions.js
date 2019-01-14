@@ -1,16 +1,25 @@
 import { FLOW } from 'application/state/flow/map/types';
-import {
-  DEFAULT_LATITUDE,
-  DEFAULT_LIMIT,
-  DEFAULT_LONGITUDE,
-} from 'domain/definitions/configurationMapDefinition';
 
 export const flow = (
-  latitude = DEFAULT_LATITUDE,
-  longitude = DEFAULT_LONGITUDE,
-  limit = DEFAULT_LIMIT,
+  itineraryStep,
+  itineraryAt,
+  periodStartAt,
+  periodEndAt,
+  interval,
+  latitude,
+  longitude,
+  limit,
 ) => ({
-  payload: { latitude, longitude, limit },
+  payload: {
+    itineraryStep,
+    itineraryAt,
+    periodStartAt,
+    periodEndAt,
+    interval,
+    latitude,
+    longitude,
+    limit,
+  },
   type: FLOW.START,
 });
 

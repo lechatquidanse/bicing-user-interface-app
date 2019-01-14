@@ -1,19 +1,20 @@
-import {
-  arrayOf, string, shape, node,
-} from 'prop-types';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const Markers = ({
-  data,
+  itineraryStep,
+  stationIds,
   children,
-}) => (data.map(station => React.cloneElement(children, {
-  stationId: station.id,
-  key: station.id,
+}) => (stationIds.map(stationId => React.cloneElement(children, {
+  key: stationId,
+  itineraryStep,
+  stationId,
 })));
 
 Markers.propTypes = {
-  data: arrayOf(shape({ id: string.isRequired })).isRequired,
-  children: node.isRequired,
+  itineraryStep: PropTypes.number.isRequired,
+  stationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default Markers;

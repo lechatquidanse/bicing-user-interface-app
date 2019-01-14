@@ -51,6 +51,7 @@ Object {
           "a41070e4-3866-490d-a8ab-5195eae71f93",
           Object {
             "interval": "5 min",
+            "isForecasting": "@@redux-saga-test-plan/json/function/bound isForecasting",
             "periodEnd": "2018-08-05 14:51:56",
             "periodStart": "2017-08-05 14:43:56",
           },

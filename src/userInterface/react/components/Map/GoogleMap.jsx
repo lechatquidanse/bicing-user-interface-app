@@ -1,6 +1,7 @@
-import { func, node, number } from 'prop-types';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { GoogleMap as GoogleMapTemplate } from 'react-google-maps';
+import { DEFAULT_ZOOM } from 'domain/definitions/configurationMapDefinition';
 
 const GoogleMap = ({
   latitude,
@@ -11,10 +12,7 @@ const GoogleMap = ({
 }) => (
   <GoogleMapTemplate
     zoom={zoom}
-    center={{
-      lat: latitude,
-      lng: longitude,
-    }}
+    center={{ lat: latitude, lng: longitude }}
     onClick={onMapClick}
   >
     {children}
@@ -22,17 +20,16 @@ const GoogleMap = ({
 );
 
 GoogleMap.propTypes = {
-  latitude: number,
-  longitude: number,
-  zoom: number,
-  onMapClick: func.isRequired,
-  children: node.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+  zoom: PropTypes.number,
+  onMapClick: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
 
 GoogleMap.defaultProps = {
-  latitude: 41.390205,
-  longitude: 2.154007,
-  zoom: 12,
+  zoom: DEFAULT_ZOOM,
+  children: undefined,
 };
 
 export default GoogleMap;

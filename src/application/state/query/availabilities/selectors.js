@@ -1,17 +1,80 @@
-const selector = state => state.query.availabilities;
+/* eslint-disable */
+const selector = state => state.query.availabilities.itinerarySteps;
 
-export const data = state => selector(state).data;
-export const error = state => selector(state).error;
-export const isFetching = state => selector(state).isFetching;
+const step = (itineraryStep, state) =>
+  selector(state).find((step) => step.itineraryStep === itineraryStep);
 
-// @todo maybe error ici add check if data and no error
-export const lastAvailabilityById = (state, id) => (data(state) === undefined
-|| error(state) === true
-  ? undefined : data(state).find(model => model.id === id));
+const data = (itineraryStep, state) =>
+  step(itineraryStep, state) === undefined ? undefined : step(itineraryStep, state).data;
 
-const property = (state, propertyKey, id) => (lastAvailabilityById(state, id) === undefined
-  ? undefined : lastAvailabilityById(state, id)[propertyKey]);
+export const availabilityByItineraryStepAndId = (itineraryStep, id, state) => {
+  if (isErrorByItineraryStep(itineraryStep, state) === true
+    || step(itineraryStep, state) === undefined
+    || step(itineraryStep, state).data === undefined) {
+    return undefined;
+  }
 
-export const statusByStationId = (state, stationId) => property(state, 'status', stationId);
-export const availableBikeNumberByStationId = (state, stationId) => property(state, 'availableBikeNumber', stationId);
-export const availableSlotNumberByStationId = (state, stationId) => property(state, 'availableSlotNumber', stationId);
+  return step(itineraryStep, state).data.find(model => model.id === id);
+};
+
+export const availabilityPropertyByKeyAndItineraryStepAndId = (state, key, itineraryStep, id) =>
+  availabilityByItineraryStepAndId(itineraryStep, id, state) === undefined ?
+    undefined :
+    availabilityByItineraryStepAndId(itineraryStep, id, state)[key];
+
+//////////////////////////////
+//// Interfaced selectors ////
+//////////////////////////////
+export const itinerarySteps = state => [...new Set(selector(state).map(
+  step => step.itineraryStep))
+];
+
+export const isErrorByItineraryStep = itineraryStep => state =>
+  step(itineraryStep, state) === undefined ? false : step(itineraryStep, state).error;
+
+export const errorByItineraryStep = itineraryStep => state =>
+  isErrorByItineraryStep(itineraryStep)(state) === true
+  && data(itineraryStep, state) instanceof Error ?
+    data(itineraryStep, state).message : undefined;
+
+export const isFetchingByItineraryStep = itineraryStep => state =>
+  step(itineraryStep, state) === undefined ? false : step(itineraryStep, state).isFetching;
+
+export const periodStartAtByItineraryStep = itineraryStep => state =>
+  step(itineraryStep,state) === undefined ?
+    undefined :
+    step(itineraryStep, state).periodStartAt;
+
+export const periodEndAtByItineraryStep = itineraryStep => state =>
+  step(itineraryStep, state) === undefined ?
+    undefined :
+    step(itineraryStep, state).periodEndAt;
+
+export const intervalByItineraryStep = itineraryStep => state =>
+  step(itineraryStep, state) === undefined ?
+    undefined :
+    step(itineraryStep, state).interval;
+
+export const itineraryAtByItineraryStep = itineraryStep => state =>
+  step(itineraryStep, state) === undefined ?
+    undefined :
+    step(itineraryStep, state).itineraryAt;
+
+export const statusByItineraryStepAndStationId = (itineraryStep, stationId) => state =>
+  availabilityPropertyByKeyAndItineraryStepAndId(
+    state,
+    'status',
+    itineraryStep,
+    stationId);
+export const availableBikeNumberByItineraryStepAndStationId = (itineraryStep, stationId) => state =>
+  availabilityPropertyByKeyAndItineraryStepAndId(
+    state,
+    'availableBikeNumber',
+    itineraryStep,
+    stationId);
+export const availableSlotNumberByItineraryStepAndStationId = (itineraryStep, stationId) => state =>
+  availabilityPropertyByKeyAndItineraryStepAndId(
+    state,
+    'availableSlotNumber',
+    itineraryStep,
+    stationId);

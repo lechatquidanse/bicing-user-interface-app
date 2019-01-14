@@ -2,8 +2,9 @@ import {
   actions as commandToggleInfoWindowActions,
   selectors as commandToggleInfoWindowSelectors,
 } from 'application/state/command/toggleInfoWindow';
-import { actions as flowStationAction } from 'application/state/flow/station';
 import { selectors as queryAvailabilitiesSelectors } from 'application/state/query/availabilities';
+import { actions as queryStationAction } from 'application/state/query/station';
+import { actions as queryStationAvailabilitiesActions } from 'application/state/query/stationAvailabilities';
 import { selectors as queryStationsSelectors } from 'application/state/query/stations';
 import { connect } from 'react-redux';
 import { branch, compose, renderNothing } from 'recompose';
@@ -11,39 +12,53 @@ import { bindActionCreators } from 'redux';
 import { InfoWindow as InfoWindowTemplate } from 'userInterface/react/components/Map/Marker';
 
 const mapStateToProps = (state, props) => ({
-  stationId: props.stationId,
   activeInfoWindowKey: commandToggleInfoWindowSelectors.key(state),
-  station: queryStationsSelectors.stationById(state, props.stationId),
-  latitude: queryStationsSelectors.latitudeByStationId(state, props.stationId),
-  longitude: queryStationsSelectors.longitudeByStationId(state, props.stationId),
-  type: queryStationsSelectors.typeByStationId(state, props.stationId),
-  name: queryStationsSelectors.nameByStationId(state, props.stationId),
-  zipCode: queryStationsSelectors.zipCodeByStationId(state, props.stationId),
-  lastAvailability: queryAvailabilitiesSelectors.lastAvailabilityById(state, props.stationId),
-  status: queryAvailabilitiesSelectors.statusByStationId(state, props.stationId),
-  availableBikeNumber: queryAvailabilitiesSelectors.availableBikeNumberByStationId(
-    state,
+  latitude: queryStationsSelectors.latitudeByItineraryStepAndStationId(
+    props.itineraryStep,
     props.stationId,
-  ),
-  availableSlotNumber: queryAvailabilitiesSelectors.availableSlotNumberByStationId(
-    state,
+  )(state),
+  longitude: queryStationsSelectors.longitudeByItineraryStepAndStationId(
+    props.itineraryStep,
     props.stationId,
-  ),
+  )(state),
+  type: queryStationsSelectors.typeByItineraryStepAndStationId(
+    props.itineraryStep,
+    props.stationId,
+  )(state),
+  name: queryStationsSelectors.nameByItineraryStepAndStationId(
+    props.itineraryStep,
+    props.stationId,
+  )(state),
+  zipCode: queryStationsSelectors.zipCodeByItineraryStepAndStationId(
+    props.itineraryStep,
+    props.stationId,
+  )(state),
+  status: queryAvailabilitiesSelectors.statusByItineraryStepAndStationId(
+    props.itineraryStep,
+    props.stationId,
+  )(state),
+  availableBikeNumber: queryAvailabilitiesSelectors.availableBikeNumberByItineraryStepAndStationId(
+    props.itineraryStep,
+    props.stationId,
+  )(state),
+  availableSlotNumber: queryAvailabilitiesSelectors.availableSlotNumberByItineraryStepAndStationId(
+    props.itineraryStep,
+    props.stationId,
+  )(state),
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  dispatchFlowAction: stationId => flowStationAction.flow(stationId),
-  dispatchToggleInfoWindow: stationId => commandToggleInfoWindowActions.toggle(stationId),
+  queryStationAction: stationId => queryStationAction.fetchStart(stationId),
+  queryStationAvailabilities: stationId => queryStationAvailabilitiesActions.fetchStart(stationId),
+  toggleInfoWindow: stationId => commandToggleInfoWindowActions.toggle(stationId),
 }, dispatch);
 
 const mergeProps = (propsFromState, propsFromDispatch, ownProps) => ({
   ...propsFromState,
   ...propsFromDispatch,
   ...ownProps,
-  onInfoWindowViewMoreClick: () => propsFromDispatch.dispatchFlowAction(propsFromState.stationId),
-  onInfoWindowCloseClick: () => propsFromDispatch.dispatchToggleInfoWindow(
-    propsFromState.stationId,
-  ),
+  onInfoWindowViewMoreClick: () => propsFromDispatch.queryStationAction(ownProps.stationId),
+  onInfoWindowCloseClick: () => propsFromDispatch.toggleInfoWindow(ownProps.stationId),
 });
 
 const withReduxConnect = connect(mapStateToProps, mapDispatchToProps, mergeProps);

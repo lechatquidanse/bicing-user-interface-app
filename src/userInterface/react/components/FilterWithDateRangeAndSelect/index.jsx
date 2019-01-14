@@ -8,6 +8,7 @@ import Select from 'react-select';
 
 import 'userInterface/react/components/FilterWithDateRangeAndSelect/stylesheets/react-datepicker.css';
 
+// @todo clean and separate component
 const filterWithDateRangeAndSelect = ({
   dateStart,
   dateEnd,

@@ -25,7 +25,9 @@ if (fs.existsSync(customDbPath)) {
 
 const router = jsonServer.router(db);
 router.render = function (req, res) {
-  if (req.url === '/last-availabilities-by-station' || req.url.includes('/stations?')) {
+  if (req.url === '/last-availabilities-by-station'
+    || req.url.includes('/stations?')
+    || req.url.includes('/stations-step-1')) {
     res.jsonp({
       'hydra:member': res.locals.data,
       '@context': 'local_bicing_http_call',

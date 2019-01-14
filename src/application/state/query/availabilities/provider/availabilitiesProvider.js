@@ -1,10 +1,18 @@
 import availabilitiesClientFactory
   from 'application/state/query/availabilities/provider/availabilitiesClientFactory';
 
-const availabilitiesProvider = (periodStart, periodEnd, interval, stationIds) => {
-  const client = availabilitiesClientFactory(periodStart, periodEnd, interval, stationIds);
-
-  return client.find();
-};
+const availabilitiesProvider = (
+  itineraryAt,
+  periodStart,
+  periodEnd,
+  interval,
+  stationIds,
+) => availabilitiesClientFactory(
+  itineraryAt,
+  periodStart,
+  periodEnd,
+  interval,
+  stationIds,
+).find();
 
 export default availabilitiesProvider;

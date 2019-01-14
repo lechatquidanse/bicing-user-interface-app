@@ -2,12 +2,11 @@ import ByIntervalInPeriodFilter from 'application/state/filter/ByIntervalInPerio
 import { HttpAvailabilitiesQuery } from 'infrastructure/bicingApi';
 import { HttpAvailabilitiesForecastQuery } from 'infrastructure/bicingForecastApi';
 
-const availabilitiesClientFactory = (periodStart, periodEnd, interval, stationIds) => {
-  if (periodStart && periodEnd && interval) {
-    return new HttpAvailabilitiesForecastQuery(
-      stationIds,
-      ByIntervalInPeriodFilter.fromRawValues(periodStart, periodEnd, interval),
-    );
+const availabilitiesClientFactory = (itineraryAt, periodStart, periodEnd, interval, stationIds) => {
+  const filter = ByIntervalInPeriodFilter.fromRawValues(periodStart, periodEnd, interval);
+
+  if (filter.isForecasting(itineraryAt) === true) {
+    return new HttpAvailabilitiesForecastQuery(stationIds, filter);
   }
 
   return new HttpAvailabilitiesQuery();

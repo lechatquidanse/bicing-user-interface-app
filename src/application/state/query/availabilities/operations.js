@@ -12,7 +12,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 
 export function* fetch(action) {
   const {
-    meta: { itineraryStep },
+    meta: { itineraryAt, itineraryStep },
     payload: {
       periodStartAt, periodEndAt, interval, stationIds,
     },
@@ -22,6 +22,7 @@ export function* fetch(action) {
 
   try {
     const availabilities = yield call(availabilitiesProvider,
+      itineraryAt,
       periodStartAt,
       periodEndAt,
       interval,

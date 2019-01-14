@@ -2,8 +2,9 @@ import ByIntervalInPeriodFilter from 'application/state/filter/ByIntervalInPerio
 
 describe('application/state/filter/ByIntervalInPeriodFilter', () => {
   test('it can create a ByIntervalInPeriodFilter from raw values', () => {
-    const periodStart = '2017-08-12 13:00:30'; const periodEnd = '2017-09-02 13:00:30'; const
-      interval = '5 min';
+    const periodStart = '2017-08-12 13:00:30';
+    const periodEnd = '2017-09-02 13:00:30';
+    const interval = '5 min';
 
     const filter = ByIntervalInPeriodFilter.fromRawValues(periodStart, periodEnd, interval);
 
@@ -22,5 +23,25 @@ describe('application/state/filter/ByIntervalInPeriodFilter', () => {
   });
   test('it can return a zoom value from a ByIntervalInPeriodFilter if periodStart greater than periodEnd ', () => {
     expect(() => ByIntervalInPeriodFilter.fromRawValues('2019-09-02 13:00:30', '2017-10-02 13:00:30', '5 min')).toThrowErrorMatchingSnapshot();
+  });
+  test('it can inform that a filter is in forecasting state for a date', () => {
+    const periodStart = '2017-08-12 13:00:30';
+    const itineraryAt = '2017-09-02 13:00:00';
+    const periodEnd = '2017-09-02 13:05:01';
+    const interval = '5T';
+
+    const filter = ByIntervalInPeriodFilter.fromRawValues(periodStart, periodEnd, interval);
+
+    expect(filter.isForecasting(itineraryAt)).toBeTruthy();
+  });
+  test('it can inform that a filter is not in forecasting state for a date', () => {
+    const periodStart = '2017-08-12 13:00:30';
+    const itineraryAt = '2017-09-02 13:00:00';
+    const periodEnd = '2017-09-02 13:04:59';
+    const interval = '5T';
+
+    const filter = ByIntervalInPeriodFilter.fromRawValues(periodStart, periodEnd, interval);
+
+    expect(filter.isForecasting(itineraryAt)).toBeTruthy();
   });
 });

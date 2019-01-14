@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`application/state/query/availabilities/operations should handle error when api call response does not contains expected schema type 1`] = `
+Object {
+  "call": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "CALL": Object {
+        "args": Array [
+          "2017-08-08 12:22:12",
+          "2017-08-08 12:12:12",
+          "2017-10-08 12:32:12",
+          "5T",
+          Array [
+            "499cf165-9d02-4bfb-b150-6ba18f5a63fb",
+            "1ee10d1e-5618-4441-a182-062dcf5fdaf1",
+          ],
+        ],
+        "context": null,
+        "fn": "@@redux-saga-test-plan/json/function/availabilitiesProvider",
+      },
+    },
+  ],
+  "put": Array [
+    Object {
+      "@@redux-saga/IO": true,
+      "PUT": Object {
+        "action": Object {
+          "error": false,
+          "meta": Object {
+            "isFetching": true,
+            "itineraryStep": 2,
+          },
+          "type": "query/availabilities/FETCH_PENDING",
+        },
+        "channel": null,
+      },
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "PUT": Object {
+        "action": Object {
+          "error": true,
+          "meta": Object {
+            "isFetching": false,
+            "itineraryStep": 2,
+          },
+          "payload": Object {
+            "_object": Array [
+              Object {
+                "availableBikeNumber": 1,
+              },
+            ],
+            "annotate": "@@redux-saga-test-plan/json/function/<anonymous>",
+            "details": Array [
+              Object {
+                "context": Object {
+                  "key": "id",
+                  "label": "id",
+                },
+                "message": "\\"id\\" is required",
+                "path": Array [
+                  0,
+                  "id",
+                ],
+                "type": "any.required",
+              },
+            ],
+            "isJoi": true,
+            "name": "ValidationError",
+          },
+          "type": "query/availabilities/FETCH_FAILURE",
+        },
+        "channel": null,
+      },
+    },
+  ],
+}
+`;

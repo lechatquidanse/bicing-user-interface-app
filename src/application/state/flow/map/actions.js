@@ -6,10 +6,9 @@ export const flow = (
   periodStartAt,
   periodEndAt,
   interval,
-  stationIds,
   latitude,
   longitude,
-  limit
+  limit,
 ) => ({
   payload: {
     itineraryStep,
@@ -17,12 +16,11 @@ export const flow = (
     periodStartAt,
     periodEndAt,
     interval,
-    stationIds,
     latitude,
     longitude,
-    limit
+    limit,
   },
-  type: FLOW.START
+  type: FLOW.START,
 });
 
 export default flow;

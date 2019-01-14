@@ -1,9 +1,9 @@
 import React from 'react';
-import GeoLocator from 'userInterface/react/containers/ItinarySearch/GeoLocation/GeoLocator';
-import GeoSuggestion from 'userInterface/react/containers/ItinarySearch/GeoLocation/GeoSuggestion';
+import GeoLocator from 'userInterface/react/containers/ItinerarySearch/GeoLocation/GeoLocator';
+import GeoSuggestion from 'userInterface/react/containers/ItinerarySearch/GeoLocation/GeoSuggestion';
 
-const GeoLocation = () => <>
-  <GeoLocator />
-  <GeoSuggestion />
+const GeoLocation = ({ itineraryStep }) => <>
+  <GeoLocator itineraryStep={itineraryStep} />
+  <GeoSuggestion itineraryStep={itineraryStep} />
   </>;
 export default GeoLocation;

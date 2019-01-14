@@ -2,8 +2,21 @@ import { FETCH } from 'application/state/query/stations/types';
 import produce from 'immer';
 import { createReducer } from 'reduxsauce';
 
+export const initialStateByItineraryStep = itineraryStep => ({
+  data: undefined,
+  error: false,
+  isFetching: false,
+  itineraryStep,
+  latitude: undefined,
+  longitude: undefined,
+  limit: undefined,
+});
+
 export const INITIAL_STATE = {
-  itinerarySteps: [],
+  itinerarySteps: [
+    initialStateByItineraryStep(0),
+    initialStateByItineraryStep(1),
+  ],
 };
 
 const findIndexByItineraryStep = (itineraryStep, itinerarySteps) => itinerarySteps.findIndex(
@@ -12,17 +25,16 @@ const findIndexByItineraryStep = (itineraryStep, itinerarySteps) => itinerarySte
 
 export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
   const { itineraryStep } = action.meta;
-  const draftByItineraryStep = {
-    data: undefined,
-    error: false,
-    isFetching: action.meta.isFetching,
-    itineraryStep,
-    latitude: action.payload.latitude,
-    longitude: action.payload.longitude,
-    limit: action.payload.limit,
-  };
 
-  const index = findIndexByItineraryStep(action.meta.itineraryStep, draft.itinerarySteps);
+  const draftByItineraryStep = produce(initialStateByItineraryStep(itineraryStep), (draftStep) => {
+    draftStep.isFetching = action.meta.isFetching;
+    draftStep.itineraryStep = itineraryStep;
+    draftStep.latitude = action.payload.latitude;
+    draftStep.longitude = action.payload.longitude;
+    draftStep.limit = action.payload.limit;
+  });
+
+  const index = findIndexByItineraryStep(itineraryStep, draft.itinerarySteps);
 
   if (index === -1) {
     draft.itinerarySteps.push(draftByItineraryStep);

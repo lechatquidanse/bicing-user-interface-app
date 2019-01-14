@@ -1,69 +1,78 @@
 /* eslint-disable */
 const selector = state => state.query.availabilities.itinerarySteps;
-const step = (state, itineraryStep) =>
+
+const step = (itineraryStep, state) =>
   selector(state).find((step) => step.itineraryStep === itineraryStep);
 
-export const availabilityByItineraryStepAndId = (state, itineraryStep, id) => {
-  if (isErrorByItineraryStep(state, itineraryStep)
-    || step(state, itineraryStep) === undefined
-    || step(state, itineraryStep).data === undefined) {
+const data = (itineraryStep, state) =>
+  step(itineraryStep, state) === undefined ? undefined : step(itineraryStep, state).data;
+
+export const availabilityByItineraryStepAndId = (itineraryStep, id, state) => {
+  if (isErrorByItineraryStep(itineraryStep, state) === true
+    || step(itineraryStep, state) === undefined
+    || step(itineraryStep, state).data === undefined) {
     return undefined;
   }
 
-  return step(state, itineraryStep).data.find(model => model.id === id);
+  return step(itineraryStep, state).data.find(model => model.id === id);
 };
+
 export const availabilityPropertyByKeyAndItineraryStepAndId = (state, key, itineraryStep, id) =>
-  availabilityByItineraryStepAndId(state, itineraryStep, id) === undefined ?
+  availabilityByItineraryStepAndId(itineraryStep, id, state) === undefined ?
     undefined :
-    availabilityByItineraryStepAndId(state, itineraryStep, id)[key];
+    availabilityByItineraryStepAndId(itineraryStep, id, state)[key];
 
 //////////////////////////////
 //// Interfaced selectors ////
 //////////////////////////////
+export const itinerarySteps = state => [...new Set(selector(state).map(
+  step => step.itineraryStep))
+];
 
-export const isErrorByItineraryStep = (state, itineraryStep) =>
-  step(state, itineraryStep) === undefined ? false : step(state, itineraryStep).error;
-export const errorByItineraryStep = (state, itineraryStep) =>
-  isErrorByItineraryStep(state, itineraryStep) === false || step(state, itineraryStep) === undefined ?
-    undefined :
-    step(state, itineraryStep).data;
-export const isFetchingByItineraryStep = (state, itineraryStep) =>
-  step(state, itineraryStep) === undefined ? false : step(state, itineraryStep).isFetching;
-export const periodStartByItineraryStep = (state, itineraryStep) =>
-  step(state, itineraryStep).periodStart === undefined ?
-    undefined :
-    step(state, itineraryStep).periodStart;
-export const periodEndByItineraryStep = (state, itineraryStep) =>
-  step(state, itineraryStep).periodEnd === undefined ?
-    undefined :
-    step(state , itineraryStep).periodEnd;
-export const intervalByItineraryStep = (state, itineraryStep) =>
-  step(state, itineraryStep).interval === undefined ?
-    undefined :
-    step(state, itineraryStep).interval;
-export const stationIdsByItineraryStep = (state, itineraryStep) =>
-  step(state, itineraryStep).stationIds === undefined ?
-    undefined :
-    step(state, itineraryStep).stationIds;
+export const isErrorByItineraryStep = itineraryStep => state =>
+  step(itineraryStep, state) === undefined ? false : step(itineraryStep, state).error;
 
-export const itineraryAtByItineraryStep = (state, itineraryStep) =>
-  step(state, itineraryStep).itineraryAt === undefined ?
-    undefined :
-    step(state, itineraryStep).itineraryAt;
+export const errorByItineraryStep = itineraryStep => state =>
+  isErrorByItineraryStep(itineraryStep)(state) === true
+  && data(itineraryStep, state) instanceof Error ?
+    data(itineraryStep, state).message : undefined;
 
-export const statusByItineraryStepAndStationId = (state, itineraryStep, stationId) =>
+export const isFetchingByItineraryStep = itineraryStep => state =>
+  step(itineraryStep, state) === undefined ? false : step(itineraryStep, state).isFetching;
+
+export const periodStartAtByItineraryStep = itineraryStep => state =>
+  step(itineraryStep,state) === undefined ?
+    undefined :
+    step(itineraryStep, state).periodStartAt;
+
+export const periodEndAtByItineraryStep = itineraryStep => state =>
+  step(itineraryStep, state) === undefined ?
+    undefined :
+    step(itineraryStep, state).periodEndAt;
+
+export const intervalByItineraryStep = itineraryStep => state =>
+  step(itineraryStep, state) === undefined ?
+    undefined :
+    step(itineraryStep, state).interval;
+
+export const itineraryAtByItineraryStep = itineraryStep => state =>
+  step(itineraryStep, state) === undefined ?
+    undefined :
+    step(itineraryStep, state).itineraryAt;
+
+export const statusByItineraryStepAndStationId = (itineraryStep, stationId) => state =>
   availabilityPropertyByKeyAndItineraryStepAndId(
     state,
     'status',
     itineraryStep,
     stationId);
-export const availableBikeNumberByItineraryStepAndStationId = (state, itineraryStep, stationId) =>
+export const availableBikeNumberByItineraryStepAndStationId = (itineraryStep, stationId) => state =>
   availabilityPropertyByKeyAndItineraryStepAndId(
     state,
     'availableBikeNumber',
     itineraryStep,
     stationId);
-export const availableSlotNumberByItineraryStepAndStationId = (state, itineraryStep, stationId) =>
+export const availableSlotNumberByItineraryStepAndStationId = (itineraryStep, stationId) => state =>
   availabilityPropertyByKeyAndItineraryStepAndId(
     state,
     'availableSlotNumber',

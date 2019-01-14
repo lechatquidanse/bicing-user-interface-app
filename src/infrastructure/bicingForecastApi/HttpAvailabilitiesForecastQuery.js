@@ -2,6 +2,7 @@ import HttpStationAvailabilitiesForecastQuery
   from 'infrastructure/bicingForecastApi/HttpStationAvailabilitiesForecastQuery';
 
 // https://gist.github.com/nhagen/a1d36b39977822c224b8 to allow on query failure
+// use lodash flattenDeep
 class HttpAvailabilitiesForecastQuery {
   constructor(stationIds, byFilter) {
     this.stationIds = stationIds;

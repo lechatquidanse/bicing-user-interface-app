@@ -1,21 +1,31 @@
 import { actions as commandConfigureMapActions } from 'application/state/command/configureMap';
 import { FLOW } from 'application/state/flow/map/types';
 import { actions as queryAvailabilitiesActions } from 'application/state/query/availabilities';
-import { actions as queryStationsActions } from 'application/state/query/stations';
-import { all, put, takeLatest } from 'redux-saga/effects';
+import {
+  actions as queryStationsActions,
+  selectors as queryStationsSelectors,
+} from 'application/state/query/stations';
+import STATIONS_FETCH from 'application/state/query/stations/types';
+import {
+  all, put, select, take, takeLatest,
+} from 'redux-saga/effects';
 
-export function * flow (action) {
+export function* flow(action) {
   const {
     itineraryStep,
     itineraryAt,
     periodStartAt,
     periodEndAt,
     interval,
-    stationIds,
     latitude,
     longitude,
-    limit
+    limit,
   } = action.payload;
+
+  yield put(queryStationsActions.fetchStart(itineraryStep, latitude, longitude, limit));
+  yield take(STATIONS_FETCH.SUCCESS);
+
+  const stationIds = yield select(queryStationsSelectors.stationIdsByItineraryStep(itineraryStep));
 
   yield all([
     put(queryAvailabilitiesActions.fetchStart(
@@ -24,13 +34,12 @@ export function * flow (action) {
       periodStartAt,
       periodEndAt,
       interval,
-      stationIds
+      stationIds,
     )),
-    put(queryStationsActions.fetchStart(itineraryStep, latitude, longitude, limit)),
-    put(commandConfigureMapActions.configureStart(latitude, longitude, limit))
+    put(commandConfigureMapActions.configureStart(latitude, longitude, limit)),
   ]);
 }
 
-export default function * operation () {
+export default function* operation() {
   yield takeLatest(FLOW.START, flow);
 }

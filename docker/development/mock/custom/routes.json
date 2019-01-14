@@ -1,5 +1,6 @@
 {
     "/1.0/stations/:id*": "/forecast-availabilities/:id",
+    "/api/stations?geo_location_filter=41.413592,2.221153,500": "/stations-step-1",
     "/api/*": "/$1",
     "/stations/:id/availabilities*": "/station-availabilities/:id"
 }

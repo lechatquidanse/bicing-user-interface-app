@@ -1,4 +1,4 @@
-import { selectors as queryStationsSelectors } from 'application/state/query/stations';
+import { selectors } from 'application/state/query/stations';
 import { connect } from 'react-redux';
 import {
   branch, compose, renderComponent, renderNothing,
@@ -10,28 +10,25 @@ import {
   MarkersLoading as MarkersLoadingTemplate,
 } from 'userInterface/react/components/Map/Marker';
 
-const mapStateToProps = state => ({
-  data: queryStationsSelectors.data(state),
-  isFetchingStations: queryStationsSelectors.isFetching(state),
-  error: queryStationsSelectors.error(state),
-  latitude: queryStationsSelectors.latitude(state),
-  longitude: queryStationsSelectors.longitude(state),
-  limit: queryStationsSelectors.limit(state),
+const mapStateToProps = (state, props) => ({
+  isFetching: selectors.isFetchingByItineraryStep(props.itineraryStep)(state),
+  isError: selectors.isErrorByItineraryStep(props.itineraryStep)(state),
+  stationIds: selectors.stationIdsByItineraryStep(props.itineraryStep)(state),
 });
 
 const withReduxConnect = connect(mapStateToProps);
 
-const isLoadingStations = props => props.isFetchingStations;
-const isNothingStations = props => props.data === undefined;
-const isEmptyStations = props => props.data.length === 0;
-const isErrorStations = props => props.error === true;
+const isLoading = props => props.isFetching === true;
+const isNothing = props => props.stationIds === undefined;
+const isEmpty = props => props.stationIds.length === 0;
+const isError = props => props.isError === true;
 
 const Markers = compose(
   withReduxConnect,
-  branch(isErrorStations, renderComponent(MarkersErrorsTemplate)),
-  branch(isLoadingStations, renderComponent(MarkersLoadingTemplate)),
-  branch(isNothingStations, renderNothing),
-  branch(isEmptyStations, renderComponent(MarkersEmptyTemplate)),
+  branch(isError, renderComponent(MarkersErrorsTemplate)),
+  branch(isLoading, renderComponent(MarkersLoadingTemplate)),
+  branch(isNothing, renderNothing),
+  branch(isEmpty, renderComponent(MarkersEmptyTemplate)),
 )(MarkersTemplate);
 
 export default Markers;

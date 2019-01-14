@@ -1,19 +1,26 @@
 import { CONFIGURE } from 'application/state/command/configureMap/types';
 import produce from 'immer';
 import { createReducer } from 'reduxsauce';
+import {
+  DEFAULT_LATITUDE,
+  DEFAULT_LONGITUDE,
+  DEFAULT_LIMIT,
+} from 'domain/definitions/configurationMapDefinition';
 
 export const INITIAL_STATE = {
   error: false,
   data: undefined,
-  latitude: undefined,
-  longitude: undefined,
-  limit: undefined,
+  latitude: DEFAULT_LATITUDE,
+  longitude: DEFAULT_LONGITUDE,
+  limit: DEFAULT_LIMIT,
 };
 
 export const configureStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
-  draft.latitude = action.payload.latitude;
-  draft.longitude = action.payload.longitude;
-  draft.limit = action.payload.limit;
+  const { payload: { latitude, longitude, limit } } = action;
+
+  draft.latitude = latitude || draft.latitude;
+  draft.longitude = longitude;
+  draft.limit = limit;
 });
 
 export const configureSuccess = (state = INITIAL_STATE, action) => produce(state, (draft) => {

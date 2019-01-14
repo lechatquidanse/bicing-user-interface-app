@@ -1,13 +1,12 @@
 import { STATUS_ALLOWED, STATUS_CLOSED } from 'domain/definitions/availabilityDefinition';
 import { TYPE_ALLOWED, TYPE_BIKE } from 'domain/definitions/stationDefinition';
-import {
-  func, node, number, oneOf, string,
-} from 'prop-types';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Marker as BaseMarker } from 'react-google-maps';
 import MarkerIcon from 'userInterface/react/components/Map/Marker/MarkerIcon';
 
 const Marker = ({
+  itineraryStep,
   stationId,
   type,
   latitude,
@@ -23,22 +22,21 @@ const Marker = ({
     position={{ lat: latitude, lng: longitude }}
     onClick={onMarkerClick}
   >
-    {React.cloneElement(children, {
-      stationId,
-    })}
+    {React.cloneElement(children, { itineraryStep, stationId })}
   </BaseMarker>
 );
 
 Marker.propTypes = {
-  stationId: string.isRequired,
-  latitude: number.isRequired,
-  longitude: number.isRequired,
-  type: oneOf(TYPE_ALLOWED),
-  status: oneOf(STATUS_ALLOWED),
-  availableBikeNumber: number,
-  availableSlotNumber: number,
-  onMarkerClick: func.isRequired,
-  children: node.isRequired,
+  itineraryStep: PropTypes.number.isRequired,
+  stationId: PropTypes.string.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+  type: PropTypes.oneOf(TYPE_ALLOWED),
+  status: PropTypes.oneOf(STATUS_ALLOWED),
+  availableBikeNumber: PropTypes.number,
+  availableSlotNumber: PropTypes.number,
+  onMarkerClick: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 Marker.defaultProps = {

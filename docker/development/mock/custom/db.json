@@ -25,6 +25,20 @@
       "longitude": 2.180223
     }
   ],
+  "stations-step-1": [
+    {
+      "@id": "/api/stations/b2471a20-c2d4-4426-b931-4ca76282d4c0",
+      "@type": "station",
+      "id": "b2471a20-c2d4-4426-b931-4ca76282d4c0",
+      "name": "35 - C/ SANT RAMON DE PENYAFORT",
+      "type": "BIKE",
+      "address": "Sant Ramon de Penyafort",
+      "addressNumber": "1",
+      "zipCode": "08019",
+      "latitude": 41.413592,
+      "longitude": 2.221153
+    }
+  ],
   "station-availabilities": [
     {
       "@context": "/api/contexts/collection%20of%20availabilities%20by%20time%20interval%20filter%20for%20a%20station",
@@ -179,6 +193,16 @@
       "statedAt": "2018-09-19T12:50:03+02:00",
       "availableBikeNumber": 18,
       "availableSlotNumber": 20,
+      "status": "OPENED"
+    },
+    {
+      "@context": "/api/contexts/last%20availability%20by%20station",
+      "@id": "/api/last-availabilities-by-station/b2471a20-c2d4-4426-b931-4ca76282d4c0",
+      "@type": "last availability by station",
+      "id": "b2471a20-c2d4-4426-b931-4ca76282d4c0",
+      "statedAt": "2019-01-13 13:30:03",
+      "availableBikeNumber": 27,
+      "availableSlotNumber": 0,
       "status": "OPENED"
     }
   ],

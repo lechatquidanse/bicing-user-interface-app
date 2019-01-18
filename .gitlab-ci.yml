@@ -44,6 +44,7 @@ before_script:
 
     - rm .env && envsubst < ./docker/production/.env.dist > ./.env
     - docker build --target bicing_ui_app_prod -t $PRODUCTION_IMAGE .
+    - docker push $PRODUCTION_IMAGE
 
 .production_script_template: &production_script
   script:

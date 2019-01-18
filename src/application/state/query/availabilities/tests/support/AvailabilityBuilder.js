@@ -1,24 +1,27 @@
 import { STATUS_OPENED } from 'domain/definitions/availabilityDefinition';
+import moment from 'moment';
 import { v4 as uuid } from 'uuid';
 
 class AvailabilityBuilder {
-  constructor(stationId, status, availableBikeNumber, availableSlotNumber) {
+  constructor(stationId, status, availableBikeNumber, availableSlotNumber, statedAt) {
     this.stationId = stationId;
     this.status = status;
     this.availableBikeNumber = availableBikeNumber;
     this.availableSlotNumber = availableSlotNumber;
+    this.statedAt = statedAt;
 
     this.withStationId = this.withStationId.bind(this);
     this.withStatus = this.withStatus.bind(this);
     this.withAvailableBikeNumber = this.withAvailableBikeNumber.bind(this);
     this.withAvailableSlotNumber = this.withAvailableSlotNumber.bind(this);
+    this.withStatedAt = this.withStatedAt.bind(this);
 
     this.build = this.build.bind(this);
     this.copy = this.copy.bind(this);
   }
 
   static create() {
-    return new this(uuid(), STATUS_OPENED, 18, 12);
+    return new this(uuid(), STATUS_OPENED, 18, 12, moment());
   }
 
   withStationId(stationId) {
@@ -49,12 +52,20 @@ class AvailabilityBuilder {
     return copy;
   }
 
+  withStatedAt(statedAt) {
+    const copy = this.copy();
+    copy.statedAt = statedAt;
+
+    return copy;
+  }
+
   build() {
     return {
       id: this.stationId,
       status: this.status,
       availableBikeNumber: this.availableBikeNumber,
       availableSlotNumber: this.availableSlotNumber,
+      statedAt: this.statedAt.toString(),
     };
   }
 
@@ -64,6 +75,7 @@ class AvailabilityBuilder {
       this.status,
       this.availableBikeNumber,
       this.availableSlotNumber,
+      this.statedAt,
     );
   }
 }

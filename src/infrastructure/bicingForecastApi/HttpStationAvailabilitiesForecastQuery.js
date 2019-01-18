@@ -6,6 +6,8 @@ import httpClient from 'infrastructure/bicingForecastApi/httpClient';
 import HttpStationAvailabilitiesForecastResponse
   from 'infrastructure/bicingForecastApi/responses/HttpStationAvailabilitiesForecastResponse';
 
+const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
 class HttpStationAvailabilitiesForecastQuery {
   static async find(stationId, byFilter) {
     const apiResponse = await httpClient.get(HttpStationAvailabilitiesForecastQuery.uri(
@@ -31,7 +33,10 @@ class HttpStationAvailabilitiesForecastQuery {
     const uri = `/stations/${stationId}`;
 
     if (byFilter instanceof ByIntervalInPeriodFilter) {
-      return `${uri}?filter=${byFilter.periodStart},${byFilter.periodEnd},${byFilter.interval}`;
+      const periodStart = byFilter.periodStartAt.format(DATE_TIME_FORMAT);
+      const periodEnd = byFilter.periodEndAt.format(DATE_TIME_FORMAT);
+
+      return `${uri}?filter=${periodStart},${periodEnd},${byFilter.interval}`;
     }
 
     return uri;

@@ -8,7 +8,7 @@ export const INITIAL_STATE = {
 };
 
 export const enable = (state = INITIAL_STATE, action) => produce(state, (draft) => {
-  draft.enabled = action.payload.enabled;
+  draft.enabled = true;
   draft.itineraryStep = action.payload.itineraryStep;
 });
 

@@ -1,42 +1,104 @@
-import { actions as commandConfigureMapActions } from 'application/state/command/configureMap';
+import {
+  actions as commandStoreItineraryAtActions,
+  selectors as commandStoreItineraryAtSelectors,
+  types as commandStoreItineraryAtTypes,
+} from 'application/state/command/storeItineraryAt';
+import {
+  actions as commandStoreItineraryGeoLocationActions,
+  selectors as commandStoreItineraryGeoLocationSelectors,
+  types as commandStoreItineraryGeoLocationTypes,
+} from 'application/state/command/storeItineraryGeoLocation';
+import {
+  actions as commandStoreItineraryStepActiveActions,
+  selectors as commandStoreItineraryStepActiveSelectors,
+} from 'application/state/command/storeItineraryStepActive';
 import { FLOW } from 'application/state/flow/map/types';
 import { actions as queryAvailabilitiesActions } from 'application/state/query/availabilities';
+import { actions as queryGeoSuggestionsActions } from 'application/state/query/geoSuggestions';
 import {
   actions as queryStationsActions,
   selectors as queryStationsSelectors,
+  types as queryStationTypes,
 } from 'application/state/query/stations';
-import STATIONS_FETCH from 'application/state/query/stations/types';
 import {
-  all, put, select, take, takeLatest,
+  DEFAULT_LATITUDE,
+  DEFAULT_LIMIT,
+  DEFAULT_LONGITUDE,
+} from 'domain/definitions/configurationMapDefinition';
+import moment from 'moment';
+import {
+  call, all, fork, put, select, takeLatest,
 } from 'redux-saga/effects';
 
-export function* flow(action) {
-  const {
+export function* queryAvailabilities() {
+  const itineraryStep = yield select(commandStoreItineraryStepActiveSelectors.itineraryStep);
+
+  const [itineraryAt, periodStartAt, periodEndAt, interval, stationIds] = yield all([
+    select(commandStoreItineraryAtSelectors.itineraryAt),
+    select(commandStoreItineraryAtSelectors.periodStartAt),
+    select(commandStoreItineraryAtSelectors.periodEndAt),
+    select(commandStoreItineraryAtSelectors.interval),
+    select(queryStationsSelectors.stationIdsByItineraryStep(itineraryStep)),
+  ]);
+
+  yield put(queryAvailabilitiesActions.fetchStart(
     itineraryStep,
     itineraryAt,
     periodStartAt,
     periodEndAt,
     interval,
-    latitude,
-    longitude,
-    limit,
-  } = action.payload;
+    stationIds,
+  ));
+}
+
+function selectLatitudeAndLongitudeAndLimit(itineraryStep) {
+  return all([
+    select(commandStoreItineraryGeoLocationSelectors.latitudeByItineraryStep(itineraryStep)),
+    select(commandStoreItineraryGeoLocationSelectors.longitudeByItineraryStep(itineraryStep)),
+    select(commandStoreItineraryGeoLocationSelectors.limitByItineraryStep(itineraryStep)),
+  ]);
+}
+
+export function* queryStations() {
+  const itineraryStep = yield select(commandStoreItineraryStepActiveSelectors.itineraryStep);
+  const [latitude, longitude, limit] = yield selectLatitudeAndLongitudeAndLimit(itineraryStep);
 
   yield put(queryStationsActions.fetchStart(itineraryStep, latitude, longitude, limit));
-  yield take(STATIONS_FETCH.SUCCESS);
+}
 
-  const stationIds = yield select(queryStationsSelectors.stationIdsByItineraryStep(itineraryStep));
+export function* queryGeoSuggestions() {
+  yield put(queryGeoSuggestionsActions.fetchStart());
+}
+
+export function* init() {
+  const now = moment();
+  const itineraryStep = 0;
 
   yield all([
-    put(queryAvailabilitiesActions.fetchStart(
+    yield put(commandStoreItineraryStepActiveActions.store(itineraryStep)),
+    yield put(commandStoreItineraryAtActions.storeStart(now)),
+    yield put(commandStoreItineraryGeoLocationActions.storeStart(
       itineraryStep,
-      itineraryAt,
-      periodStartAt,
-      periodEndAt,
-      interval,
-      stationIds,
+      DEFAULT_LATITUDE,
+      DEFAULT_LONGITUDE,
+      DEFAULT_LIMIT,
     )),
-    put(commandConfigureMapActions.configureStart(latitude, longitude, limit)),
+    yield fork(queryGeoSuggestions),
+  ]);
+}
+
+export function* flow() {
+  yield call(init);
+
+  yield all([
+    yield takeLatest(
+      [
+        commandStoreItineraryAtTypes.STORE.SUCCESS,
+        queryStationTypes.FETCH.SUCCESS,
+      ],
+      queryAvailabilities,
+    ),
+    yield takeLatest(commandStoreItineraryGeoLocationTypes.STORE.SUCCESS, queryStations),
   ]);
 }
 

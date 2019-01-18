@@ -2,7 +2,7 @@ import { FETCH } from 'application/state/query/station/types';
 
 export const fetchStart = stationId => ({
   error: false,
-  meta: { isFetching: true },
+  meta: { isFetching: false },
   payload: { stationId },
   type: FETCH.START,
 });

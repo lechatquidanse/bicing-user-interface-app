@@ -1,31 +1,29 @@
-import reducer, { INITIAL_STATE } from 'application/state/command/enableGeoLocation/reducers';
-import { ENABLE } from 'application/state/command/enableGeoLocation/types';
+import * as actions from 'application/state/command/enableGeoLocation/actions';
+import reducer from 'application/state/command/enableGeoLocation/reducers';
+import StateBuilder from 'application/state/command/enableGeoLocation/tests/support/StateBuilder';
 
-describe('application/state/command/infoWindow/reducers', () => {
+let stateBuilder;
+
+describe('application/state/command/enableGeoLocation/reducers', () => {
   test('should have initial state', () => {
-    expect(reducer()).toEqual({
-      enabled: false,
-      itineraryStep: 0,
-    });
+    expect(reducer()).toEqual(stateBuilder.withEnabled(false).withItineraryStep(0).build());
   });
 
   test('should not affect state for an unknown action type', () => {
-    expect(reducer(INITIAL_STATE, { type: 'NOT_EXISTING' })).toEqual({
-      enabled: false,
-      itineraryStep: 0,
-    });
+    const initialState = stateBuilder.withEnabled(true).withItineraryStep(2).build();
+
+    expect(reducer(initialState, { type: 'NOT_EXISTING' })).toEqual(initialState);
   });
 
   test('should affect state for action with type defining a enabled start', () => {
-    const enabled = true;
-    const itineraryStep = 3;
+    const initialState = stateBuilder.withEnabled(true).withItineraryStep(2).build();
+    const itineraryStep = 1;
+    const expectedState = stateBuilder.withEnabled(true).withItineraryStep(itineraryStep).build();
 
-    expect(reducer(INITIAL_STATE, {
-      payload: { enabled, itineraryStep },
-      type: ENABLE.START,
-    })).toEqual({
-      enabled,
-      itineraryStep,
-    });
+    expect(reducer(initialState, actions.enable(itineraryStep))).toEqual(expectedState);
+  });
+
+  beforeEach(() => {
+    stateBuilder = StateBuilder.create().withIsReduced(true);
   });
 });

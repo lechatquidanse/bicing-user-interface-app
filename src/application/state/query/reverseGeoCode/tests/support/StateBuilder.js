@@ -1,20 +1,22 @@
 class StateBuilder {
-  constructor(address, isError, error, isFetching) {
+  constructor(address, isError, error, isFetching, isReduced) {
     this.address = address;
     this.isError = isError;
     this.error = error;
     this.isFetching = isFetching;
+    this.isReduced = isReduced;
 
     this.withAddress = this.withAddress.bind(this);
     this.withIsError = this.withIsError.bind(this);
     this.withError = this.withError.bind(this);
     this.withIsFetching = this.withIsFetching.bind(this);
+    this.withIsReduced = this.withIsReduced.bind(this);
     this.build = this.build.bind(this);
     this.copy = this.copy.bind(this);
   }
 
   static create() {
-    return new this('ramiro de maeztu', false, undefined, false);
+    return new this('ramiro de maeztu', false, undefined, false, false);
   }
 
   withAddress(address) {
@@ -45,21 +47,28 @@ class StateBuilder {
     return copy;
   }
 
+  withIsReduced(isReduced) {
+    const copy = this.copy();
+    copy.isReduced = isReduced;
+
+    return copy;
+  }
+
   build() {
     const data = this.isError === true ? this.error : this.address;
-    return {
-      query: {
-        reverseGeoCode: {
-          data,
-          error: this.isError,
-          isFetching: this.isFetching,
-        },
-      },
-    };
+    const state = { data, error: this.isError, isFetching: this.isFetching };
+
+    return this.isReduced === true ? state : { query: { reverseGeoCode: state } };
   }
 
   copy() {
-    return new StateBuilder(this.address, this.isError, this.error, this.isFetching);
+    return new StateBuilder(
+      this.address,
+      this.isError,
+      this.error,
+      this.isFetching,
+      this.isReduced,
+    );
   }
 }
 

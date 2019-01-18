@@ -11,7 +11,7 @@ const stationType = Joi.object().keys({
   addressNumber: Joi.string().allow(null),
   latitude: Joi.number().required(),
   longitude: Joi.number().required(),
-  zipCode: Joi.string().required(),
+  zipCode: Joi.string().allow(null),
 }).unknown(true);
 
 const stationsType = Joi.array().items(stationType);

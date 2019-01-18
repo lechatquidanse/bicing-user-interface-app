@@ -1,29 +1,35 @@
 import * as actions from 'application/state/query/availabilities/actions';
+import AvailabilityBuilder
+  from 'application/state/query/availabilities/tests/support/AvailabilityBuilder';
 import { FETCH } from 'application/state/query/availabilities/types';
 import { isError, isFSA } from 'flux-standard-action';
+import moment from 'moment';
 import { v4 as uuid } from 'uuid';
 
 describe('application/state/query/availabilities/actions', () => {
   test('should create an action to start fetching availabilities with function fetchStart() and parameters', () => {
     const itineraryStep = 0;
-    const itineraryAt = '2017-08-08 12:22:12';
-    const periodStartAt = '2017-08-08 12:12:12';
-    const periodEndAt = '2017-08-08 12:32:12';
+    const itineraryAt = moment();
+    const periodStartAt = moment();
+    const periodEndAt = moment();
     const interval = '5T';
-    const stationId1 = uuid();
-    const stationId2 = uuid();
-    const stationIds = [stationId1, stationId2];
+    const stationIds = [uuid(), uuid()];
 
     const action = actions.fetchStart(
-      itineraryStep, itineraryAt, periodStartAt, periodEndAt, interval, stationIds,
+      itineraryStep,
+      itineraryAt,
+      periodStartAt,
+      periodEndAt,
+      interval,
+      stationIds,
     );
 
-    expect(isFSA(action)).toBeTruthy();
+    expect(isFSA(action)).toEqual(true);
     expect(action).toEqual({
       error: false,
-      meta: { isFetching: true, itineraryStep, itineraryAt },
+      meta: { isFetching: false, itineraryStep },
       payload: {
-        periodStartAt, periodEndAt, interval, stationIds,
+        itineraryAt, periodStartAt, periodEndAt, interval, stationIds,
       },
       type: FETCH.START,
     });
@@ -32,7 +38,7 @@ describe('application/state/query/availabilities/actions', () => {
     const itineraryStep = 2;
     const action = actions.fetchPending(itineraryStep);
 
-    expect(isFSA(action)).toBeTruthy();
+    expect(isFSA(action)).toEqual(true);
     expect(action).toEqual({
       error: false,
       meta: { isFetching: true, itineraryStep },
@@ -41,23 +47,10 @@ describe('application/state/query/availabilities/actions', () => {
   });
   test('should create an action to notify the success of fetching availabilities with function fetchSuccess()', () => {
     const itineraryStep = 1;
-    const data = [
-      {
-        statedAt: '2018-09-19T12:50:03+02:00',
-        availableBikeNumber: 12,
-        availableSlotNumber: 20,
-        status: 'OPENED',
-      },
-      {
-        statedAt: '2018-09-19T12:50:03+02:00',
-        availableBikeNumber: 4,
-        availableSlotNumber: 17,
-        status: 'OPENED',
-      },
-    ];
+    const data = [AvailabilityBuilder.create(), AvailabilityBuilder.create()];
     const action = actions.fetchSuccess(itineraryStep, data);
 
-    expect(isFSA(action)).toBeTruthy();
+    expect(isFSA(action)).toEqual(true);
     expect(action).toEqual({
       error: false,
       meta: { isFetching: false, itineraryStep },
@@ -67,11 +60,11 @@ describe('application/state/query/availabilities/actions', () => {
   });
   test('should create an action when a failure occurred during fetching availabilities with function fetchFailure()', () => {
     const itineraryStep = 1;
-    const error = { message: 'An error occurred during fetching a availabilities.' };
+    const error = new Error('An error occurred.');
 
     const action = actions.fetchFailure(itineraryStep, error);
 
-    expect(isError(action)).toBeTruthy();
+    expect(isError(action)).toEqual(true);
     expect(action).toEqual({
       error: true,
       meta: { isFetching: false, itineraryStep },

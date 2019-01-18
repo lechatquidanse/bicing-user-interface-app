@@ -12,7 +12,7 @@ describe('application/state/query/reverseGeoCode/actions', () => {
     expect(isFSA(action)).toBeTruthy();
     expect(action).toEqual({
       error: false,
-      meta: { isFetching: true },
+      meta: { isFetching: false },
       payload: { latitude, longitude },
       type: FETCH.START,
     });

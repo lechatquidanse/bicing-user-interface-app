@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`application/state/query/availabilities/provider/availabilitiesClientFactory should not create a specific client if filter parameters are bad and should throw an error 1`] = `"Invalid date format"`;

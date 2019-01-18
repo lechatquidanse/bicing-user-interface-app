@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
+import { bindActionCreators } from 'redux';
 import 'userInterface/react/components/App.css';
 import ItinerarySearch from 'userInterface/react/containers/ItinerarySearch';
 import Map from 'userInterface/react/containers/Map';
-import { mapDispatchToProps, mapStateToProps } from 'userInterface/react/containers/Map/mapProps';
+import { actions as flowMapActions } from 'application/state/flow/map';
 
 const Home = () => (
   <div className="App">
@@ -14,27 +15,11 @@ const Home = () => (
   </div>
 );
 
-const mergeProps = (propsFromState, propsFromDispatch, ownProps) => ({
-  ...propsFromState,
-  ...propsFromDispatch,
-  ...ownProps,
-  initMap: () => {
-    propsFromDispatch.flowMap(
-      propsFromState.itineraryStep,
-      propsFromState.itineraryAt,
-      propsFromState.periodStartAt,
-      propsFromState.periodEndAt,
-      propsFromState.interval,
-      propsFromState.latitude,
-      propsFromState.longitude,
-      propsFromState.limit,
-    );
-  },
-});
+export const mapDispatchToProps = dispatch => bindActionCreators({
+  initMap: () => flowMapActions.flow(),
+}, dispatch);
 
-const itineraryStep = 0;
-
-const withReduxConnect = connect(mapStateToProps(itineraryStep), mapDispatchToProps, mergeProps);
+const withReduxConnect = connect(null, mapDispatchToProps);
 
 const withLifeCycle = lifecycle({
   componentDidMount() {

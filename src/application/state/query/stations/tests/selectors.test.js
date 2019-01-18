@@ -147,55 +147,6 @@ describe('application/state/query/stations/selectors', () => {
 
     expect(selectors.isFetchingByItineraryStep(99)(state)).toEqual(false);
   });
-
-  test('it can return latitude by Itinerary step', () => {
-    const latitude = 41.322;
-    const itineraryStep = 2;
-
-    const state = StateBuilder.create()
-      .withItinerarySteps(
-        ItineraryStepBuilder.create().build(),
-        ItineraryStepBuilder.create()
-          .withItineraryStep(itineraryStep)
-          .withLatitude(latitude)
-          .build(),
-      )
-      .build();
-
-    expect(selectors.latitudeByItineraryStep(itineraryStep)(state)).toEqual(latitude);
-  });
-
-  test('it can return longitude by Itinerary step', () => {
-    const longitude = 1.322;
-    const itineraryStep = 1;
-    const state = StateBuilder.create()
-      .withItinerarySteps(
-        ItineraryStepBuilder.create().build(),
-        ItineraryStepBuilder.create()
-          .withItineraryStep(itineraryStep)
-          .withLongitude(longitude)
-          .build(),
-      )
-      .build();
-
-    expect(selectors.longitudeByItineraryStep(itineraryStep)(state)).toEqual(longitude);
-  });
-
-  test('it can return limit by Itinerary step', () => {
-    const limit = 1000;
-    const itineraryStep = 3;
-    const state = StateBuilder.create()
-      .withItinerarySteps(
-        ItineraryStepBuilder.create().build(),
-        ItineraryStepBuilder.create()
-          .withItineraryStep(itineraryStep)
-          .withLimit(limit)
-          .build(),
-      )
-      .build();
-
-    expect(selectors.limitByItineraryStep(itineraryStep)(state)).toEqual(limit);
-  });
   test('it can return stationIds by Itinerary step', () => {
     const stationId1 = uuid();
     const stationId2 = uuid();

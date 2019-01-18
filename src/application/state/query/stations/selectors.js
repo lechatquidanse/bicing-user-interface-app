@@ -10,7 +10,7 @@ const data = (itineraryStep, state) =>
 export const stationByItineraryStepAndId = (itineraryStep, id, state) => {
   if (isErrorByItineraryStep(itineraryStep, state) === true
     || step(itineraryStep, state) === undefined
-    || step(itineraryStep, state).data === undefined) {
+    || Array.isArray(step(itineraryStep, state).data) === false) {
     return undefined;
   }
 
@@ -29,8 +29,8 @@ export const itinerarySteps = state => [...new Set(selector(state).map(
   step => step.itineraryStep))
 ];
 
-export const isErrorByItineraryStep = itineraryStep => state =>
-  step(itineraryStep, state) === undefined ? false : step(itineraryStep, state).error;
+export const isErrorByItineraryStep = itineraryStep => state => step(itineraryStep, state) === undefined ?
+  false : step(itineraryStep, state).error;
 
 export const errorByItineraryStep = itineraryStep => state =>
   isErrorByItineraryStep(itineraryStep)(state) === true
@@ -40,28 +40,12 @@ export const errorByItineraryStep = itineraryStep => state =>
 export const isFetchingByItineraryStep = itineraryStep => state =>
   step(itineraryStep, state) === undefined ? false : step(itineraryStep, state).isFetching;
 
-
-export const latitudeByItineraryStep = itineraryStep => state =>
-  step(itineraryStep,state) === undefined ?
-    undefined :
-    step(itineraryStep, state).latitude;
-
-export const longitudeByItineraryStep = itineraryStep => state =>
-  step(itineraryStep,state) === undefined ?
-    undefined :
-    step(itineraryStep, state).longitude;
-
-export const limitByItineraryStep = itineraryStep => state =>
-  step(itineraryStep,state) === undefined ?
-    undefined :
-    step(itineraryStep, state).limit;
-
 export const stationIdsByItineraryStep = itineraryStep => state => {
   if (step(itineraryStep, state) === undefined
     || step(itineraryStep, state).data === undefined
     || Array.isArray(step(itineraryStep, state).data) === false) {
     return undefined;
-  }else {
+  } else {
     return [...new Set(step(itineraryStep, state).data.map(station => station.id))];
   }
 };

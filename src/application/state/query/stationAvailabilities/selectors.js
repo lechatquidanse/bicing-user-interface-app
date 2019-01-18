@@ -4,11 +4,7 @@ export const data = state => selector(state).data;
 export const error = state => selector(state).error;
 export const isFetching = state => selector(state).isFetching;
 
-export const periodStart = state => selector(state).periodStart;
-export const periodEnd = state => selector(state).periodEnd;
-export const interval = state => selector(state).interval;
-export const stationId = state => selector(state).stationId;
-
+// @todo add tests selector
 export const stationAvailabilitiesSorted = (state) => {
   if (data(state) === undefined || data(state).availabilities === undefined) {
     return null;

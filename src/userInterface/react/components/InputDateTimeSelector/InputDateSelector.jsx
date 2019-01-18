@@ -4,30 +4,30 @@ import React from 'react';
 import Select from 'react-select';
 
 const InputDateSelector = ({
-  placeholder, option, options, onOptionChange,
+  datePlaceholder, dateSelected, dateChoices, onDateChange,
 }) => (
   <Select
-    value={options.find(optionObj => optionObj.value === option)}
-    onChange={onOptionChange}
-    options={options}
-    placeholder={placeholder}
+    value={dateChoices.find(choice => choice.value === dateSelected)}
+    onChange={onDateChange}
+    options={dateChoices}
+    placeholder={datePlaceholder}
   />
 );
 
 InputDateSelector.propTypes = {
-  placeholder: PropTypes.string,
-  option: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({
+  datePlaceholder: PropTypes.string,
+  dateSelected: PropTypes.string,
+  dateChoices: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
   })),
-  onOptionChange: PropTypes.func.isRequired,
+  onDateChange: PropTypes.func.isRequired,
 };
 
 InputDateSelector.defaultProps = {
-  placeholder: 'Later',
-  option: null,
-  options: defaultInputDateSelectOptions(),
+  datePlaceholder: 'Later',
+  dateSelected: null,
+  dateChoices: defaultInputDateSelectOptions(),
 };
 
 export default InputDateSelector;

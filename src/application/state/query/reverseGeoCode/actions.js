@@ -2,7 +2,7 @@ import { FETCH } from 'application/state/query/reverseGeoCode/types';
 
 export const fetchStart = (latitude, longitude) => ({
   error: false,
-  meta: { isFetching: true },
+  meta: { isFetching: false },
   payload: { latitude, longitude },
   type: FETCH.START,
 });

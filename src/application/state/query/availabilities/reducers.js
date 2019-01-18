@@ -1,26 +1,16 @@
 import { FETCH } from 'application/state/query/availabilities/types';
-import { DEFAULT_INTERVAL_AVAILABILITIES } from 'domain/definitions/byIntervalInPeriodDefinition';
 import produce from 'immer';
-import Clock from 'infrastructure/system/Clock';
 import { createReducer } from 'reduxsauce';
 
 export const initialStateByItineraryStep = itineraryStep => ({
   data: undefined,
   error: false,
   isFetching: false,
-  interval: DEFAULT_INTERVAL_AVAILABILITIES,
-  itineraryAt: Clock.nowDateTimeFormatted(),
   itineraryStep,
-  periodStartAt: Clock.nowDateTimeFormatted(),
-  periodEndAt: Clock.nowDateTimeFormatted(),
-  stationIds: [],
 });
 
 export const INITIAL_STATE = {
-  itinerarySteps: [
-    initialStateByItineraryStep(0),
-    initialStateByItineraryStep(1),
-  ],
+  itinerarySteps: [],
 };
 
 const findIndexByItineraryStep = (itineraryStep, itinerarySteps) => itinerarySteps.findIndex(
@@ -28,24 +18,20 @@ const findIndexByItineraryStep = (itineraryStep, itinerarySteps) => itinerarySte
 );
 
 export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
-  const { itineraryStep } = action.meta;
+  const { isFetching, itineraryStep } = action.meta;
 
-  const draftByItineraryStep = produce(initialStateByItineraryStep(itineraryStep), (draftStep) => {
-    draftStep.isFetching = action.meta.isFetching;
-    draftStep.interval = action.payload.interval;
-    draftStep.itineraryAt = action.meta.itineraryAt;
-    draftStep.itineraryStep = itineraryStep;
-    draftStep.periodStartAt = action.payload.periodStartAt;
-    draftStep.periodEndAt = action.payload.periodEndAt;
-    draftStep.stationIds = action.payload.stationIds;
-  });
+  const draftByItineraryStep = initialStateByItineraryStep(itineraryStep);
+
+  draftByItineraryStep.data = undefined;
+  draftByItineraryStep.isFetching = isFetching;
+  draftByItineraryStep.error = action.error;
 
   const index = findIndexByItineraryStep(itineraryStep, draft.itinerarySteps);
 
-  if (index === -1) {
-    draft.itinerarySteps.push(draftByItineraryStep);
-  } else {
+  if (index !== -1) {
     draft.itinerarySteps[index] = draftByItineraryStep;
+  } else {
+    draft.itinerarySteps.push(draftByItineraryStep);
   }
 });
 
@@ -55,7 +41,9 @@ export const fetchPending = (state = INITIAL_STATE, action) => produce(state, (d
   if (index !== -1) {
     const draftByItineraryStep = draft.itinerarySteps[index];
 
+    draftByItineraryStep.data = undefined;
     draftByItineraryStep.isFetching = action.meta.isFetching;
+    draftByItineraryStep.error = action.error;
 
     draft.itinerarySteps[index] = draftByItineraryStep;
   }
@@ -67,8 +55,9 @@ export const fetchSuccess = (state = INITIAL_STATE, action) => produce(state, (d
   if (index !== -1) {
     const draftByItineraryStep = draft.itinerarySteps[index];
 
-    draftByItineraryStep.isFetching = action.meta.isFetching;
     draftByItineraryStep.data = action.payload;
+    draftByItineraryStep.isFetching = action.meta.isFetching;
+    draftByItineraryStep.error = action.error;
 
     draft.itinerarySteps[index] = draftByItineraryStep;
   }

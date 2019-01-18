@@ -1,4 +1,4 @@
-import ByGeoLocationFilter from 'application/state/filter/ByGeoLocationFilter';
+import ByItineraryGeoLocationFilter from 'application/state/filter/ByItineraryGeoLocationFilter';
 import { OK } from 'http-status';
 import HttpStationQueryError from 'infrastructure/bicingApi/errors/HttpStationQueryError';
 import httpClient from 'infrastructure/bicingApi/httpClient';
@@ -33,7 +33,7 @@ class HttpStationsQuery {
   static uri(byFilter) {
     const uri = '/stations';
 
-    if (byFilter instanceof ByGeoLocationFilter) {
+    if (byFilter instanceof ByItineraryGeoLocationFilter) {
       return `${uri}?geo_location_filter=${byFilter.latitude},${byFilter.longitude},${byFilter.limit}`;
     }
 

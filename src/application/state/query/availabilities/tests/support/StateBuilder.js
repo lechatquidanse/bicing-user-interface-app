@@ -2,20 +2,24 @@ import ItineraryStepBuilder
   from 'application/state/query/availabilities/tests/support/ItineraryStepBuilder';
 
 class StateBuilder {
-  constructor(itinerarySteps) {
+  constructor(itinerarySteps, isReduced) {
     this.itinerarySteps = itinerarySteps;
+    this.isReduced = isReduced;
 
     this.withItinerarySteps = this.withItinerarySteps.bind(this);
-
+    this.withIsReduced = this.withIsReduced.bind(this);
     this.build = this.build.bind(this);
     this.copy = this.copy.bind(this);
   }
 
   static create() {
-    return new this([
-      ItineraryStepBuilder.create().withItineraryStep(0).build(),
-      ItineraryStepBuilder.create().withItineraryStep(1).build(),
-    ]);
+    return new this(
+      [
+        ItineraryStepBuilder.create().withItineraryStep(0).build(),
+        ItineraryStepBuilder.create().withItineraryStep(1).build(),
+      ],
+      false,
+    );
   }
 
   withItinerarySteps(...itinerarySteps) {
@@ -25,18 +29,21 @@ class StateBuilder {
     return copy;
   }
 
+  withIsReduced(isReduced) {
+    const copy = this.copy();
+    copy.isReduced = isReduced;
+
+    return copy;
+  }
+
   build() {
-    return {
-      query: {
-        availabilities: {
-          itinerarySteps: this.itinerarySteps,
-        },
-      },
-    };
+    const state = { itinerarySteps: this.itinerarySteps };
+
+    return this.isReduced === true ? state : { query: { availabilities: state } };
   }
 
   copy() {
-    return new StateBuilder(this.itinerarySteps);
+    return new StateBuilder(this.itinerarySteps, this.isReduced);
   }
 }
 

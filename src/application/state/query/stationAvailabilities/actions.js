@@ -2,7 +2,7 @@ import { FETCH } from 'application/state/query/stationAvailabilities/types';
 
 export const fetchStart = (stationId, periodStart, periodEnd, interval) => ({
   error: false,
-  meta: { isFetching: true },
+  meta: { isFetching: false },
   payload: {
     stationId, periodStart, periodEnd, interval,
   },

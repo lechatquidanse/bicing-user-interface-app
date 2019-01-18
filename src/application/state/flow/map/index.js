@@ -1,12 +1,12 @@
-import reducer from 'application/state/flow/map/reducers';
-import operation from 'application/state/flow/map/operations';
 import * as actions from 'application/state/flow/map/actions';
-import * as Types from 'application/state/flow/map/types';
+import operation from 'application/state/flow/map/operations';
+import reducer from 'application/state/flow/map/reducers';
+import * as types from 'application/state/flow/map/types';
 
 export {
-    actions,
-    Types,
-    operation,
+  actions,
+  operation,
+  types,
 };
 
 export default reducer;

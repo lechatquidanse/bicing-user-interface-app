@@ -1,62 +1,45 @@
-import { testSaga, expectSaga } from 'redux-saga-test-plan';
+import * as actions from 'application/state/query/station/actions';
+import operation, { fetch } from 'application/state/query/station/operations';
+import StationProvider from 'application/state/query/station/provider/StationProvider';
+import { FETCH } from 'application/state/query/station/types';
+import StationBuilder from 'application/state/query/stations/tests/support/StationBuilder';
+import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { throwError } from 'redux-saga-test-plan/providers';
+import { v4 as uuid } from 'uuid';
 
-import { FETCH } from 'application/state/query/station/types';
-import { fetchPending, fetchSuccess, fetchFailure } from 'application/state/query/station/actions';
-import operation from 'application/state/query/station/operations';
-import { fetch } from 'application/state/query/station/operations';
-import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
-import * as Types from 'application/state/query/station/types';
+let stationBuilder;
 
 describe('application/state/query/station/operations', () => {
-    it('should wait for a fetch start event to fetch with operation()', () => {
-        testSaga(operation)
-            .next()
-            .takeLatestEffect(FETCH.START, fetch);
-    });
+  test('should wait for a fetch start event to fetch with operation()', () => {
+    testSaga(operation)
+      .next()
+      .takeLatestEffect(FETCH.START, fetch);
+  });
 
-    it('should dispatch a fetchPending action with fetch()', () => {
-        testSaga(fetch)
-            .next()
-            .put(fetchPending());
-    });
+  test('should dispatch a fetchListPending action with fetch() generator', () => {
+    testSaga(fetch, actions.fetchStart(uuid()))
+      .next()
+      .put(actions.fetchPending());
+  });
+  test('it can list expected availabilities with fetch() generator', () => {
+    const station = stationBuilder.build();
 
-    it('should fetch expected station with fetch()', () => {
-        const stationId = 'f7fa1d7b-4a7b-410d-bae0-549d862a2523';
-        const fakeStation = {
-            "@id": `\/api\/stations\/${stationId}`,
-            "@type": "stationView",
-            "id": `${stationId}`,
-            "name": "233 - C\/NOU DE LA RAMBLA, 164",
-            "type": "BIKE",
-            "address": "Nou de la Rambla",
-            "addressNumber": "164",
-            "zipCode": "08004",
-            "latitude": 41.371965,
-            "longitude": 2.166871
-        };
-        const action = { type: Types.FETCH.START, payload: { stationId } };
+    return expectSaga(fetch, actions.fetchStart(uuid()))
+      .provide([[matchers.call.fn(StationProvider.provide), station]])
+      .put(actions.fetchSuccess(station))
+      .run();
+  });
+  test('it can handle error', () => {
+    const error = new Error('An error occurred');
 
-        // @todo use real stub/mock with https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#srcsetuptestsjs-1
-        return expectSaga(fetch, action)
-            .provide([
-                [matchers.call.fn(HttpStationQuery.find, stationId), fakeStation],
-            ])
-            .put(fetchSuccess(fakeStation))
-            .run();
-    });
+    return expectSaga(fetch, actions.fetchStart())
+      .provide([[matchers.call.fn(StationProvider.provide), throwError(error)]])
+      .put(actions.fetchFailure(error))
+      .run();
+  });
 
-    it('should handle error when api call failed in fetch()', () => {
-        const stationId = 'f7fa1d7b-4a7b-410d-bae0-549d862a2523';
-        const error = new Error('error_api_call');
-        const action = { type: Types.FETCH.START, payload: { stationId } };
-
-        return expectSaga(fetch, action)
-            .provide([
-                [matchers.call.fn(HttpStationQuery.find, stationId), throwError(error)],
-            ])
-            .put(fetchFailure(error))
-            .run();
-    });
-})
+  beforeEach(() => {
+    stationBuilder = StationBuilder.create();
+  });
+});

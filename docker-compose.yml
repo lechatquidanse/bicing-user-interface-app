@@ -1,32 +1,19 @@
 version: '2.3'
 
 services:
-  node:
+  ui_app:
     build:
       context: .
-      target: 'bicing_app_node'
+      target: 'bicing_ui_app_dev'
     networks: ['app']
     ports: ['3000:3000']
     volumes: ['.:/usr/src/app', './node_modules:/usr/src/app/node_modules']
 
-  apimock:
-    image: 'clue/json-server'
+  bicingapi-mock:
+    image: 'fabriciomendonca/json-server-https'
     networks: ['app']
-    ports: ['8080:80']
-    volumes: ['./docker/stages/development/mock/:/data/']
-    entrypoint: [
-      'json-server',
-      'db.json',
-      '-p', '80',
-      '--routes', 'routes.json',
-      ]
-
-  # test-feature:
-  #   build: './docker/chrome'
-  #   cap_add: [SYS_ADMIN]
-  #   networks: ['app']
-  #   ports: ['9222:9222']
-  #   shm_size: '1gb'
+    ports: ['8443:8000']
+    volumes: ['./docker/development/mock/custom:/data/custom', './docker/development/mock/server.js:/data/server.js']
 
 networks:
   app:

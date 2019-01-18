@@ -1,9 +1,7 @@
-import Loading from 'userInterface/react/components/Map/Loading';
-import Empty from 'userInterface/react/components/Map/Empty';
-import Map from 'userInterface/react/components/Map/Map';
+import MapError from 'userInterface/react/components/Map/MapError';
+import GoogleMap from 'userInterface/react/components/Map/GoogleMap';
 
 export {
-    Loading,
-    Empty,
-    Map,
-}
+  MapError,
+  GoogleMap,
+};

@@ -1,10 +1,27 @@
-import * as Types from 'application/state/query/stationAvailabilities/types';
+import { FETCH } from 'application/state/query/stationAvailabilities/types';
 
 export const fetchStart = (stationId, periodStart, periodEnd, interval) => ({
-    type: Types.FETCH.START,
-    payload: { stationId, periodStart, periodEnd, interval, isFetching: true }
+  error: false,
+  meta: { isFetching: false },
+  payload: {
+    stationId, periodStart, periodEnd, interval,
+  },
+  type: FETCH.START,
 });
-export const fetchPending = () => ({ type: Types.FETCH.PENDING, payload: { isFetching: true } });
-export const fetchCancelled = () => ({ type: Types.FETCH.CANCELLED, payload: { isFetching: false } });
-export const fetchSuccess = data => ({ type: Types.FETCH.SUCCESS, payload: { data, isFetching: false } });
-export const fetchFailure = error => ({ type: Types.FETCH.FAILURE, payload: { error, isFetching: false } });
+export const fetchPending = () => ({
+  error: false,
+  meta: { isFetching: true },
+  type: FETCH.PENDING,
+});
+export const fetchSuccess = data => ({
+  error: false,
+  meta: { isFetching: false },
+  type: FETCH.SUCCESS,
+  payload: data,
+});
+export const fetchFailure = error => ({
+  error: true,
+  meta: { isFetching: false },
+  type: FETCH.FAILURE,
+  payload: error,
+});

@@ -1,26 +1,55 @@
 import * as actions from 'application/state/query/station/actions';
-import * as Types from 'application/state/query/station/types';
+import { FETCH } from 'application/state/query/station/types';
+import { isError, isFSA } from 'flux-standard-action';
+import { v4 as uuid } from 'uuid';
 
 describe('application/state/query/station/actions', () => {
-    it('should create an action to start fetching a station with function fetchStart()', () => {
-        const stationId = '630863d3-510c-4dba-8a39-bb1404ebbb78';
+  test('should create an action to start fetching a station with function fetchStart()', () => {
+    const stationId = uuid();
+    const action = actions.fetchStart(stationId);
 
-        expect(actions.fetchStart(stationId)).toEqual({ type: Types.FETCH.START, payload: { stationId, isFetching: true, isFetching: true } });
+    expect(isFSA(action)).toBeTruthy();
+    expect(action).toEqual({
+      error: false,
+      meta: { isFetching: false },
+      payload: { stationId },
+      type: FETCH.START,
     });
-    it('should create an action pending while fetching a station with function fetchPending()', () => {
-        expect(actions.fetchPending()).toEqual({ type: Types.FETCH.PENDING, payload: { isFetching: true } });
-    });
-    it('should create an action to cancel fetching a station with function fetchCancelled()', () => {
-        expect(actions.fetchCancelled()).toEqual({ type: Types.FETCH.CANCELLED, payload: { isFetching: false } });
-    });
-    it('should create an action to notify the success of fetching a station with function fetchSuccess()', () => {
-        const data = { name: '87 - C/ MALLORCA 41-43', type: 'BIKE' };
+  });
+  test('should create an action pending while fetching a station with function fetchPending()', () => {
+    const action = actions.fetchPending();
 
-        expect(actions.fetchSuccess(data)).toEqual({ type: Types.FETCH.SUCCESS, payload: { data, isFetching: false }, });
+    expect(isFSA(action)).toBeTruthy();
+    expect(action).toEqual({
+      error: false,
+      meta: { isFetching: true },
+      type: FETCH.PENDING,
     });
-    it('should create an action when a failure occured during fetching a station with function fetchFailure()', () => {
-        const error = { message: 'An error occured during fetching a station.' };
+  });
+  test('should create an action to notify the success of fetching a station with function fetchSuccess()', () => {
+    const data = { name: '87 - C/ MALLORCA 41-43', type: 'BIKE' };
 
-        expect(actions.fetchFailure(error)).toEqual({ type: Types.FETCH.FAILURE, payload: { error, isFetching: false } });
+    const action = actions.fetchSuccess(data);
+
+    expect(isFSA(action)).toBeTruthy();
+    expect(action).toEqual({
+      error: false,
+      meta: { isFetching: false },
+      type: FETCH.SUCCESS,
+      payload: data,
     });
-})
+  });
+  test('should create an action when a failure occurred during fetching a station with function fetchFailure()', () => {
+    const error = { message: 'An error occurred during fetching a station.' };
+
+    const action = actions.fetchFailure(error);
+
+    expect(isError(action)).toBeTruthy();
+    expect(action).toEqual({
+      error: true,
+      meta: { isFetching: false },
+      type: FETCH.FAILURE,
+      payload: error,
+    });
+  });
+});

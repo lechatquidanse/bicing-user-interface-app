@@ -1,31 +1,62 @@
 import * as actions from 'application/state/query/stations/actions';
-import * as Types from 'application/state/query/stations/types';
+import { FETCH } from 'application/state/query/stations/types';
+import { isError, isFSA } from 'flux-standard-action';
+import StationBuilder from 'application/state/query/stations/tests/support/StationBuilder';
 
-describe('application/state/query/stations/actions', () => {
-    it('should create an action to start fetching a list of stations with function fetchListStart()', () => {
-        expect(actions.fetchListStart()).toEqual({ type: Types.FETCH_LIST.START, payload: { isFetching: true } });
+describe('application/state/query/lastAvailabilities/actions', () => {
+  test('should create an action to start fetching stations with function fetchStart() and parameters', () => {
+    const itineraryStep = 0;
+    const latitude = 41.3244;
+    const longitude = 2.345;
+    const limit = 5000;
+
+    const action = actions.fetchStart(itineraryStep, latitude, longitude, limit);
+
+    expect(isFSA(action)).toBeTruthy();
+    expect(action).toEqual({
+      error: false,
+      meta: { isFetching: false, itineraryStep },
+      payload: { latitude, longitude, limit },
+      type: FETCH.START,
     });
-    it('should create an action pending while fetching a list of stations with function fetchListPending()', () => {
-        expect(actions.fetchListPending()).toEqual({ type: Types.FETCH_LIST.PENDING, payload: { isFetching: true } });
+  });
+  test('should create an action pending while fetching stations with function fetchPending()', () => {
+    const itineraryStep = 2;
+    const action = actions.fetchPending(itineraryStep);
+
+    expect(isFSA(action)).toBeTruthy();
+    expect(action).toEqual({
+      error: false,
+      meta: { isFetching: true, itineraryStep },
+      type: FETCH.PENDING,
     });
-    it('should create an action to cancel fetching a list of stations with function fetchListCancelled()', () => {
-        expect(actions.fetchListCancelled()).toEqual({ type: Types.FETCH_LIST.CANCELLED, payload: { isFetching: false } });
+  });
+  test('should create an action to notify the success of fetching stations with function fetchSuccess()', () => {
+    const itineraryStep = 0;
+    const data = [StationBuilder.create().build()];
+
+    const action = actions.fetchSuccess(itineraryStep, data);
+
+    expect(isFSA(action)).toBeTruthy();
+    expect(action).toEqual({
+      error: false,
+      meta: { isFetching: false, itineraryStep },
+      type: FETCH.SUCCESS,
+      payload: data,
     });
-    it('should create an action to notify the success of fetching a list of stations with function fetchListSuccess()', () => {
-        const data = [
-            {
-                name: '87 - C/ MALLORCA 41-43',
-                type: 'BIKE',
-            },
-            {
-                name: '165 - C/ DEL DOCTOR TRUETA, 221',
-                type: 'ELECTRIC_BIKE',
-            },
-        ];
-        expect(actions.fetchListSuccess(data)).toEqual({ type: Types.FETCH_LIST.SUCCESS, payload: { data, isFetching: false } });
+  });
+  test('should create an action when a failure occurred during fetching stations with function fetchFailure()', () => {
+    const itineraryStep = 1;
+    const error = new Error('An error occurred');
+
+    const action = actions.fetchFailure(itineraryStep, error);
+
+    expect(isError(action)).toBeTruthy();
+    expect(action).toEqual({
+      error: true,
+      meta: { isFetching: false, itineraryStep },
+      type: FETCH.FAILURE,
+      payload: error,
     });
-    it('should create an action when a failure occured during fetching a list of stations with function fetchListFailure()', () => {
-        const error = { message: 'An error occured during fetching a list of stations.' };
-        expect(actions.fetchListFailure(error)).toEqual({ type: Types.FETCH_LIST.FAILURE, payload: { error, isFetching: false } });
-    });
-})
+  });
+});

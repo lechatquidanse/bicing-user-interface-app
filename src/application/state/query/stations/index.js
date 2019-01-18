@@ -1,14 +1,14 @@
-import reducer from 'application/state/query/stations/reducers';
-import operation from 'application/state/query/stations/operations';
 import * as actions from 'application/state/query/stations/actions';
-import * as Types from 'application/state/query/stations/types';
+import operation from 'application/state/query/stations/operations';
+import reducer from 'application/state/query/stations/reducers';
 import * as selectors from 'application/state/query/stations/selectors';
+import * as types from 'application/state/query/stations/types';
 
 export {
-    actions,
-    Types,
-    operation,
-    selectors
+  actions,
+  operation,
+  selectors,
+  types,
 };
 
 export default reducer;

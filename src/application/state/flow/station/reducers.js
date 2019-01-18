@@ -1,25 +1,13 @@
-import { createReducer } from 'reduxsauce'
+import { FLOW } from 'application/state/flow/station/types';
 import produce from 'immer';
+import { createReducer } from 'reduxsauce';
 
-import * as Types from 'application/state/flow/station/types';
+const INITIAL_STATE = {};
 
-export const INITIAL_STATE = { error: false, station: null, availabilities: null };
-
-export const fetchStationStart = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.payload = action.payload
-  })
-};
-
-export const fetchStationSuccess = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.payload = action.payload
-  })
-}
+export const flow = (state = INITIAL_STATE) => produce(state, () => {});
 
 export const HANDLERS = {
-  [Types.FETCH_STATION.START]: fetchStationStart,
-  [Types.FETCH_STATION.SUCCESS]: fetchStationSuccess,
-}
+  [FLOW.START]: flow,
+};
 
 export default createReducer(INITIAL_STATE, HANDLERS);

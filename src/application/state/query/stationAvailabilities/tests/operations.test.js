@@ -1,78 +1,46 @@
-import { testSaga, expectSaga } from 'redux-saga-test-plan';
+import * as actions from 'application/state/query/stationAvailabilities/actions';
+import operation, { fetch } from 'application/state/query/stationAvailabilities/operations';
+import StationAvailabilitiesProvider from 'application/state/query/stationAvailabilities/provider/StationAvailabilitiesProvider';
+import { FETCH } from 'application/state/query/stationAvailabilities/types';
+import AvailabilityBuilder from 'application/state/query/availabilities/tests/support/AvailabilityBuilder';
+import moment from 'moment';
+import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { throwError } from 'redux-saga-test-plan/providers';
+import { v4 as uuid } from 'uuid';
 
-import { FETCH } from 'application/state/query/stationAvailabilities/types';
-import { fetchPending, fetchSuccess, fetchFailure } from 'application/state/query/stationAvailabilities/actions';
-import operation from 'application/state/query/stationAvailabilities/operations';
-import { fetch } from 'application/state/query/stationAvailabilities/operations';
-import HttpStationAvailabilityQuery from 'infrastructure/bicingApi/HttpStationAvailabilityQuery';
-import * as Types from 'application/state/query/stationAvailabilities/types';
+let availabilityBuilder;
 
 describe('application/state/query/stationAvailabilities/operations', () => {
-    it('should wait for a fetch start event to fecth with operation()', () => {
-        testSaga(operation)
-            .next()
-            .takeLatestEffect(FETCH.START, fetch);
-    });
+  test('should wait for a fetch start event to fetch with operation()', () => {
+    testSaga(operation)
+      .next()
+      .takeLatestEffect(FETCH.START, fetch);
+  });
 
-    it('should dispatch a fetchPending action with fetch()', () => {
-        testSaga(fetch)
-            .next()
-            .put(fetchPending());
-    });
+  test('should dispatch a fetchListPending action with fetch() generator', () => {
+    testSaga(fetch, actions.fetchStart(uuid(), moment(), moment(), '5 min'))
+      .next()
+      .put(actions.fetchPending());
+  });
+  test('it can list expected availabilities with fetch() generator', () => {
+    const availabilities = [availabilityBuilder.build(), availabilityBuilder.build()];
 
-    it('should fetch expected availabilities for a station with fetch()', () => {
-        const stationId = 'cc90eb4e-4988-4443-aedf-6464f79eeb12';
-        const periodStart = '2016-08-11 14:15:00';
-        const periodEnd = '2016-08-13 16:15:00';
-        const interval = '5 minute';
+    return expectSaga(fetch, actions.fetchStart(uuid(), moment(), moment(), '5 min'))
+      .provide([[matchers.call.fn(StationAvailabilitiesProvider.provide), availabilities]])
+      .put(actions.fetchSuccess(availabilities))
+      .run();
+  });
+  test('it can handle error', () => {
+    const error = new Error('An error occurred');
 
-        const fakeStationAvailabilities = [
-            {
-                "interval": "2018-11-05 14:45:00",
-                "available_bike_avg": "20.0000000000000000",
-                "available_bike_min": 20,
-                "available_bike_max": 20,
-                "available_slot_avg": "9.0000000000000000",
-                "available_slot_min": 9,
-                "available_slot_max": 9
-            },
-            {
-                "interval": "2018-11-05 14:50:00",
-                "available_bike_avg": "20.0000000000000000",
-                "available_bike_min": 19,
-                "available_bike_max": 21,
-                "available_slot_avg": "9.0000000000000000",
-                "available_slot_min": 8,
-                "available_slot_max": 10
-            },
-        ];
+    return expectSaga(fetch, actions.fetchStart())
+      .provide([[matchers.call.fn(StationAvailabilitiesProvider.provide), throwError(error)]])
+      .put(actions.fetchFailure(error))
+      .run();
+  });
 
-        const action = { type: Types.FETCH.START, payload: { stationId, periodStart, periodEnd, interval } };
-
-        // @todo use real stub/mock with https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#srcsetuptestsjs-1
-        return expectSaga(fetch, action)
-            .provide([
-                [matchers.call.fn(
-                    HttpStationAvailabilityQuery.find, stationId, periodStart, periodEnd, interval),
-                    fakeStationAvailabilities
-                ],
-            ])
-            .put(fetchSuccess(fakeStationAvailabilities))
-            .run();
-    });
-
-    it('should handle error when api call failed in fetch()', () => {
-        const error = new Error('error_api_call');
-        const stationId = 'cc90eb4e-4988-4443-aedf-6464f79eeb12';
-        const action = { type: Types.FETCH.START, payload: { stationId } };
-
-        return expectSaga(fetch, action)
-            .provide([
-                [matchers.call.fn(HttpStationAvailabilityQuery.find, stationId), throwError(error)],
-            ])
-            .put(fetchFailure(error))
-            .run();
-    });
-})
+  beforeEach(() => {
+    availabilityBuilder = AvailabilityBuilder.create();
+  });
+});

@@ -1,12 +1,12 @@
-import reducer from 'application/state/flow/station/reducers';
-import operation from 'application/state/flow/station/operations';
 import * as actions from 'application/state/flow/station/actions';
-import * as Types from 'application/state/flow/station/types';
+import operation from 'application/state/flow/station/operations';
+import reducer from 'application/state/flow/station/reducers';
+import * as types from 'application/state/flow/station/types';
 
 export {
-    actions,
-    Types,
-    operation,
+  actions,
+  types,
+  operation,
 };
 
 export default reducer;

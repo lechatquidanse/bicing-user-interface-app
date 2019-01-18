@@ -1,49 +1,24 @@
-import axios from 'axios';
 import { OK } from 'http-status';
-
 import HttpStationQueryError from 'infrastructure/bicingApi/errors/HttpStationQueryError';
+import httpClient from 'infrastructure/bicingApi/httpClient';
 
-/** @todo make this class as a service (singleton) as pass API_URL threw construction */
 class HttpStationQuery {
-  static findAll() {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`${process.env.REACT_APP_BICING_API_URL}/stations`)
-        .then(response => {
-          if (OK !== response.status) {
-            reject({
-              error: HttpStationQueryError.withUnexpectedResponseStatus(response.status)
-            });
-          }
+  static async find(stationId) {
+    const apiResponse = await httpClient.get(HttpStationQuery.uri(stationId))
+      .then(response => response)
+      .catch((error) => {
+        throw HttpStationQueryError.withRequestError(error);
+      });
 
-          // if () @todo add test to check if response.data
-          resolve(response.data);
-        }).catch(error => {
-          reject({
-            error: HttpStationQueryError.withRequestError(error)
-          });
-        })
-    });
+    if (OK !== apiResponse.status) {
+      throw HttpStationQueryError.withUnexpectedResponseStatus(apiResponse.status);
+    }
+
+    return apiResponse.data;
   }
-  static find(stationId) {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`${process.env.REACT_APP_BICING_API_URL}/stations/${stationId}`)
-        .then(response => {
-          if (OK !== response.status) {
-            reject({
-              error: HttpStationQueryError.withUnexpectedResponseStatus(response.status)
-            });
-          }
 
-          // if () @todo add test to check if response.data
-          resolve(response.data);
-        }).catch(error => {
-          reject({
-            error: HttpStationQueryError.withRequestError(error)
-          });
-        })
-    });
+  static uri(stationId) {
+    return `/stations/${stationId}`;
   }
 }
 

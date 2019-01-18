@@ -1,21 +1,25 @@
+import { fetchFailure, fetchPending, fetchSuccess } from 'application/state/query/stations/actions';
+import { FETCH } from 'application/state/query/stations/types';
 import { call, put, takeLatest } from 'redux-saga/effects';
+import StationsProvider from './provider/StationsProvider';
 
-import { fetchListPending, fetchListSuccess, fetchListFailure } from 'application/state/query/stations/actions';
-import * as Types from 'application/state/query/stations/types';
-import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
+export function* fetch(action) {
+  const {
+    meta: { itineraryStep },
+    payload: { latitude, longitude, limit },
+  } = action;
 
-export function* list() {
-  yield put(fetchListPending());
+  yield put(fetchPending(itineraryStep));
 
   try {
-    const stations = yield call(HttpStationQuery.findAll);
+    const stations = yield call(StationsProvider.provide, latitude, longitude, limit);
 
-    yield put(fetchListSuccess(stations));
-  } catch (e) {
-    yield put(fetchListFailure(e));
+    yield put(fetchSuccess(itineraryStep, stations));
+  } catch (exception) {
+    yield put(fetchFailure(itineraryStep, exception));
   }
 }
 
 export default function* operation() {
-  yield takeLatest(Types.FETCH_LIST.START, list);
+  yield takeLatest(FETCH.START, fetch);
 }

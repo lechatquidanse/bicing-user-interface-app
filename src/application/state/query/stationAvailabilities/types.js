@@ -1,11 +1,12 @@
+import {
+  FAILURE, PENDING, START, SUCCESS,
+} from 'application/state/stateConstants';
 import { defineAction } from 'redux-define';
 
-import { START, PENDING, CANCELLED, SUCCESS, FAILURE } from 'application/state/stateConstants';
-
-const domain = defineAction('stationAvailabilities');
-
 export const FETCH = defineAction(
-    'FETCH',
-    [START, PENDING, CANCELLED, SUCCESS, FAILURE],
-    domain
+  'FETCH',
+  [START, PENDING, SUCCESS, FAILURE],
+  defineAction('query/stationAvailabilities'),
 );
+
+export default FETCH;

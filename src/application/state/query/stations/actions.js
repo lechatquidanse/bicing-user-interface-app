@@ -1,19 +1,25 @@
-import * as Types from 'application/state/query/stations/types';
+import { FETCH } from 'application/state/query/stations/types';
 
-export const fetchListStart = () => ({ type: Types.FETCH_LIST.START, payload: { isFetching: true } });
-export const fetchListPending = () => ({ type: Types.FETCH_LIST.PENDING, payload: { isFetching: true } });
-export const fetchListCancelled = () => ({ type: Types.FETCH_LIST.CANCELLED, payload: { isFetching: false } });
-export const fetchListSuccess = data => ({
-    type: Types.FETCH_LIST.SUCCESS,
-    payload: {
-        data,
-        isFetching: false
-    },
+export const fetchStart = (itineraryStep, latitude, longitude, limit) => ({
+  error: false,
+  meta: { isFetching: false, itineraryStep },
+  payload: { latitude, longitude, limit },
+  type: FETCH.START,
 });
-export const fetchListFailure = error => ({
-    type: Types.FETCH_LIST.FAILURE,
-    payload: {
-        error,
-        isFetching: false
-    },
+export const fetchPending = itineraryStep => ({
+  error: false,
+  meta: { isFetching: true, itineraryStep },
+  type: FETCH.PENDING,
+});
+export const fetchSuccess = (itineraryStep, data) => ({
+  error: false,
+  meta: { isFetching: false, itineraryStep },
+  type: FETCH.SUCCESS,
+  payload: data,
+});
+export const fetchFailure = (itineraryStep, error) => ({
+  error: true,
+  meta: { isFetching: false, itineraryStep },
+  type: FETCH.FAILURE,
+  payload: error,
 });

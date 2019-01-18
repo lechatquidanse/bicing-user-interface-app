@@ -1,5 +1,20 @@
-import * as Types from 'application/state/flow/station/types';
+import { FLOW } from 'application/state/flow/station/types';
+import {
+  DEFAULT_INTERVAL,
+  DEFAULT_PERIOD_END,
+  DEFAULT_PERIOD_START,
+} from 'domain/definitions/byIntervalInPeriodDefinition';
 
-export const fetchStationStart = (stationId) => ({ type: Types.FETCH_STATION.START, payload: { stationId } });
-export const fetchStationSuccess = () => ({ type: Types.FETCH_STATION.SUCCESS, payload: {} });
-export const fetchStationFailure = (error) => ({ type: Types.FETCH_STATION.Failure, payload: { error } });
+export const flow = (
+  stationId,
+  periodStart = DEFAULT_PERIOD_START,
+  periodEnd = DEFAULT_PERIOD_END,
+  interval = DEFAULT_INTERVAL,
+) => ({
+  payload: {
+    stationId, periodStart, periodEnd, interval,
+  },
+  type: FLOW.START,
+});
+
+export default flow;

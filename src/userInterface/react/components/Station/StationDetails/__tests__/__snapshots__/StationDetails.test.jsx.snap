@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`userInterface/react/components/FilterWithDateRangeAndSelect/index.js it can renders with default values as expected 1`] = `
+<div>
+  <h6>
+    97 - C/ TARRAGONA 141
+  </h6>
+  <p>
+    BIKE
+    
+    
+    
+  </p>
+</div>
+`;
+
+exports[`userInterface/react/components/FilterWithDateRangeAndSelect/index.js it can renders with values as expected 1`] = `
+<div>
+  <h6>
+    97 - C/ TARRAGONA 141
+  </h6>
+  <p>
+    BIKE
+    Tarragona
+    141
+    08014
+  </p>
+</div>
+`;

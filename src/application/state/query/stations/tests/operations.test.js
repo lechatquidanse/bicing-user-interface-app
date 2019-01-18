@@ -1,59 +1,52 @@
-import { testSaga, expectSaga } from 'redux-saga-test-plan';
+import * as actions from 'application/state/query/stations/actions';
+import operation, { fetch } from 'application/state/query/stations/operations';
+import StationsProvider from 'application/state/query/stations/provider/StationsProvider';
+import StationBuilder from 'application/state/query/stations/tests/support/StationBuilder';
+import { FETCH } from 'application/state/query/stations/types';
+import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { throwError } from 'redux-saga-test-plan/providers';
 
-import { FETCH_LIST } from 'application/state/query/stations/types';
-import { fetchListPending, fetchListSuccess, fetchListFailure } from 'application/state/query/stations/actions';
-import operation from 'application/state/query/stations/operations';
-import { list } from 'application/state/query/stations/operations';
-import HttpStationQuery from 'infrastructure/bicingApi/HttpStationQuery';
+let stationBuilder;
 
 describe('application/state/query/stations/operations', () => {
-    it('should wait for a fetch list start event to list with operation()', () => {
-        testSaga(operation)
-            .next()
-            .takeLatestEffect(FETCH_LIST.START, list);
-    });
+  test('should wait for a fetch start event to fetch with operation()', () => {
+    testSaga(operation)
+      .next()
+      .takeLatestEffect(FETCH.START, fetch);
+  });
 
-    it('should dispatch a fetchListPending action with list()', () => {
-        testSaga(list)
-            .next()
-            .put(fetchListPending());
-    });
+  test('should dispatch a fetchListPending action with fetch() generator', () => {
+    const itineraryStep = 5;
+    const action = actions.fetchStart(itineraryStep, 41.3244, 2.345, 5000);
 
-    it('should list expected stations with list()', () => {
-        const fakeStations = [
-            {
-                "@id": "\/api\/stations\/f7fa1d7b-4a7b-410d-bae0-549d862a2523",
-                "@type": "stationView",
-                "id": "f7fa1d7b-4a7b-410d-bae0-549d862a2523",
-                "name": "233 - C\/NOU DE LA RAMBLA, 164",
-                "type": "BIKE",
-                "address": "Nou de la Rambla",
-                "addressNumber": "164",
-                "zipCode": "08004",
-                "latitude": 41.371965,
-                "longitude": 2.166871
-            },
-        ];
+    testSaga(fetch, action)
+      .next()
+      .put(actions.fetchPending(itineraryStep));
+  });
+  test('it can list expected availabilities with fetch() generator', () => {
+    const stations = [stationBuilder.build(), stationBuilder.build()];
 
-        // @todo use real stub/mock with https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#srcsetuptestsjs-1
-        return expectSaga(list)
-            .provide([
-                [matchers.call.fn(HttpStationQuery.findAll), fakeStations],
-            ])
-            .put(fetchListSuccess(fakeStations))
-            .run();
-    });
+    const itineraryStep = 5;
+    const action = actions.fetchStart(itineraryStep, 41.3244, 2.345, 5000);
 
-    it('should handle error when api call failed in list()', () => {
-        const error = new Error('error_api_call');
+    return expectSaga(fetch, action)
+      .provide([[matchers.call.fn(StationsProvider.provide), stations]])
+      .put(actions.fetchSuccess(itineraryStep, stations))
+      .run();
+  });
+  test('it can handle error', () => {
+    const error = new Error('An error occurred');
+    const itineraryStep = 5;
+    const action = actions.fetchStart(itineraryStep, 41.3244, 2.345, 5000);
 
-        return expectSaga(list)
-            .provide([
-                [matchers.call.fn(HttpStationQuery.findAll), throwError(error)],
-            ])
-            .put(fetchListFailure(error))
-            .run();
-    });
-})
+    return expectSaga(fetch, action)
+      .provide([[matchers.call.fn(StationsProvider.provide), throwError(error)]])
+      .put(actions.fetchFailure(itineraryStep, error))
+      .run();
+  });
+
+  beforeEach(() => {
+    stationBuilder = StationBuilder.create();
+  });
+});

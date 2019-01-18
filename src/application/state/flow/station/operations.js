@@ -1,38 +1,19 @@
-import { all, put, takeLatest, race } from 'redux-saga/effects';
+import { FLOW } from 'application/state/flow/station/types';
+import { actions as queryStationActions } from 'application/state/query/station';
+import { actions as queryStationAvailabilitiesActions } from 'application/state/query/stationAvailabilities';
+import { all, put, takeLatest } from 'redux-saga/effects';
 
-import { fetchStationSuccess } from 'application/state/flow/station/actions';
-import * as Types from 'application/state/flow/station/types';
+export function* flow(action) {
+  const {
+    stationId, periodStart, periodEnd, interval,
+  } = action.payload;
 
-import { fetchStart as stationFetchStart } from 'application/state/query/station/actions';
-import * as StationTypes from 'application/state/query/station/types';
-
-import { fetchStart as stationAvailabilitiesFetchStart } from 'application/state/query/stationAvailabilities/actions';
-import * as stationAvailabilitiesTypes from 'application/state/query/stationAvailabilities/types';
-
-export function* initFetch(action) {
-  try {
-    const stationId = action.payload.stationId;
-
-    yield all([
-      put(stationFetchStart(stationId)),
-      put(stationAvailabilitiesFetchStart(stationId)),
-    ]);
-  } catch (e) {
-    console.log('INIT FETCHED LALAL ERROR operations.js', e);
-  }
-}
-export function* dataFetched(action) {
-  try {
-    yield put(fetchStationSuccess());
-  } catch (e) {
-    console.log('DATA FETCHED LALAL ERROR operations.js', e);
-  }
+  yield all([
+    put(queryStationActions.fetchStart(stationId)),
+    put(queryStationAvailabilitiesActions.fetchStart(stationId, periodStart, periodEnd, interval)),
+  ]);
 }
 
 export default function* operation() {
-  yield takeLatest(Types.FETCH_STATION.START, initFetch);
-  yield race({
-    station: takeLatest(StationTypes.FETCH.SUCCESS, dataFetched),
-    stationAvailabilities: takeLatest(stationAvailabilitiesTypes.FETCH.SUCCESS, dataFetched),
-  });
+  yield takeLatest(FLOW.START, flow);
 }

@@ -1,0 +1,259 @@
+{
+  "stations": [
+    {
+      "@id": "\/api\/stations\/cc90eb4e-4988-4443-aedf-6464f79eeb12",
+      "@type": "stationView",
+      "id": "cc90eb4e-4988-4443-aedf-6464f79eeb12",
+      "name": "01 - C\/ GRAN VIA CORTS CATALANES 760",
+      "type": "BIKE",
+      "address": "Gran Via Corts Catalanes",
+      "addressNumber": "760",
+      "zipCode": "08013",
+      "latitude": 41.397952,
+      "longitude": 2.180042
+    },
+    {
+      "@id": "\/api\/stations\/bcc7c3d4-0a75-4cb5-96c6-5260ae959bb1",
+      "@type": "stationView",
+      "id": "bcc7c3d4-0a75-4cb5-96c6-5260ae959bb1",
+      "name": "05 - PG. LLUIS COMPANYS 11 (ARC TRIOMF)",
+      "type": "BIKE",
+      "address": "Pg Lluís Companys",
+      "addressNumber": "11",
+      "zipCode": "08003",
+      "latitude": 41.391075,
+      "longitude": 2.180223
+    }
+  ],
+  "stations-step-1": [
+    {
+      "@id": "/api/stations/b2471a20-c2d4-4426-b931-4ca76282d4c0",
+      "@type": "station",
+      "id": "b2471a20-c2d4-4426-b931-4ca76282d4c0",
+      "name": "35 - C/ SANT RAMON DE PENYAFORT",
+      "type": "BIKE",
+      "address": "Sant Ramon de Penyafort",
+      "addressNumber": "1",
+      "zipCode": "08019",
+      "latitude": 41.413592,
+      "longitude": 2.221153
+    }
+  ],
+  "station-availabilities": [
+    {
+      "@context": "/api/contexts/collection%20of%20availabilities%20by%20time%20interval%20filter%20for%20a%20station",
+      "@id": "/api/stations/cc90eb4e-4988-4443-aedf-6464f79eeb12/availabilities",
+      "@type": "collection of availabilities by time interval filter for a station",
+      "id": "cc90eb4e-4988-4443-aedf-6464f79eeb12",
+      "stationId": "cc90eb4e-4988-4443-aedf-6464f79eeb12",
+      "availabilities": [
+        {
+          "interval": "2018-12-24 16:10:00",
+          "available_bike_avg": "11.5000000000000000",
+          "available_bike_min": 11,
+          "available_bike_max": 12,
+          "available_slot_avg": "13.5000000000000000",
+          "available_slot_min": 13,
+          "available_slot_max": 14
+        },
+        {
+          "interval": "2018-12-24 16:15:00",
+          "available_bike_avg": "12.0000000000000000",
+          "available_bike_min": 12,
+          "available_bike_max": 12,
+          "available_slot_avg": "13.0000000000000000",
+          "available_slot_min": 13,
+          "available_slot_max": 13
+        },
+        {
+          "interval": "2018-12-24 16:20:00",
+          "available_bike_avg": "12.0000000000000000",
+          "available_bike_min": 12,
+          "available_bike_max": 12,
+          "available_slot_avg": "13.6666666666666667",
+          "available_slot_min": 13,
+          "available_slot_max": 14
+        },
+        {
+          "interval": "2018-12-24 16:25:00",
+          "available_bike_avg": "12.0000000000000000",
+          "available_bike_min": 12,
+          "available_bike_max": 12,
+          "available_slot_avg": "13.5000000000000000",
+          "available_slot_min": 13,
+          "available_slot_max": 14
+        },
+        {
+          "interval": "2018-12-24 16:30:00",
+          "available_bike_avg": "11.3333333333333333",
+          "available_bike_min": 11,
+          "available_bike_max": 12,
+          "available_slot_avg": "13.6666666666666667",
+          "available_slot_min": 13,
+          "available_slot_max": 14
+        },
+        {
+          "interval": "2018-12-24 16:35:00",
+          "available_bike_avg": "11.0000000000000000",
+          "available_bike_min": 11,
+          "available_bike_max": 11,
+          "available_slot_avg": "14.0000000000000000",
+          "available_slot_min": 14,
+          "available_slot_max": 14
+        },
+        {
+          "interval": "2018-12-24 16:40:00",
+          "available_bike_avg": "10.6666666666666667",
+          "available_bike_min": 10,
+          "available_bike_max": 11,
+          "available_slot_avg": "14.3333333333333333",
+          "available_slot_min": 14,
+          "available_slot_max": 15
+        },
+        {
+          "interval": "2018-12-24 16:45:00",
+          "available_bike_avg": "10.0000000000000000",
+          "available_bike_min": 10,
+          "available_bike_max": 10,
+          "available_slot_avg": "15.5000000000000000",
+          "available_slot_min": 15,
+          "available_slot_max": 16
+        }
+      ]
+    },
+    {
+      "@context": "/api/contexts/collection%20of%20availabilities%20by%20time%20interval%20filter%20for%20a%20station",
+      "@id": "/api/stations/bcc7c3d4-0a75-4cb5-96c6-5260ae959bb1",
+      "@type": "collection of availabilities by time interval filter for a station",
+      "id": "bcc7c3d4-0a75-4cb5-96c6-5260ae959bb1",
+      "stationId": "bcc7c3d4-0a75-4cb5-96c6-5260ae959bb1",
+      "availabilities": [
+        {
+          "interval": "2018-12-24 17:50:00",
+          "available_bike_avg": "13.6666666666666667",
+          "available_bike_min": 13,
+          "available_bike_max": 14,
+          "available_slot_avg": "11.3333333333333333",
+          "available_slot_min": 11,
+          "available_slot_max": 12
+        },
+        {
+          "interval": "2018-12-24 17:55:00",
+          "available_bike_avg": "14.0000000000000000",
+          "available_bike_min": 14,
+          "available_bike_max": 14,
+          "available_slot_avg": "11.0000000000000000",
+          "available_slot_min": 11,
+          "available_slot_max": 11
+        },
+        {
+          "interval": "2018-12-24 18:00:00",
+          "available_bike_avg": "14.3333333333333333",
+          "available_bike_min": 14,
+          "available_bike_max": 15,
+          "available_slot_avg": "10.6666666666666667",
+          "available_slot_min": 10,
+          "available_slot_max": 11
+        },
+        {
+          "interval": "2018-12-24 18:05:00",
+          "available_bike_avg": "15.0000000000000000",
+          "available_bike_min": 15,
+          "available_bike_max": 15,
+          "available_slot_avg": "10.0000000000000000",
+          "available_slot_min": 10,
+          "available_slot_max": 10
+        },
+        {
+          "interval": "2018-12-24 18:10:00",
+          "available_bike_avg": "15.0000000000000000",
+          "available_bike_min": 15,
+          "available_bike_max": 15,
+          "available_slot_avg": "10.0000000000000000",
+          "available_slot_min": 10,
+          "available_slot_max": 10
+        }
+      ]
+    }
+  ],
+  "last-availabilities-by-station": [
+    {
+      "@id": "\/api\/last-availabilities-by-station\/cc90eb4e-4988-4443-aedf-6464f79eeb12",
+      "@type": "lastAvailabilitiesByStationView",
+      "id": "cc90eb4e-4988-4443-aedf-6464f79eeb12",
+      "statedAt": "2018-09-19T12:50:03+02:00",
+      "availableBikeNumber": 7,
+      "availableSlotNumber": 22,
+      "status": "OPENED"
+    },
+    {
+      "@id": "\/api\/last-availabilities-by-station\/bcc7c3d4-0a75-4cb5-96c6-5260ae959bb1",
+      "@type": "lastAvailabilitiesByStationView",
+      "id": "bcc7c3d4-0a75-4cb5-96c6-5260ae959bb1",
+      "statedAt": "2018-09-19T12:50:03+02:00",
+      "availableBikeNumber": 18,
+      "availableSlotNumber": 20,
+      "status": "OPENED"
+    },
+    {
+      "@context": "/api/contexts/last%20availability%20by%20station",
+      "@id": "/api/last-availabilities-by-station/b2471a20-c2d4-4426-b931-4ca76282d4c0",
+      "@type": "last availability by station",
+      "id": "b2471a20-c2d4-4426-b931-4ca76282d4c0",
+      "statedAt": "2019-01-13 13:30:03",
+      "availableBikeNumber": 27,
+      "availableSlotNumber": 0,
+      "status": "OPENED"
+    }
+  ],
+  "forecast-availabilities": [
+    {
+      "id": "cc90eb4e-4988-4443-aedf-6464f79eeb12",
+      "station_id": "cc90eb4e-4988-4443-aedf-6464f79eeb12",
+      "predictions": [
+        {
+          "available_bike_number": "12.66667",
+          "available_slot_number": "1.66667",
+          "status": "OPENED",
+          "forecast_at": "2017-08-08 12:10:00"
+        },
+        {
+          "available_bike_number": "5.66667",
+          "available_slot_number": "5.66667",
+          "status": "OPENED",
+          "forecast_at": "2017-08-08 12:15:12"
+        },
+        {
+          "available_bike_number": "5.66667",
+          "available_slot_number": "5.66667",
+          "status": "CLOSED",
+          "forecast_at": "2017-08-08 12:20:12"
+        }
+      ]
+    },
+    {
+      "id": "bcc7c3d4-0a75-4cb5-96c6-5260ae959bb1",
+      "station_id": "bcc7c3d4-0a75-4cb5-96c6-5260ae959bb1",
+      "predictions": [
+        {
+          "available_bike_number": "12.66667",
+          "available_slot_number": "100.66667",
+          "status": "OPENED",
+          "forecast_at": "2017-08-08 12:10:00"
+        },
+        {
+          "available_bike_number": "5.66667",
+          "available_slot_number": "5.66667",
+          "status": "OPENED",
+          "forecast_at": "2017-08-08 12:15:12"
+        },
+        {
+          "available_bike_number": "5.66667",
+          "available_slot_number": "5.66667",
+          "status": "OPENED",
+          "forecast_at": "2017-08-08 12:20:12"
+        }
+      ]
+    }
+  ]
+}

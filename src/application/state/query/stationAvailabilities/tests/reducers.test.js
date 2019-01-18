@@ -1,52 +1,90 @@
-import produce from 'immer';
-
+import * as actions from 'application/state/query/stationAvailabilities/actions';
 import reducer from 'application/state/query/stationAvailabilities/reducers';
-import * as Types from 'application/state/query/stationAvailabilities/types';
+import StateBuilder from 'application/state/query/stationAvailabilities/tests/support/StateBuilder';
+import AvailabilityBuilder from 'application/state/query/availabilities/tests/support/AvailabilityBuilder';
+import moment from 'moment';
+import { v4 as uuid } from 'uuid';
 
-const INITIAL_STATE = { data: null, error: null, payload: { isFetching: false } };
+let stateBuilder; let
+  availabilityBuilder;
 
 describe('application/state/query/stationAvailabilities/reducers', () => {
-    it('should have initial state', () => {
-        expect(reducer()).toEqual(INITIAL_STATE);
-    });
+  test('should have initial state', () => {
+    expect(reducer()).toEqual(stateBuilder
+      .withNoStationAvailabilities()
+      .withIsError(false)
+      .withIsFetching(false)
+      .build());
+  });
+  test('should not affect state for an unknown action type', () => {
+    const initialState = stateBuilder.build();
 
-    it('should not affect state for an unknow action type', () => {
-        expect(reducer(INITIAL_STATE, { type: 'NOT_EXISTING' })).toEqual(INITIAL_STATE);
-    });
+    expect(reducer(initialState, { type: 'NOT_EXISTING' })).toEqual(initialState);
+  });
+  test('should affect state for action with type defining a fetch start', () => {
+    const initialState = stateBuilder.build();
+    const expectedState = stateBuilder
+      .withNoStationAvailabilities()
+      .withIsError(false)
+      .withIsFetching(false)
+      .build();
 
-    it('should affect state for action with type defining a fetch start', () => {
-        const expectedState = produce(INITIAL_STATE, draft => {
-            draft.payload = { isFetching: true, stationId: 'stationId' };
-        });
-        expect(reducer(INITIAL_STATE, { type: Types.FETCH.START, payload: { isFetching: true, stationId: 'stationId' } })).toEqual(expectedState);
-    });
+    expect(reducer(initialState, actions.fetchStart(
+      uuid(),
+      moment(),
+      moment(),
+      '5 min',
+    ))).toEqual(expectedState);
+  });
+  test('should affect state for action with type defining a fetch pending for existing step', () => {
+    const initialState = stateBuilder
+      .withIsFetching(false)
+      .build();
+    const expectedState = stateBuilder
+      .withNoStationAvailabilities()
+      .withIsError(false)
+      .withIsFetching(true)
+      .build();
 
-    it('should affect state for action with type defining a fetch success', () => {
-        const expectedState = produce(INITIAL_STATE, draft => {
-            draft.data = [
-                'stationAvailabilities 1', 'stationAvailabilities 2'
-            ];
-        });
+    expect(reducer(initialState, actions.fetchPending())).toEqual(expectedState);
+  });
+  test('should affect state for action with type success a fetch success for existing step', () => {
+    const initialState = stateBuilder
+      .withNoStationAvailabilities()
+      .withIsFetching(true)
+      .build();
 
-        expect(reducer(INITIAL_STATE, {
-            type: Types.FETCH.SUCCESS,
-            payload: {
-                data: ['stationAvailabilities 1', 'stationAvailabilities 2'],
-                isFetching: false
-            }
-        })).toEqual(expectedState);
-    });
+    const stationAvailability = availabilityBuilder.build();
 
-    it('should affect state for action with type defining a fetch failure', () => {
-        const expectedState = produce(INITIAL_STATE, draft => {
-            draft.error = 'An error occured during fetch.';
-        });
-        expect(reducer(INITIAL_STATE, {
-            type: Types.FETCH.FAILURE,
-            payload: {
-                error: 'An error occured during fetch.',
-                isFetching: false
-            }
-        })).toEqual(expectedState);
-    });
-})
+    const expectedState = stateBuilder
+      .withStationAvailabilities(stationAvailability)
+      .withIsError(false)
+      .withIsFetching(false)
+      .build();
+
+    const action = actions.fetchSuccess([stationAvailability]);
+
+    expect(reducer(initialState, action)).toEqual(expectedState);
+  });
+  test('should affect state for action with type error a fetch error for existing step', () => {
+    const initialState = stateBuilder
+      .withStationAvailabilities(availabilityBuilder.build())
+      .withIsError(false)
+      .withIsFetching(true)
+      .build();
+
+    const error = new Error('An error occurred');
+
+    const expectedState = stateBuilder
+      .withError(error)
+      .withIsError(true)
+      .withIsFetching(false)
+      .build();
+
+    expect(reducer(initialState, actions.fetchFailure(error))).toEqual(expectedState);
+  });
+  beforeEach(() => {
+    stateBuilder = StateBuilder.create().withIsReduced(true);
+    availabilityBuilder = AvailabilityBuilder.create();
+  });
+});

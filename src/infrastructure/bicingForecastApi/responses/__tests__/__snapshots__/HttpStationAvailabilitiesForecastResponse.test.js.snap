@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`infrastructure/bicingForecastApi/responses/HttpStationAvailabilitiesForecastResponse it can not create from raw values with availabilities not valid 1`] = `"\\"value\\" must be a string"`;
+
+exports[`infrastructure/bicingForecastApi/responses/HttpStationAvailabilitiesForecastResponse it can not create from raw values with stationId not valid 1`] = `"\\"value\\" must be a string"`;

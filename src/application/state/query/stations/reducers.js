@@ -1,34 +1,85 @@
-import { createReducer } from 'reduxsauce'
+import { FETCH } from 'application/state/query/stations/types';
 import produce from 'immer';
+import { createReducer } from 'reduxsauce';
 
-import * as Types from 'application/state/query/stations/types';
+export const initialStateByItineraryStep = itineraryStep => ({
+  data: undefined,
+  error: false,
+  isFetching: false,
+  itineraryStep,
+});
 
-export const INITIAL_STATE = { error: null, data: null, payload: { isFetching: false } };
-
-export const fetchListStart = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.payload = action.payload;
-  });
+export const INITIAL_STATE = {
+  itinerarySteps: [],
 };
 
-export const fetchListSuccess = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.data = action.payload.data;
-    draft.payload.isFetching = action.payload.isFetching;
-  });
-}
+const findIndexByItineraryStep = (itineraryStep, itinerarySteps) => itinerarySteps.findIndex(
+  step => step.itineraryStep === itineraryStep,
+);
 
-export const fetchListFailure = (state = INITIAL_STATE, action) => {
-  return produce(state, draft => {
-    draft.error = action.payload.error;
-    draft.payload.isFetching = action.payload.isFetching;
-  });
-}
+export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  const { isFetching, itineraryStep } = action.meta;
+
+  const draftByItineraryStep = initialStateByItineraryStep(itineraryStep);
+
+  draftByItineraryStep.data = undefined;
+  draftByItineraryStep.isFetching = isFetching;
+  draftByItineraryStep.error = action.error;
+
+  const index = findIndexByItineraryStep(itineraryStep, draft.itinerarySteps);
+
+  if (index !== -1) {
+    draft.itinerarySteps[index] = draftByItineraryStep;
+  } else {
+    draft.itinerarySteps.push(draftByItineraryStep);
+  }
+});
+
+export const fetchPending = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  const index = findIndexByItineraryStep(action.meta.itineraryStep, draft.itinerarySteps);
+
+  if (index !== -1) {
+    const draftByItineraryStep = draft.itinerarySteps[index];
+
+    draftByItineraryStep.data = undefined;
+    draftByItineraryStep.isFetching = action.meta.isFetching;
+    draftByItineraryStep.error = action.error;
+
+    draft.itinerarySteps[index] = draftByItineraryStep;
+  }
+});
+
+export const fetchSuccess = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  const index = findIndexByItineraryStep(action.meta.itineraryStep, draft.itinerarySteps);
+
+  if (index !== -1) {
+    const draftByItineraryStep = draft.itinerarySteps[index];
+
+    draftByItineraryStep.data = action.payload;
+    draftByItineraryStep.isFetching = action.meta.isFetching;
+    draftByItineraryStep.error = action.error;
+
+    draft.itinerarySteps[index] = draftByItineraryStep;
+  }
+});
+
+export const fetchFailure = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  const index = findIndexByItineraryStep(action.meta.itineraryStep, draft.itinerarySteps);
+
+  if (index !== -1) {
+    const draftByItineraryStep = draft.itinerarySteps[index];
+
+    draftByItineraryStep.data = action.payload;
+    draftByItineraryStep.error = action.error;
+    draftByItineraryStep.isFetching = action.meta.isFetching;
+  }
+});
 
 const HANDLERS = {
-  [Types.FETCH_LIST.START]: fetchListStart,
-  [Types.FETCH_LIST.SUCCESS]: fetchListSuccess,
-  [Types.FETCH_LIST.FAILURE]: fetchListFailure,
-}
+  [FETCH.START]: fetchStart,
+  [FETCH.PENDING]: fetchPending,
+  [FETCH.SUCCESS]: fetchSuccess,
+  [FETCH.FAILURE]: fetchFailure,
+};
 
 export default createReducer(INITIAL_STATE, HANDLERS);

@@ -1,14 +1,14 @@
-import reducer from 'application/state/query/stationAvailabilities/reducers';
-import operation from 'application/state/query/stationAvailabilities/operations';
 import * as actions from 'application/state/query/stationAvailabilities/actions';
-import * as Types from 'application/state/query/stationAvailabilities/types';
+import operation from 'application/state/query/stationAvailabilities/operations';
+import reducer from 'application/state/query/stationAvailabilities/reducers';
 import * as selectors from 'application/state/query/stationAvailabilities/selectors';
+import * as types from 'application/state/query/stationAvailabilities/types';
 
 export {
-    actions,
-    Types,
-    operation,
-    selectors
+  actions,
+  operation,
+  selectors,
+  types,
 };
 
 export default reducer;

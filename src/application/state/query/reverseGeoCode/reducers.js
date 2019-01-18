@@ -5,16 +5,21 @@ import { createReducer } from 'reduxsauce';
 export const INITIAL_STATE = { data: undefined, error: false, isFetching: false };
 
 export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.data = undefined;
+  draft.error = action.error;
   draft.isFetching = action.meta.isFetching;
 });
 
 export const fetchPending = (state = INITIAL_STATE, action) => produce(state, (draft) => {
+  draft.data = undefined;
+  draft.error = action.error;
   draft.isFetching = action.meta.isFetching;
 });
 
 export const fetchSuccess = (state = INITIAL_STATE, action) => produce(state, (draft) => {
   draft.data = action.payload;
   draft.isFetching = action.meta.isFetching;
+  draft.error = action.error;
 });
 
 export const fetchFailure = (state = INITIAL_STATE, action) => produce(state, (draft) => {

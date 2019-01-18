@@ -1,10 +1,7 @@
-import ByGeoLocationFilter from 'application/state/filter/ByGeoLocationFilter';
 import { fetchFailure, fetchPending, fetchSuccess } from 'application/state/query/stations/actions';
 import { FETCH } from 'application/state/query/stations/types';
-import { stationsType } from 'domain/types/stationType';
-import HttpStationsQuery from 'infrastructure/bicingApi/HttpStationsQuery';
-import Joi from 'joi';
 import { call, put, takeLatest } from 'redux-saga/effects';
+import StationsProvider from './provider/StationsProvider';
 
 export function* fetch(action) {
   const {
@@ -15,12 +12,7 @@ export function* fetch(action) {
   yield put(fetchPending(itineraryStep));
 
   try {
-    const stations = yield call(
-      HttpStationsQuery.find,
-      ByGeoLocationFilter.fromRawValues(latitude, longitude, limit),
-    );
-
-    Joi.assert(stations, stationsType);
+    const stations = yield call(StationsProvider.provide, latitude, longitude, limit);
 
     yield put(fetchSuccess(itineraryStep, stations));
   } catch (exception) {

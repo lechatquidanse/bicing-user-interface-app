@@ -1,275 +1,139 @@
-import reducer, { INITIAL_STATE } from 'application/state/query/stations/reducers';
-import { FETCH } from 'application/state/query/stations/types';
+import * as actions from 'application/state/query/stations/actions';
+import reducer from 'application/state/query/stations/reducers';
+import ItineraryStepBuilder
+  from 'application/state/query/stations/tests/support/ItineraryStepBuilder';
+import StateBuilder from 'application/state/query/stations/tests/support/StateBuilder';
+import StationBuilder from 'application/state/query/stations/tests/support/StationBuilder';
+
+let stateBuilder; let itineraryStepBuilder; let
+  stationBuilder;
 
 describe('application/state/query/stations/reducers', () => {
   test('should have initial state', () => {
-    expect(reducer()).toEqual(INITIAL_STATE);
+    expect(reducer()).toEqual(stateBuilder.withItinerarySteps().build());
   });
-
   test('should not affect state for an unknown action type', () => {
-    expect(reducer(INITIAL_STATE, { type: 'NOT_EXISTING' })).toEqual(INITIAL_STATE);
-  });
+    const initialState = stateBuilder.build();
 
+    expect(reducer(initialState, { type: 'NOT_EXISTING' })).toEqual(initialState);
+  });
+  test('should affect state for action with type defining a fetch start', () => {
+    const initialState = stateBuilder.withItinerarySteps().build();
+    const itineraryStep = 0;
+    const expectedState = stateBuilder.withItinerarySteps(
+      itineraryStepBuilder
+        .withItineraryStep(itineraryStep)
+        .withNoStations()
+        .withIsError(false)
+        .withIsFetching(false)
+        .build(),
+    ).build();
+
+    const action = actions.fetchStart(itineraryStep, 41.12, 2.13, 500, []);
+
+    expect(reducer(initialState, action)).toEqual(expectedState);
+  });
   test('should affect state for action with type defining a fetch start with step existing', () => {
     const itineraryStep = 0;
-    const existingState = {
-      itinerarySteps: [
-        {
-          data: undefined,
-          error: false,
-          isFetching: false,
-          itineraryStep,
-          latitude: 20.213,
-          longitude: 9.134,
-          limit: 1200,
-        },
-      ],
-    };
-    const isFetching = true;
-    const latitude = 41.213;
-    const longitude = 2.134;
-    const limit = 200;
+    const initialState = stateBuilder
+      .withItinerarySteps(
+        itineraryStepBuilder
+          .withItineraryStep(itineraryStep)
+          .withIsError(true)
+          .withError(new Error())
+          .build(),
+      ).build();
 
-    expect(reducer(existingState, {
-      type: FETCH.START,
-      payload: { latitude, longitude, limit },
-      meta: { isFetching, itineraryStep },
-    })).toEqual({
-      itinerarySteps: [{
-        data: undefined,
-        error: false,
-        isFetching,
-        itineraryStep,
-        latitude,
-        longitude,
-        limit,
-      }],
-    });
+    const expectedState = stateBuilder.withItinerarySteps(
+      itineraryStepBuilder
+        .withItineraryStep(itineraryStep)
+        .withNoStations()
+        .withIsError(false)
+        .withIsFetching(false)
+        .build(),
+    ).build();
+
+    const action = actions.fetchStart(itineraryStep, 41.12, 2.13, 500, []);
+
+    expect(reducer(initialState, action)).toEqual(expectedState);
   });
-
   test('should affect state for action with type defining a fetch pending for existing step', () => {
-    const error = false;
-    const itineraryStep = 3;
-    const latitude = 41.213;
-    const longitude = 2.134;
-    const limit = 200;
+    const itineraryStep = 2;
+    const initialState = stateBuilder
+      .withItinerarySteps(
+        itineraryStepBuilder
+          .withItineraryStep(itineraryStep)
+          .withIsFetching(false)
+          .withIsError(true)
+          .withError(new Error())
+          .build(),
+      ).build();
 
-    const existingState = {
-      itinerarySteps: [
-        {
-          data: undefined,
-          error,
-          isFetching: false,
-          itineraryStep,
-          latitude,
-          longitude,
-          limit,
-        },
-      ],
-    };
+    const expectedState = stateBuilder.withItinerarySteps(
+      itineraryStepBuilder
+        .withItineraryStep(itineraryStep)
+        .withNoStations()
+        .withIsError(false)
+        .withIsFetching(true)
+        .build(),
+    ).build();
+    const action = actions.fetchPending(itineraryStep);
 
-    expect(reducer(existingState, {
-      type: FETCH.PENDING,
-      meta: { isFetching: true, itineraryStep },
-    })).toEqual({
-      itinerarySteps: [
-        {
-          data: undefined,
-          error,
-          isFetching: true,
-          itineraryStep,
-          latitude,
-          longitude,
-          limit,
-        },
-      ],
-    });
+    expect(reducer(initialState, action)).toEqual(expectedState);
   });
+  test('should affect state for action with type success a fetch success for existing step', () => {
+    const itineraryStep = 2;
+    const initialState = stateBuilder
+      .withItinerarySteps(
+        itineraryStepBuilder
+          .withItineraryStep(itineraryStep)
+          .withNoStations()
+          .build(),
+      ).build();
 
-  test('should not affect state for action with type defining a fetch pending for non existing step', () => {
-    const existingState = {
-      itinerarySteps: [
-        {
-          data: undefined,
-          error: false,
-          isFetching: false,
-          itineraryStep: 0,
-          latitude: 41.213,
-          longitude: 2.134,
-          limit: 200,
-        },
-      ],
-    };
+    const station = stationBuilder.build();
 
-    expect(reducer(existingState, {
-      type: FETCH.PENDING,
-      meta: { isFetching: true, itineraryStep: 1 },
-    })).toEqual(existingState);
+    const expectedState = stateBuilder.withItinerarySteps(
+      itineraryStepBuilder
+        .withItineraryStep(itineraryStep)
+        .withStations(station)
+        .withIsError(false)
+        .withIsFetching(false)
+        .build(),
+    ).build();
+    const action = actions.fetchSuccess(itineraryStep, [station]);
+
+    expect(reducer(initialState, action)).toEqual(expectedState);
   });
-
-  test('should affect state for action with type success a fetch pending for existing step', () => {
-    const error = false;
-    const itineraryStep = 3;
-    const latitude = 41.213;
-    const longitude = 2.134;
-    const limit = 200;
-
-    const existingState = {
-      itinerarySteps: [
-        {
-          data: undefined,
-          error,
-          isFetching: true,
-          itineraryStep,
-          latitude,
-          longitude,
-          limit,
-        },
-        {
-          data: undefined,
-          error,
-          isFetching: true,
-          itineraryStep,
-          latitude,
-          longitude,
-          limit,
-        },
-      ],
-    };
-
-    const payload = ['station 1', 'station 2'];
-
-    expect(reducer(existingState, {
-      type: FETCH.SUCCESS,
-      payload,
-      meta: { isFetching: false, itineraryStep },
-    })).toEqual({
-      itinerarySteps: [
-        {
-          data: payload,
-          error,
-          isFetching: false,
-          itineraryStep,
-          latitude,
-          longitude,
-          limit,
-        },
-        {
-          data: undefined,
-          error,
-          isFetching: true,
-          itineraryStep,
-          latitude,
-          longitude,
-          limit,
-        },
-      ],
-    });
-  });
-
-  test('should not affect state for action with type defining a fetch success for non existing step', () => {
-    const existingState = {
-      itinerarySteps: [
-        {
-          data: ['station 1', 'station 2'],
-          error: false,
-          isFetching: false,
-          itineraryStep: 0,
-          latitude: 41.213,
-          longitude: 2.134,
-          limit: 200,
-        },
-      ],
-    };
-
-    expect(reducer(existingState, {
-      type: FETCH.SUCCESS,
-      payload: ['station 10'],
-      meta: { isFetching: false, itineraryStep: 1 },
-    })).toEqual(existingState);
-  });
-
   test('should affect state for action with type error a fetch error for existing step', () => {
-    const error = false;
-    const itineraryStep = 3;
-    const latitude = 41.213;
-    const longitude = 2.134;
-    const limit = 200;
+    const itineraryStep = 2;
+    const initialState = stateBuilder.withItinerarySteps(
+      itineraryStepBuilder
+        .withItineraryStep(itineraryStep)
+        .withStations(stationBuilder.build(), stationBuilder.build())
+        .withIsError(false)
+        .withIsFetching(false)
+        .build(),
+    ).build();
 
-    const existingState = {
-      itinerarySteps: [
-        {
-          data: undefined,
-          error,
-          isFetching: true,
-          itineraryStep,
-          latitude,
-          longitude,
-          limit,
-        },
-        {
-          data: undefined,
-          error,
-          isFetching: true,
-          itineraryStep,
-          latitude,
-          longitude,
-          limit,
-        },
-      ],
-    };
+    const error = new Error('An error occurred');
+    const action = actions.fetchFailure(itineraryStep, error);
 
-    const payload = 'An error occurred during fetch.';
+    const expectedState = stateBuilder.withItinerarySteps(
+      itineraryStepBuilder
+        .withItineraryStep(itineraryStep)
+        .withNoStations()
+        .withError(error)
+        .withIsError(true)
+        .withIsFetching(false)
+        .build(),
+    ).build();
 
-    expect(reducer(existingState, {
-      type: FETCH.FAILURE,
-      payload,
-      error: true,
-      meta: { isFetching: false, itineraryStep },
-    })).toEqual({
-      itinerarySteps: [
-        {
-          data: payload,
-          error: true,
-          isFetching: false,
-          itineraryStep,
-          latitude,
-          longitude,
-          limit,
-        },
-        {
-          data: undefined,
-          error: false,
-          isFetching: true,
-          itineraryStep,
-          latitude,
-          longitude,
-          limit,
-        },
-      ],
-    });
+    expect(reducer(initialState, action)).toEqual(expectedState);
   });
-
-  test('should not affect state for action with type defining a fetch error for non existing step', () => {
-    const existingState = {
-      itinerarySteps: [
-        {
-          data: ['station 1', 'station 2'],
-          error: false,
-          isFetching: false,
-          itineraryStep: 0,
-          latitude: 41.213,
-          longitude: 2.134,
-          limit: 200,
-        },
-      ],
-    };
-
-    expect(reducer(existingState, {
-      type: FETCH.SUCCESS,
-      error: true,
-      payload: 'error for station 10',
-      meta: { isFetching: false, itineraryStep: 1 },
-    })).toEqual(existingState);
+  beforeEach(() => {
+    stateBuilder = StateBuilder.create().withIsReduced(true);
+    itineraryStepBuilder = ItineraryStepBuilder.create();
+    stationBuilder = StationBuilder.create();
   });
 });

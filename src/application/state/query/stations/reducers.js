@@ -7,16 +7,10 @@ export const initialStateByItineraryStep = itineraryStep => ({
   error: false,
   isFetching: false,
   itineraryStep,
-  latitude: undefined,
-  longitude: undefined,
-  limit: undefined,
 });
 
 export const INITIAL_STATE = {
-  itinerarySteps: [
-    initialStateByItineraryStep(0),
-    initialStateByItineraryStep(1),
-  ],
+  itinerarySteps: [],
 };
 
 const findIndexByItineraryStep = (itineraryStep, itinerarySteps) => itinerarySteps.findIndex(
@@ -24,22 +18,20 @@ const findIndexByItineraryStep = (itineraryStep, itinerarySteps) => itinerarySte
 );
 
 export const fetchStart = (state = INITIAL_STATE, action) => produce(state, (draft) => {
-  const { itineraryStep } = action.meta;
+  const { isFetching, itineraryStep } = action.meta;
 
-  const draftByItineraryStep = produce(initialStateByItineraryStep(itineraryStep), (draftStep) => {
-    draftStep.isFetching = action.meta.isFetching;
-    draftStep.itineraryStep = itineraryStep;
-    draftStep.latitude = action.payload.latitude;
-    draftStep.longitude = action.payload.longitude;
-    draftStep.limit = action.payload.limit;
-  });
+  const draftByItineraryStep = initialStateByItineraryStep(itineraryStep);
+
+  draftByItineraryStep.data = undefined;
+  draftByItineraryStep.isFetching = isFetching;
+  draftByItineraryStep.error = action.error;
 
   const index = findIndexByItineraryStep(itineraryStep, draft.itinerarySteps);
 
-  if (index === -1) {
-    draft.itinerarySteps.push(draftByItineraryStep);
-  } else {
+  if (index !== -1) {
     draft.itinerarySteps[index] = draftByItineraryStep;
+  } else {
+    draft.itinerarySteps.push(draftByItineraryStep);
   }
 });
 
@@ -49,7 +41,9 @@ export const fetchPending = (state = INITIAL_STATE, action) => produce(state, (d
   if (index !== -1) {
     const draftByItineraryStep = draft.itinerarySteps[index];
 
+    draftByItineraryStep.data = undefined;
     draftByItineraryStep.isFetching = action.meta.isFetching;
+    draftByItineraryStep.error = action.error;
 
     draft.itinerarySteps[index] = draftByItineraryStep;
   }
@@ -61,8 +55,9 @@ export const fetchSuccess = (state = INITIAL_STATE, action) => produce(state, (d
   if (index !== -1) {
     const draftByItineraryStep = draft.itinerarySteps[index];
 
-    draftByItineraryStep.isFetching = action.meta.isFetching;
     draftByItineraryStep.data = action.payload;
+    draftByItineraryStep.isFetching = action.meta.isFetching;
+    draftByItineraryStep.error = action.error;
 
     draft.itinerarySteps[index] = draftByItineraryStep;
   }

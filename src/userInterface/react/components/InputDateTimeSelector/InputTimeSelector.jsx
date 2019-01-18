@@ -3,31 +3,30 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import 'userInterface/react/components/InputDateTimeSelector/stylesheets/react-datepicker.css';
 
 const InputTimeSelector = ({
-  selected, dateFormat, timeIntervals, onChange,
+  timeSelected, timeFormat, timeIntervals, onTimeChange,
 }) => (
   <DatePicker
-    selected={selected}
-    onChange={onChange}
+    selected={timeSelected}
+    onChange={onTimeChange}
     showTimeSelect
     showTimeSelectOnly
     timeIntervals={timeIntervals}
-    dateFormat={dateFormat}
+    dateFormat={timeFormat}
     timeCaption="Time"
   />
 );
 
 InputTimeSelector.propTypes = {
-  selected: PropTypes.instanceOf(moment).isRequired,
-  dateFormat: PropTypes.string,
+  timeSelected: PropTypes.instanceOf(moment).isRequired,
+  timeFormat: PropTypes.string,
   timeIntervals: PropTypes.number,
-  onChange: PropTypes.func.isRequired,
+  onTimeChange: PropTypes.func.isRequired,
 };
 
 InputTimeSelector.defaultProps = {
-  dateFormat: DEFAULT_TIME_FORMAT,
+  timeFormat: DEFAULT_TIME_FORMAT,
   timeIntervals: DEFAULT_TIME_INTERVAL,
 };
 

@@ -1,6 +1,7 @@
 import * as actions from 'application/state/query/stations/actions';
 import { FETCH } from 'application/state/query/stations/types';
 import { isError, isFSA } from 'flux-standard-action';
+import StationBuilder from 'application/state/query/stations/tests/support/StationBuilder';
 
 describe('application/state/query/lastAvailabilities/actions', () => {
   test('should create an action to start fetching stations with function fetchStart() and parameters', () => {
@@ -14,7 +15,7 @@ describe('application/state/query/lastAvailabilities/actions', () => {
     expect(isFSA(action)).toBeTruthy();
     expect(action).toEqual({
       error: false,
-      meta: { isFetching: true, itineraryStep },
+      meta: { isFetching: false, itineraryStep },
       payload: { latitude, longitude, limit },
       type: FETCH.START,
     });
@@ -32,16 +33,7 @@ describe('application/state/query/lastAvailabilities/actions', () => {
   });
   test('should create an action to notify the success of fetching stations with function fetchSuccess()', () => {
     const itineraryStep = 0;
-    const data = [
-      {
-        name: '87 - C/ MALLORCA 41-43',
-        type: 'BIKE',
-      },
-      {
-        name: '165 - C/ DEL DOCTOR TRUETA, 221',
-        type: 'ELECTRIC_BIKE',
-      },
-    ];
+    const data = [StationBuilder.create().build()];
 
     const action = actions.fetchSuccess(itineraryStep, data);
 
@@ -55,7 +47,7 @@ describe('application/state/query/lastAvailabilities/actions', () => {
   });
   test('should create an action when a failure occurred during fetching stations with function fetchFailure()', () => {
     const itineraryStep = 1;
-    const error = { message: 'An error occurred during fetching stations.' };
+    const error = new Error('An error occurred');
 
     const action = actions.fetchFailure(itineraryStep, error);
 

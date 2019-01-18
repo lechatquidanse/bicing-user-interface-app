@@ -2,13 +2,15 @@ import { v4 as uuid } from 'uuid';
 import { TYPE_BIKE } from 'domain/definitions/stationDefinition';
 
 class StationBuilder {
-  constructor(stationId, name, latitude, longitude, type, zipCode) {
+  constructor(stationId, name, latitude, longitude, type, zipCode, address, addressNumber) {
     this.stationId = stationId;
     this.name = name;
     this.latitude = latitude;
     this.longitude = longitude;
     this.type = type;
     this.zipCode = zipCode;
+    this.address = address;
+    this.addressNumber = addressNumber;
 
     this.withStationId = this.withStationId.bind(this);
     this.withName = this.withName.bind(this);
@@ -16,6 +18,8 @@ class StationBuilder {
     this.withLongitude = this.withLongitude.bind(this);
     this.withType = this.withType.bind(this);
     this.withZipCode = this.withZipCode.bind(this);
+    this.withAddress = this.withAddress.bind(this);
+    this.withAddressNumber = this.withAddressNumber.bind(this);
 
     this.build = this.build.bind(this);
     this.copy = this.copy.bind(this);
@@ -28,6 +32,8 @@ class StationBuilder {
       41.234,
       2.12,
       TYPE_BIKE,
+      undefined,
+      'carrer GRAN VIA CORTS CATALANES',
       undefined,
     );
   }
@@ -74,6 +80,20 @@ class StationBuilder {
     return copy;
   }
 
+  withAddress(address) {
+    const copy = this.copy();
+    copy.address = address;
+
+    return copy;
+  }
+
+  withAddressNumber(addressNumber) {
+    const copy = this.copy();
+    copy.addressNumber = addressNumber;
+
+    return copy;
+  }
+
   build() {
     return {
       id: this.stationId,
@@ -82,6 +102,8 @@ class StationBuilder {
       longitude: this.longitude,
       type: this.type,
       zipCode: this.zipCode,
+      address: this.address,
+      addressNumber: this.addressNumber,
     };
   }
 
@@ -93,6 +115,8 @@ class StationBuilder {
       this.longitude,
       this.type,
       this.zipCode,
+      this.address,
+      this.addressNumber,
     );
   }
 }

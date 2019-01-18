@@ -1,15 +1,23 @@
-import ByIntervalInPeriodFilter from 'application/state/filter/ByIntervalInPeriodFilter';
+import ByItineraryAtFilter from 'application/state/filter/ByItineraryAtFilter';
 import { HttpAvailabilitiesQuery } from 'infrastructure/bicingApi';
 import { HttpAvailabilitiesForecastQuery } from 'infrastructure/bicingForecastApi';
 
-const availabilitiesClientFactory = (itineraryAt, periodStart, periodEnd, interval, stationIds) => {
-  const filter = ByIntervalInPeriodFilter.fromRawValues(periodStart, periodEnd, interval);
+const availabilitiesClientFactory = async (
+  itineraryAt,
+  periodStart,
+  periodEnd,
+  interval,
+  stationIds) => {
+  const filter = await ByItineraryAtFilter.fromRawValues(
+    itineraryAt,
+    periodStart,
+    periodEnd,
+    interval,
+  );
 
-  if (filter.isForecasting(itineraryAt) === true) {
-    return new HttpAvailabilitiesForecastQuery(stationIds, filter);
-  }
-
-  return new HttpAvailabilitiesQuery();
+  return filter.isForecasting() === true
+    ? new HttpAvailabilitiesForecastQuery(stationIds, filter)
+    : new HttpAvailabilitiesQuery();
 };
 
 export default availabilitiesClientFactory;

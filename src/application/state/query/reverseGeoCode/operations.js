@@ -14,6 +14,7 @@ export function* fetch(action) {
     const { latitude, longitude } = action.payload;
 
     const address = yield call(HttpReverseGeoCodeQuery.find, latitude, longitude);
+
     yield put(fetchSuccess(address));
   } catch (exception) {
     yield put(fetchFailure(exception));

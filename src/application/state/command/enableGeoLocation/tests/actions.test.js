@@ -7,9 +7,9 @@ describe('application/state/command/enableGeoLocation/actions', () => {
     const itineraryStep = 1;
     const action = actions.enable(itineraryStep);
 
-    expect(isFSA(action)).toBeTruthy();
+    expect(isFSA(action)).toEqual(true);
     expect(action).toEqual({
-      payload: { enabled: true, itineraryStep },
+      payload: { itineraryStep },
       type: ENABLE.START,
     });
   });

@@ -10,7 +10,7 @@ const data = (itineraryStep, state) =>
 export const availabilityByItineraryStepAndId = (itineraryStep, id, state) => {
   if (isErrorByItineraryStep(itineraryStep, state) === true
     || step(itineraryStep, state) === undefined
-    || step(itineraryStep, state).data === undefined) {
+    || Array.isArray(step(itineraryStep, state).data) === false) {
     return undefined;
   }
 
@@ -39,26 +39,6 @@ export const errorByItineraryStep = itineraryStep => state =>
 
 export const isFetchingByItineraryStep = itineraryStep => state =>
   step(itineraryStep, state) === undefined ? false : step(itineraryStep, state).isFetching;
-
-export const periodStartAtByItineraryStep = itineraryStep => state =>
-  step(itineraryStep,state) === undefined ?
-    undefined :
-    step(itineraryStep, state).periodStartAt;
-
-export const periodEndAtByItineraryStep = itineraryStep => state =>
-  step(itineraryStep, state) === undefined ?
-    undefined :
-    step(itineraryStep, state).periodEndAt;
-
-export const intervalByItineraryStep = itineraryStep => state =>
-  step(itineraryStep, state) === undefined ?
-    undefined :
-    step(itineraryStep, state).interval;
-
-export const itineraryAtByItineraryStep = itineraryStep => state =>
-  step(itineraryStep, state) === undefined ?
-    undefined :
-    step(itineraryStep, state).itineraryAt;
 
 export const statusByItineraryStepAndStationId = (itineraryStep, stationId) => state =>
   availabilityPropertyByKeyAndItineraryStepAndId(

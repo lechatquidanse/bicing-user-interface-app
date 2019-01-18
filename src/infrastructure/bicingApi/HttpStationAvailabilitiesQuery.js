@@ -4,6 +4,8 @@ import { OK } from 'http-status';
 import HttpStationQueryError from 'infrastructure/bicingApi/errors/HttpStationQueryError';
 import httpClient from 'infrastructure/bicingApi/httpClient';
 
+const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
 class HttpStationAvailabilitiesQuery {
   static async find(stationId, byFilter) {
     const apiResponse = await httpClient
@@ -24,7 +26,10 @@ class HttpStationAvailabilitiesQuery {
     const uri = `/stations/${stationId}/availabilities`;
 
     if (byFilter instanceof ByIntervalInPeriodFilter) {
-      return `${uri}?periodStart=${byFilter.periodStart}&periodEnd=${byFilter.periodEnd}&interval=${byFilter.interval}`;
+      const periodStart = byFilter.periodStartAt.format(DATE_TIME_FORMAT);
+      const periodEnd = byFilter.periodEndAt.format(DATE_TIME_FORMAT);
+
+      return `${uri}?periodStart=${periodStart}&periodEnd=${periodEnd}&interval=${byFilter.interval}`;
     }
 
     return uri;

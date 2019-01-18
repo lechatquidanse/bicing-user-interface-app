@@ -1,4 +1,5 @@
-import { selectors as commandConfigureMapSelectors } from 'application/state/command/configureMap';
+import { selectors as commandStoreItineraryGeoLocationSelectors } from 'application/state/command/storeItineraryGeoLocation';
+import { selectors as commandStoreItineraryStepActiveSelectors } from 'application/state/command/storeItineraryStepActive';
 import { actions as commandToggleInfoWindowActions } from 'application/state/command/toggleInfoWindow';
 import React from 'react';
 import { withGoogleMap, withScriptjs } from 'react-google-maps';
@@ -9,13 +10,19 @@ import {
 import { bindActionCreators } from 'redux';
 import { GoogleMap as GoogleMapTemplate, MapError } from 'userInterface/react/components/Map';
 
-const mapStateToProps = state => ({
-  latitude: commandConfigureMapSelectors.latitude(state),
-  longitude: commandConfigureMapSelectors.longitude(state),
-  zoom: commandConfigureMapSelectors.zoom(state),
-  error: commandConfigureMapSelectors.error(state),
-  isError: commandConfigureMapSelectors.isError(state),
-});
+const mapStateToProps = (state) => {
+  const itineraryStep = commandStoreItineraryStepActiveSelectors.itineraryStep(state);
+
+  return {
+    latitude: commandStoreItineraryGeoLocationSelectors
+      .latitudeByItineraryStep(itineraryStep)(state),
+    longitude: commandStoreItineraryGeoLocationSelectors
+      .longitudeByItineraryStep(itineraryStep)(state),
+    zoom: commandStoreItineraryGeoLocationSelectors.zoomByItineraryStep(itineraryStep)(state),
+    error: commandStoreItineraryGeoLocationSelectors.errorByItineraryStep(itineraryStep)(state),
+    isError: commandStoreItineraryGeoLocationSelectors.isErrorByItineraryStep(itineraryStep)(state),
+  };
+};
 const mapDispatchToProps = dispatch => bindActionCreators({
   onMapClick: () => commandToggleInfoWindowActions.toggle(null),
 }, dispatch);

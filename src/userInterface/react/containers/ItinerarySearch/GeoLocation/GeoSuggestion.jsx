@@ -1,11 +1,14 @@
-import { selectors as commandConfigureMapSelectors } from 'application/state/command/configureMap';
+/* eslint-disable */
 import {
   actions as commandEnableGeoLocationActions,
   selectors as commandEnableGeoLocationSelectors,
 } from 'application/state/command/enableGeoLocation';
-import { actions as flowMapActions } from 'application/state/flow/map';
-import { selectors as queryAvailabilitiesSelectors } from 'application/state/query/availabilities';
+import { selectors as commandStoreItineraryAtSelectors } from 'application/state/command/storeItineraryAt';
+import { actions as commandStoreItineraryGeoLocationActions } from 'application/state/command/storeItineraryGeoLocation';
+import { actions as commandStoreItineraryStepActiveActions } from 'application/state/command/storeItineraryStepActive';
+import { selectors as queryGeoSuggestionsSelectors } from 'application/state/query/geoSuggestions';
 import { selectors as queryReverseGeoCodeSelectors } from 'application/state/query/reverseGeoCode';
+import { LIMIT } from 'domain/definitions/configurationMapDefinition';
 import React from 'react';
 import { withScriptjs } from 'react-google-maps';
 import { connect } from 'react-redux';
@@ -19,26 +22,15 @@ export const mapStateToProps = itineraryStep => (state, props) => {
   const initialValue = step === commandEnableGeoLocationSelectors.itineraryStep(state)
     ? queryReverseGeoCodeSelectors.addressOrError(state) : undefined;
 
-  // @todo add provider for suggestion
-  const fixtures = [
-    { label: 'Use current Location', location: 'geoLocation' },
-    { label: '02 - C/ ROGER DE FLOR, 126', location: { lat: 41.39553, lng: 2.17706 } },
-    { label: '35 - C/ SANT RAMON DE PENYAFORT', location: { lat: 41.413592, lng: 2.221153 } },
-    {
-      label: '227 - C/ DEL TORRENT DE LES FLORS, 102',
-      location: { lat: 41.407837, lng: 2.158678 },
-    },
-  ];
+  const fixtures = queryGeoSuggestionsSelectors.geoSuggestions(state);
+  fixtures.unshift({ label: 'Use current Location', location: 'geoLocation' });
 
   return {
     itineraryStep: step,
-    itineraryAt: queryAvailabilitiesSelectors.itineraryAtByItineraryStep(step)(state),
-    periodStartAt: queryAvailabilitiesSelectors.periodStartAtByItineraryStep(step)(state),
-    periodEndAt: queryAvailabilitiesSelectors.periodEndAtByItineraryStep(step)(state),
-    interval: queryAvailabilitiesSelectors.intervalByItineraryStep(step)(state),
-    latitude: commandConfigureMapSelectors.latitude(state),
-    longitude: commandConfigureMapSelectors.longitude(state),
-    limit: commandConfigureMapSelectors.limit(state),
+    itineraryAt: commandStoreItineraryAtSelectors.itineraryAt(state),
+    periodStartAt: commandStoreItineraryAtSelectors.periodStartAt(state),
+    periodEndAt: commandStoreItineraryAtSelectors.periodEndAt(state),
+    interval: commandStoreItineraryAtSelectors.interval(state),
     initialValue,
     fixtures,
   };
@@ -46,25 +38,13 @@ export const mapStateToProps = itineraryStep => (state, props) => {
 
 export const mapDispatchToProps = dispatch => bindActionCreators({
   enableGeoLocation: itineraryStep => commandEnableGeoLocationActions.enable(itineraryStep),
-  flowMap: (
+  storeItineraryGeoLocation: (itineraryStep, latitude, longitude) => commandStoreItineraryGeoLocationActions.storeStart(
     itineraryStep,
-    itineraryAt,
-    periodStartAt,
-    periodEndAt,
-    interval,
     latitude,
     longitude,
-    limit,
-  ) => flowMapActions.flow(
-    itineraryStep,
-    itineraryAt,
-    periodStartAt,
-    periodEndAt,
-    interval,
-    latitude,
-    longitude,
-    limit,
+    LIMIT,
   ),
+  storeItineraryStepActive: itineraryStep => commandStoreItineraryStepActiveActions.store(itineraryStep),
 }, dispatch);
 
 const mergeProps = (propsFromState, propsFromDispatch, ownProps) => ({
@@ -74,20 +54,15 @@ const mergeProps = (propsFromState, propsFromDispatch, ownProps) => ({
   onSuggestSelect: (suggest) => {
     if (suggest === undefined) {
       return null;
-    }
-
-    if (suggest.location === 'geoLocation') {
+    } if (suggest.location === 'geoLocation') {
       return propsFromDispatch.enableGeoLocation(propsFromState.itineraryStep);
     }
-    return propsFromDispatch.flowMap(
+
+    propsFromDispatch.storeItineraryStepActive(propsFromState.itineraryStep);
+    return propsFromDispatch.storeItineraryGeoLocation(
       propsFromState.itineraryStep,
-      propsFromState.itineraryAt,
-      propsFromState.periodStartAt,
-      propsFromState.periodEndAt,
-      propsFromState.interval,
       suggest.location.lat,
       suggest.location.lng,
-      500,
     );
   },
 });

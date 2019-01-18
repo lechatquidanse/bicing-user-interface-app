@@ -9,9 +9,9 @@ export const fetchStart = (
   stationIds,
 ) => ({
   error: false,
-  meta: { isFetching: true, itineraryStep, itineraryAt },
+  meta: { isFetching: false, itineraryStep },
   payload: {
-    periodStartAt, periodEndAt, interval, stationIds,
+    itineraryAt, periodStartAt, periodEndAt, interval, stationIds,
   },
   type: FETCH.START,
 });

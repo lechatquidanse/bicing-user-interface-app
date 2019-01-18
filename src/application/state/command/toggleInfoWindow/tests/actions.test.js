@@ -8,7 +8,7 @@ describe('application/state/command/toggleInfoWindow/actions', () => {
     const key = uuid();
     const action = actions.toggle(key);
 
-    expect(isFSA(action)).toBeTruthy();
+    expect(isFSA(action)).toEqual(true);
     expect(action).toEqual({
       payload: { key },
       type: TOGGLE.START,

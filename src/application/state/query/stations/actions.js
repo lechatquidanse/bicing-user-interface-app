@@ -2,7 +2,7 @@ import { FETCH } from 'application/state/query/stations/types';
 
 export const fetchStart = (itineraryStep, latitude, longitude, limit) => ({
   error: false,
-  meta: { isFetching: true, itineraryStep },
+  meta: { isFetching: false, itineraryStep },
   payload: { latitude, longitude, limit },
   type: FETCH.START,
 });

@@ -1,12 +1,5 @@
-class InfrastructureError extends Error {
-  constructor(...args) {
-    super(...args);
-    Error.captureStackTrace(this, InfrastructureError);
-  }
+import AppError from 'domain/errors/AppError';
 
-  toString() {
-    return this.message;
-  }
-}
+class InfrastructureError extends AppError {}
 
 export default InfrastructureError;

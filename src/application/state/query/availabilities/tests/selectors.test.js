@@ -160,56 +160,6 @@ describe('application/state/query/availabilities/selectors', () => {
     expect(selectors.itinerarySteps(state))
       .toEqual([itineraryStep1, itineraryStep2, itineraryStep3]);
   });
-
-  test('it can return periodStartAt by Itinerary step', () => {
-    const periodStartAt = '2017-08-08 12:12:12';
-    const itineraryStep = 2;
-    const state = StateBuilder.create()
-      .withItinerarySteps(ItineraryStepBuilder.create()
-        .withItineraryStep(itineraryStep)
-        .withPeriodStartAt(periodStartAt)
-        .build())
-      .build();
-
-    expect(selectors.periodStartAtByItineraryStep(itineraryStep)(state)).toEqual(periodStartAt);
-  });
-  //
-  test('it can return periodEndAt by Itinerary step', () => {
-    const periodEndAt = '2017-08-08 12:12:12';
-    const itineraryStep = 1;
-    const state = StateBuilder.create()
-      .withItinerarySteps(ItineraryStepBuilder.create()
-        .withItineraryStep(itineraryStep)
-        .withPeriodEndAt(periodEndAt)
-        .build())
-      .build();
-
-    expect(selectors.periodEndAtByItineraryStep(itineraryStep)(state)).toEqual(periodEndAt);
-  });
-  test('it can return interval by Itinerary step', () => {
-    const interval = '10T';
-    const itineraryStep = 5;
-    const state = StateBuilder.create()
-      .withItinerarySteps(ItineraryStepBuilder.create()
-        .withItineraryStep(itineraryStep)
-        .withInterval(interval)
-        .build())
-      .build();
-
-    expect(selectors.intervalByItineraryStep(itineraryStep)(state)).toEqual(interval);
-  });
-  test('it can return itineraryAt by Itinerary step', () => {
-    const itineraryAt = '2016-04-28 14:34:00';
-    const itineraryStep = 0;
-    const state = StateBuilder.create()
-      .withItinerarySteps(ItineraryStepBuilder.create()
-        .withItineraryStep(itineraryStep)
-        .withItineraryAt(itineraryAt)
-        .build())
-      .build();
-
-    expect(selectors.itineraryAtByItineraryStep(itineraryStep)(state)).toEqual(itineraryAt);
-  });
   test('it can return an availability status by its stationId and Itinerary step', () => {
     const stationId = uuid();
     const status = 'CLOSED';

@@ -6,33 +6,19 @@ import {
 } from 'domain/definitions/configurationMapDefinition';
 
 class ItineraryStepBuilder {
-  constructor(
-    stations,
-    isError,
-    isFetching,
-    itineraryStep,
-    error,
-    latitude,
-    longitude,
-    limit,
-  ) {
+  constructor(stations, isError, isFetching, itineraryStep, error) {
     this.stations = stations;
     this.isError = isError;
     this.isFetching = isFetching;
     this.itineraryStep = itineraryStep;
     this.error = error;
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.limit = limit;
 
     this.withStations = this.withStations.bind(this);
+    this.withNoStations = this.withNoStations.bind(this);
     this.withIsError = this.withIsError.bind(this);
     this.withIsFetching = this.withIsFetching.bind(this);
     this.withItineraryStep = this.withItineraryStep.bind(this);
     this.withError = this.withError.bind(this);
-    this.withLatitude = this.withLatitude.bind(this);
-    this.withLongitude = this.withLongitude.bind(this);
-    this.withLimit = this.withLimit.bind(this);
 
     this.build = this.build.bind(this);
     this.copy = this.copy.bind(this);
@@ -53,6 +39,13 @@ class ItineraryStepBuilder {
   withStations(...stations) {
     const copy = this.copy();
     copy.stations = stations;
+
+    return copy;
+  }
+
+  withNoStations() {
+    const copy = this.copy();
+    copy.stations = undefined;
 
     return copy;
   }
@@ -85,27 +78,6 @@ class ItineraryStepBuilder {
     return copy;
   }
 
-  withLatitude(latitude) {
-    const copy = this.copy();
-    copy.latitude = latitude;
-
-    return copy;
-  }
-
-  withLongitude(longitude) {
-    const copy = this.copy();
-    copy.longitude = longitude;
-
-    return copy;
-  }
-
-  withLimit(limit) {
-    const copy = this.copy();
-    copy.limit = limit;
-
-    return copy;
-  }
-
   build() {
     const data = this.isError === true ? this.error : this.stations;
 
@@ -114,9 +86,6 @@ class ItineraryStepBuilder {
       error: this.isError,
       isFetching: this.isFetching,
       itineraryStep: this.itineraryStep,
-      latitude: this.latitude,
-      longitude: this.longitude,
-      limit: this.limit,
     };
   }
 
@@ -127,9 +96,6 @@ class ItineraryStepBuilder {
       this.isFetching,
       this.itineraryStep,
       this.error,
-      this.latitude,
-      this.longitude,
-      this.limit,
     );
   }
 }

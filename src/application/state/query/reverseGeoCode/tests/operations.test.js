@@ -30,23 +30,19 @@ describe('application/state/query/reverseGeoCode/operations', () => {
     const action = { type: FETCH.START, payload: { latitude, longitude } };
 
     return expectSaga(fetch, action)
-      .provide([
-        [matchers.call.fn(HttpReverseGeoCodeQuery.find, latitude, longitude), fakeAddress],
-      ])
+      .provide([[matchers.call.fn(HttpReverseGeoCodeQuery.find), fakeAddress]])
       .put(actions.fetchSuccess(fakeAddress))
       .run();
   });
 
-  test('should handle error when api call failed in fetch() generator', () => {
+  test('should handle error', () => {
     const latitude = 41.371965;
     const longitude = 2.166871;
     const error = new Error('error_api_call');
     const action = { type: FETCH.START, payload: { latitude, longitude } };
 
     return expectSaga(fetch, action)
-      .provide([
-        [matchers.call.fn(HttpReverseGeoCodeQuery.find, latitude, longitude), throwError(error)],
-      ])
+      .provide([[matchers.call.fn(HttpReverseGeoCodeQuery.find), throwError(error)]])
       .put(actions.fetchFailure(error))
       .run();
   });

@@ -1,55 +1,91 @@
-import reducer, { INITIAL_STATE } from 'application/state/query/station/reducers';
-import { FETCH } from 'application/state/query/station/types';
-import produce from 'immer';
+import * as actions from 'application/state/query/reverseGeoCode/actions';
+import reducer from 'application/state/query/reverseGeoCode/reducers';
+import StateBuilder from 'application/state/query/reverseGeoCode/tests/support/StateBuilder';
+
+let stateBuilder;
 
 describe('application/state/query/station/reducers', () => {
   test('should have initial state', () => {
-    expect(reducer()).toEqual({ data: undefined, error: false, isFetching: false });
+    expect(reducer()).toEqual(stateBuilder
+      .withAddress(undefined)
+      .withIsError(false)
+      .withIsFetching(false)
+      .build());
   });
-
   test('should not affect state for an unknown action type', () => {
-    expect(reducer(INITIAL_STATE, { type: 'NOT_EXISTING' })).toEqual({
-      data: undefined,
-      error: false,
-      isFetching: false,
-    });
-  });
+    const initialState = stateBuilder
+      .withAddress(undefined)
+      .withIsError(false)
+      .withIsFetching(true)
+      .build();
 
+    expect(reducer(initialState, { type: 'NOT_EXISTING' })).toEqual(initialState);
+  });
   test('should affect state for action with type defining a fetch start', () => {
-    const expectedState = produce(INITIAL_STATE, (draft) => {
-      draft.isFetching = true;
-    });
+    const initialState = stateBuilder
+      .withAddress('an address')
+      .withIsError(false)
+      .withIsFetching(true)
+      .build();
 
-    expect(reducer(INITIAL_STATE, {
-      type: FETCH.START,
-      meta: { isFetching: true },
-    })).toEqual(expectedState);
+    const expectedState = stateBuilder
+      .withAddress(undefined)
+      .withIsError(false)
+      .withIsFetching(false)
+      .build();
+
+    expect(reducer(initialState, actions.fetchStart(41.12, 2.12))).toEqual(expectedState);
   });
+  test('should affect state for action with type defining a fetch pending', () => {
+    const initialState = stateBuilder
+      .withAddress('an address')
+      .withIsError(false)
+      .withIsFetching(false)
+      .build();
 
+    const expectedState = stateBuilder
+      .withAddress(undefined)
+      .withIsError(false)
+      .withIsFetching(true)
+      .build();
+
+    expect(reducer(initialState, actions.fetchPending())).toEqual(expectedState);
+  });
   test('should affect state for action with type defining a fetch success', () => {
-    const expectedState = produce(INITIAL_STATE, (draft) => {
-      draft.data = ['station data'];
-      draft.isFetching = false;
-    });
+    const initialState = stateBuilder
+      .withAddress(undefined)
+      .withIsError(false)
+      .withIsFetching(true)
+      .build();
 
-    expect(reducer(INITIAL_STATE, {
-      type: FETCH.SUCCESS,
-      payload: ['station data'],
-      meta: { isFetching: false },
-    })).toEqual(expectedState);
+    const address = 'an address';
+
+    const expectedState = stateBuilder
+      .withAddress(address)
+      .withIsError(false)
+      .withIsFetching(false)
+      .build();
+
+    expect(reducer(initialState, actions.fetchSuccess(address))).toEqual(expectedState);
   });
-
   test('should affect state for action with type defining a fetch failure', () => {
-    const expectedState = produce(INITIAL_STATE, (draft) => {
-      draft.data = 'An error occurred during fetch.';
-      draft.error = true;
-      draft.isFetching = false;
-    });
-    expect(reducer(INITIAL_STATE, {
-      type: FETCH.FAILURE,
-      error: true,
-      payload: 'An error occurred during fetch.',
-      meta: { isFetching: false },
-    })).toEqual(expectedState);
+    const initialState = stateBuilder
+      .withAddress(undefined)
+      .withIsError(false)
+      .withIsFetching(true)
+      .build();
+
+    const error = new Error('An error occurred');
+
+    const expectedState = stateBuilder
+      .withError(error)
+      .withIsError(true)
+      .withIsFetching(false)
+      .build();
+
+    expect(reducer(initialState, actions.fetchFailure(error))).toEqual(expectedState);
+  });
+  beforeEach(() => {
+    stateBuilder = StateBuilder.create().withIsReduced(true);
   });
 });

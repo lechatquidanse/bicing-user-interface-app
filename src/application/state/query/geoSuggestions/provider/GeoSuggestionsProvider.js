@@ -5,10 +5,6 @@ import { HttpStationsQuery } from 'infrastructure/bicingApi';
 
 class GeoSuggestionsProvider {
   static async provide() {
-    if (GeoSuggestionsProvider.hasApiKey() === true) {
-      return [];
-    }
-
     const geoSuggestions = await HttpStationsQuery.find();
 
     return GeoSuggestionsProvider.validate(geoSuggestions);
@@ -22,10 +18,6 @@ class GeoSuggestionsProvider {
           validationError.details.map(d => d.message).toString(),
         );
       });
-  }
-
-  static hasApiKey() {
-    return process.env.GEO_SUGGESTION_API_KEY !== undefined;
   }
 }
 

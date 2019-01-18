@@ -10,7 +10,7 @@ let stationBuilder;
 
 jest.mock('infrastructure/bicingApi/HttpStationsQuery');
 
-describe('application/state/query/geoSuggestions/provider/StationsProvider', () => {
+describe('application/state/query/geoSuggestions/provider/GeoSuggestionsProvider', () => {
   test('it can provide geoSuggestions', async () => {
     const fakeGeoSuggestions = [stationBuilder.build(), stationBuilder.build()];
 

@@ -23,7 +23,7 @@
   <a href="#ci-and-deployment">CI and Deployment</a>
 </p>
 
-![Bicing API RESTs examples](./documentation/bicing-api-curl-examples.png)
+![Bicing API RESTs examples](./documentation/bicing-user-interface-app.gif)
 
 ## <a name="getting-started"></a> Getting Started
 ### Prerequisites
@@ -41,12 +41,9 @@ Your docker containers should have been successfully built and run.
 
 ## Features
 
-Multiple features are proposed across the user interface.
+Multiple features are proposed across the user interface, to locate stations nearby a geo location or change date expected:
 
-### Stations State:
-### Predictions for Stations States:
-### Itinerary Suggestions:
-### And more to come...
+![Bicing API RESTs examples](./documentation/bicing-user-interface-app-features.png)
 
 ## <a name="built-with"></a> Built with
 
@@ -96,11 +93,13 @@ In this App, to query a station by its stationId, we need:
 - reducers, to update state according to actions dispatched
 - selectors, to "interface" how the state can be read 
 
+![Redux-Saga example](./documentation/redux-saga-example.png)
+
 ### HOC, components and containers
 
 In this project, user interfaces are divided in two:
-- components that handle "low level" template. Their role is display html and css.
-- containers that handle "high level" template. Their role is dispatch actions, read state and render components. 
+- components that handle "low level" templating. Their role is display html and css.
+- containers that handle "high level" templating. Their role is dispatch actions, read state and render components. 
 It is basically an **enhanced** version of a components, or called a Higher Order Component (HOC).
 
 Here is some very helpful resources that I encourage you to read to understand HOC:

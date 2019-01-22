@@ -1,6 +1,7 @@
 Dockerfile
 docker/
 !docker/nginx/conf/
+documentation/
 Makefile
 node_modules/
 README.md

@@ -1,17 +1,33 @@
 <p align="center">
-    <img alt="Bicing Log" title="Bicing API" src="./documentation/bicing-logo.png" width="20%">
+    <img alt="Bicing Log" title="Bicing API" src="./documentation/images/bicing-logo.png" width="20%">
 </p>
-<h1 align="center">Bicing User Interface APP</h1>
 
-<h4 align="center">Get statistics and locations of bicycle stations.</h4>
+<h3 align="center">
+  Bicing User Interface Application
+</h3>
+
+<p align="center">
+  <a href="https://reactjs.org/">React</a> application
+  applying <a href="https://reactjs.org/docs/higher-order-components.html">HOC</a> patterns,
+  built with <a href="https://en.wikipedia.org/wiki/Continuous_integration">CI</a>,
+  driven by <a href="https://en.wikipedia.org/wiki/Behavior-driven_development">BDD</a>.
+</p>
+
+
+<h5 align="center">Display statistics and locations of bicycle stations.</h5>
 
 > The goal of this APP is to ease customer's usage of large-scale public bicycle sharing system.  
-> By displaying data from different providers ([Bicing][bicing], [Velib][velib], ...) it can advice customers and provide them useful information (location to pick or return a bike, best time for picking up a bike, ...).
+> By displaying data from different providers ([Bicing][bicing], [Velib][velib], ...) it can advice customers and provide them powerful information (location to pick or return a bike, best time for picking up a bike, ...).  
+> Here is an example of a provider [/lechatquidanse/bicing-api](https://github.com/lechatquidanse/bicing-api)
 
 
 <p align="center">
+    <img src="https://img.shields.io/badge/node-8.12.0-blue.svg" alt="node 8.12.0">
+    <img src="https://gitlab.com/lechatquidanse/public-badges/raw/master/bicing-user-interface-app/reference.svg" alt="reference">
+    <img src="https://gitlab.com/lechatquidanse/public-badges/raw/master/bicing-user-interface-app/build.svg" alt="build">
+    <img src="https://gitlab.com/lechatquidanse/public-badges/raw/master/bicing-user-interface-app/coverage.svg" alt="coverage">
     <img src="https://img.shields.io/badge/contributions-welcome-orange.svg" alt="Contributions welcome">
-    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"><a>
+    <img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="License">
 </p>
 
 <p align="center">
@@ -23,7 +39,7 @@
   <a href="#ci-and-deployment">CI and Deployment</a>
 </p>
 
-![Bicing API RESTs examples](./documentation/bicing-user-interface-app.gif)
+![Bicing API RESTs examples](./documentation/images/bicing-user-interface-app.gif)
 
 ## <a name="getting-started"></a> Getting Started
 ### Prerequisites
@@ -43,7 +59,7 @@ Your docker containers should have been successfully built and run.
 
 Multiple features are proposed across the user interface, to locate stations nearby a geo location or change date expected:
 
-![Bicing API RESTs examples](./documentation/bicing-user-interface-app-features.png)
+![Bicing API RESTs examples](./documentation/images/bicing-user-interface-app-features.png)
 
 ## <a name="built-with"></a> Built with
 
@@ -55,7 +71,7 @@ Multiple features are proposed across the user interface, to locate stations nea
 ## Development
 The Makefile contains useful command for development purpose
 
-![Makefile helpul commands](./documentation/makefile-help-min.png)
+![Makefile helpul commands](./documentation/images/makefile-help-min.png)
 
 ## <a name="coding-standard"></a> Coding standard
 
@@ -77,9 +93,9 @@ Here is a good article to understand naming and folder [Domain Driver Design, li
 ### Redux-Saga
 
 In this project, the state is handled by redux-saga.
-A reminder on how works redux-saga (from a [great article by aksudupa11](https://medium.com/@aksudupa11/redux-sagas-714370b61692))
+A reminder on how works redux-saga
 
-![redux-saga](./documentation/redux-saga.gif)
+![redux-saga](./documentation/images/redux-saga.png)
 
 Here is some very helpful resources that I encourage you to read to understand redux-saga and the architecture chosen in this project:
 
@@ -93,7 +109,7 @@ In this App, to query a station by its stationId, we need:
 - reducers, to update state according to actions dispatched
 - selectors, to "interface" how the state can be read 
 
-![Redux-Saga example](./documentation/redux-saga-example.png)
+![Redux-Saga example](./documentation/images/redux-saga-example.png)
 
 ### HOC, components and containers
 
@@ -117,7 +133,7 @@ In this APP, to render geo suggestions, we need:
 - a component to display the html Select input with some fixtures in it
 - a container that will enhanced the component by connecting and reading state, rendering or not if its enabled...
 
-![HOC example](./documentation/hoc-example.png)
+![HOC example](./documentation/images/hoc-example.png)
  
 ## <a name="ci-and-deployment"></a> CI and Deployment
 
@@ -138,7 +154,7 @@ It will then install project, launch qa tools and then build and push a docker i
 
 This manual action, will pull the image build by the previous step and update the specific container.
 
-![Continuous Integration](./documentation/continuous-integration.png)
+![Continuous Integration](./documentation/images/continuous-integration.png)
 
 ## License
 

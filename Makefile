@@ -26,7 +26,7 @@ help:
 ##################
 
 ## Install all install_* requirements and launch project.
-install: env_file env_run install_vendor
+install: env_file install_vendor env_run
 
 ## Run project, install vendors
 run: env_run install_vendor
